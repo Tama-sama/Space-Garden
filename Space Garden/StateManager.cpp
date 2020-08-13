@@ -1,7 +1,7 @@
 #include "StateManager.hpp"
 #include "Window.hpp"
 
-State state = State::MAIN_MENU;
+State state = State::INTRO;
 
 
 void UpdateManager()
@@ -17,6 +17,7 @@ void UpdateManager()
 	{
 	case State::MAIN_MENU :
 		break;
+
 	default:
 		break;
 	}
@@ -36,8 +37,13 @@ void DisplayManager()
 
 	switch (state)
 	{
+	case State::INTRO:
+		Intro();
+		break;
+
 	case State::MAIN_MENU:
 		break;
+
 	default:
 		break;
 	}

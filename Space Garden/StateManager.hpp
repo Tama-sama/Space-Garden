@@ -5,6 +5,7 @@
 enum class State
 {
 	RTNULL,
+	INTRO,
 	MAIN_MENU,
 };
 extern State state;
@@ -22,3 +23,9 @@ void UpdateManager();
 void DisplayManager();
 
 void EventsManager();
+
+
+
+
+
+void Intro();

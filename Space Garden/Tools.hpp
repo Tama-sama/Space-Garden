@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include "SFML/Graphics.hpp"
+#include "SFML/Audio.hpp"
 #include <list>
 #include <math.h>
 
@@ -42,6 +43,36 @@ private:
 extern Times MainTime;
 
 
+/////////////
+/// \brief Class for animate SpriteSheets
+/////////////
+class CAnimations
+{
+public:
+	CAnimations() {};
+	CAnimations(int AnimationLine, sf::Vector2i FrameSize, float _AnimationTiming, int _MaxFrames);
+	~CAnimations() {};
+
+	/////////////
+	/// \brief Function for looking lauching arguments
+	/// \param _SpriteSheet : Sprite With the sprite sheet in texture
+	/// \param _Line : Disired line (Default = actual line)
+	/////////////
+	void Animate(sf::Sprite& _SpriteSheet, int _Line = -1);
+
+	void Initialitation(int AnimationLine, sf::Vector2i FrameSize, float _AnimationTiming, int _MaxFrames);
+	int getXFrame() const { return m_AnimationFrameX; };
+	int getMaxXFrame() const { return m_TotalFramesX; };
+
+private:
+	sf::IntRect m_AnimatedRect;
+	sf::Vector2i m_Size;
+	int m_line;
+	int m_TotalFramesX;
+	int m_AnimationFrameX;
+	float m_AnimationTime;
+	float m_Timer;
+};
 
 
 /////////////

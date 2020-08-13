@@ -159,12 +159,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Explosion.cpp" />
+    <ClCompile Include="Intro.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="RessourcesManager.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="Tir.cpp" />
     <ClCompile Include="Tools.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Explosion.hpp" />
+    <ClInclude Include="RessourcesManager.hpp" />
+    <ClInclude Include="SoundManager.hpp" />
     <ClInclude Include="StateManager.hpp" />
+    <ClInclude Include="Tir.hpp" />
     <ClInclude Include="Tools.hpp" />
     <ClInclude Include="View.hpp" />
     <ClInclude Include="Window.hpp" />

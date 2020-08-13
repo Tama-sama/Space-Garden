@@ -16,6 +16,18 @@
     <Filter Include="Fichiers d%27en-tête\Objects">
       <UniqueIdentifier>{73cbe133-185b-4e17-9821-51c8747d754f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Objects">
+      <UniqueIdentifier>{e189079b-722c-477b-8c6b-f9ae23edeedb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Objects\GameObj">
+      <UniqueIdentifier>{0d8938e3-e33f-4e53-866b-79ecfa169798}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Ressources">
+      <UniqueIdentifier>{f42b48be-d203-49ac-892d-dff1f6e6bc2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Ressources">
+      <UniqueIdentifier>{cb532da7-9cbc-40aa-b4ee-0396f0c9cef9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -26,6 +38,21 @@
     </ClCompile>
     <ClCompile Include="StateManager.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Intro.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Tir.cpp">
+      <Filter>Fichiers sources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>Fichiers sources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Fichiers sources\Ressources</Filter>
+    </ClCompile>
+    <ClCompile Include="RessourcesManager.cpp">
+      <Filter>Fichiers sources\Ressources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -40,6 +67,18 @@
     </ClInclude>
     <ClInclude Include="Tools.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Tir.hpp">
+      <Filter>Fichiers d%27en-tête\Objects\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.hpp">
+      <Filter>Fichiers d%27en-tête\Objects\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.hpp">
+      <Filter>Fichiers d%27en-tête\Ressources</Filter>
+    </ClInclude>
+    <ClInclude Include="RessourcesManager.hpp">
+      <Filter>Fichiers d%27en-tête\Ressources</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
