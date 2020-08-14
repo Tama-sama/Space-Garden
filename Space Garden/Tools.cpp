@@ -1,7 +1,7 @@
 #include "Tools.hpp"
 
 Times MainTime;
-
+sf::Font Font;
 
 CAnimations::CAnimations(int AnimationLine, sf::Vector2i FrameSize, float _AnimationTiming, int _MaxFrames)
 {

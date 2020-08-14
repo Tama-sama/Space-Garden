@@ -24,8 +24,8 @@ void DisplayManager();
 
 void EventsManager();
 
+void ChangeState(State NextStage);
 
-
-
+void InitManager();
 
 void Intro();

@@ -74,6 +74,7 @@ private:
 	float m_Timer;
 };
 
+extern sf::Font Font;
 
 /////////////
 /// \brief Function for looking lauching arguments

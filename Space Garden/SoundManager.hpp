@@ -14,7 +14,7 @@ public:
 
 		if (m_Buffer.loadFromFile(Path))
 		{
-			m_sound.setBuffer(m_Buffer);
+			m_sound.setBuffer(m_Buffer);	// need to redo it beacause the address is moved when pushback
 		}
 		else
 		{
@@ -32,6 +32,9 @@ public:
 			m_sound.setBuffer(m_Buffer); 
 	};
 
+	bool operator == (const Sound& s) const { return m_name == s.m_name && m_state == s.m_state; };
+	bool operator != (const Sound& s) const { return !operator==(s); };
+
 private:
 	std::string m_name;
 	//RessourceType m_type;
@@ -43,23 +46,9 @@ private:
 };
 
 
-
-//struct Sound
-//{
-//	Sound(std::string Name) { name = Name; };
-//
-//	std::string name;
-//	RessourceType type;
-//	State state;
-//	float volume_multi;
-//
-//	sf::SoundBuffer Buffer;
-//	sf::Sound sound;
-//
-//	//sf::Music music;
-//};
 extern std::list<Sound> SoundList;
 
 void LoadSounds(State _state);
 sf::Sound& getSound(std::string Name);
+void RemoveAllSounds();
 

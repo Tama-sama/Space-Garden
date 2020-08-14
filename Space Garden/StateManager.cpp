@@ -1,8 +1,40 @@
 #include "StateManager.hpp"
 #include "Window.hpp"
-
+#include "SoundManager.hpp"
+#include "Texture_SpriteManager.hpp"
 State state = State::INTRO;
 
+
+void ChangeState(State NextState)
+{
+	RemoveAllSounds();
+	RemoveAllSprites();
+
+	state = NextState;
+	
+	LoadSounds(NextState);
+	LoadSprite(NextState);
+	InitManager();
+}
+
+void InitManager()
+{
+	static bool FirstInit = false;
+	if (!FirstInit)
+	{
+		Font.loadFromFile("../Ressources/Otto.ttf");
+		FirstInit = true;
+	}
+
+	switch (state)
+	{
+	case State::MAIN_MENU:
+		break;
+
+	default:
+		break;
+	}
+}
 
 void UpdateManager()
 {

@@ -27,3 +27,15 @@ sf::Sound& getSound(std::string Name)
 		}
 	}
 }
+
+void RemoveAllSounds()
+{
+	while (SoundList.size() != 0)
+	{
+		for (Sound& ActualSound : SoundList)
+		{
+			SoundList.remove(ActualSound);
+			break;
+		}
+	}
+}

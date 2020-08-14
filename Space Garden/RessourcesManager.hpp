@@ -5,6 +5,7 @@
 enum class RessourceType
 {
 	UNKNOWN,
+	TEXTURE,
 	SOUNDFX,
 	MUSIC,
 };

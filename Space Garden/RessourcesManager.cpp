@@ -37,11 +37,20 @@ void RessourcesLoad(std::string path)
 		{
 			tmpRessource.type = RessourceType::SOUNDFX;
 			InfoPath = "../Ressources/Infos/Sound.load";
-			//std::cout << tmpRessource.name << std::endl;
 		}
 		else if (tmpExtension == ".ogg")
 		{
 			tmpRessource.type = RessourceType::MUSIC;
+		}
+		else if (tmpExtension == ".png")
+		{
+			tmpRessource.type = RessourceType::TEXTURE;
+			InfoPath = "../Ressources/Infos/Textures.load";
+		}
+		else if (tmpExtension == ".jpg")
+		{
+			tmpRessource.type = RessourceType::TEXTURE;
+			InfoPath = "../Ressources/Infos/Textures.load";
 		}
 
 
@@ -55,7 +64,6 @@ void RessourcesLoad(std::string path)
 				{
 					std::string FileName = "";
 					FileName = Line.substr(0, Line.find(" "));
-					//std::cout << FileName << std::endl;
 
 					if (FileName == tmp)
 					{
