@@ -16,7 +16,7 @@ void Intro()
 	static sf::Text buttons_text[5];
 
 	static bool one_pass = false;
-
+	bool changestate = false;
 	if (!one_pass)
 	{
 		for (int i = 0; i < 5; i++)
@@ -27,13 +27,12 @@ void Intro()
 		}
 
 		buttons_text[0].setString("Jouer");
-		buttons_text[1].setString("ScoreBoard Solo");
-		buttons_text[2].setString("ScoreBoard Duo");
+		buttons_text[1].setString("ScoreBoards");
+		buttons_text[2].setString("Options");
 		buttons_text[3].setString("Credits");
 		buttons_text[4].setString("Quitter");
 
 		buttons_text[1].setCharacterSize(50);
-		buttons_text[2].setCharacterSize(50);
 
 		one_pass = true;
 	}
@@ -116,16 +115,15 @@ void Intro()
 	if (Name_pos.x > 9000 && ship_pos.y > -150)
 		ship_pos.y += -250 * MainTime.GetTimeDeltaF();
 	else if (Name_pos.x > 9000 && ship_pos.y <= -150)
-	{
-		state = State::MAIN_MENU;
-	}
+		changestate = true;
+	
 
 	getSprite("Test").setPosition(ship_pos);
 	win.Window().draw(getSprite("Test"));
 
 	buttons_text[0].setPosition(sf::Vector2f(850, 50 + (ship_pos.y + 150)));
-	buttons_text[1].setPosition(sf::Vector2f(950, 265 + (ship_pos.y + 150)));
-	buttons_text[2].setPosition(sf::Vector2f(800, 470 + (ship_pos.y + 150)));
+	buttons_text[1].setPosition(sf::Vector2f(975, 265 + (ship_pos.y + 150)));
+	buttons_text[2].setPosition(sf::Vector2f(850, 450 + (ship_pos.y + 150)));
 	buttons_text[3].setPosition(sf::Vector2f(1000, 650 + (ship_pos.y + 150)));
 	buttons_text[4].setPosition(sf::Vector2f(845, 850 + (ship_pos.y + 150)));
 
@@ -149,4 +147,7 @@ void Intro()
 		win.Window().draw(getSprite("Button"));
 		win.Window().draw(buttons_text[i]);
 	}
+
+	if (changestate)
+		ChangeState(State::MAIN_MENU);
 }

@@ -1,5 +1,10 @@
 // Name | State1 | State2 ...
-Fond_menu2 | Intro
+Fond_menu2 | Intro | Menu
 Spaces_garden | Intro
 Test | Intro
-Button | Intro
+Button | Intro | Menu
+Credits | Menu
+Comment_jouer | Menu
+Joueur1 | Menu
+XP | Menu
+XpBar | Menu

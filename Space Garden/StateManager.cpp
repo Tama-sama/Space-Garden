@@ -2,6 +2,9 @@
 #include "Window.hpp"
 #include "SoundManager.hpp"
 #include "Texture_SpriteManager.hpp"
+
+#include "Menu.hpp"
+
 State state = State::INTRO;
 
 
@@ -48,6 +51,7 @@ void UpdateManager()
 	switch (state)
 	{
 	case State::MAIN_MENU :
+		UpdateMenu();
 		break;
 
 	default:
@@ -74,6 +78,7 @@ void DisplayManager()
 		break;
 
 	case State::MAIN_MENU:
+		DisplayMenu();
 		break;
 
 	default:

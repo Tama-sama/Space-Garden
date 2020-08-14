@@ -28,18 +28,18 @@
     <Filter Include="Fichiers d%27en-tête\Ressources">
       <UniqueIdentifier>{cb532da7-9cbc-40aa-b4ee-0396f0c9cef9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Stages">
+      <UniqueIdentifier>{016ff441-2c9e-47d6-84c3-2151eb227b47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Stages">
+      <UniqueIdentifier>{a88cb406-9203-4b85-9306-813084d347d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Tools.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="StateManager.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Intro.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Tir.cpp">
@@ -55,6 +55,15 @@
       <Filter>Fichiers sources\Ressources</Filter>
     </ClCompile>
     <ClCompile Include="Texture_SpriteManager.cpp">
+      <Filter>Fichiers sources\Ressources</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Fichiers sources\Stages</Filter>
+    </ClCompile>
+    <ClCompile Include="Intro.cpp">
+      <Filter>Fichiers sources\Stages</Filter>
+    </ClCompile>
+    <ClCompile Include="StateManager.cpp">
       <Filter>Fichiers sources\Ressources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -85,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="Texture_SpriteManager.hpp">
       <Filter>Fichiers d%27en-tête\Ressources</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.hpp">
+      <Filter>Fichiers d%27en-tête\Stages</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

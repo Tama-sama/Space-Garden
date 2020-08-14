@@ -1,3 +1,4 @@
 // Name | State1 | State2 ...
-shoot | Intro | r1 | r2
+shoot | Intro
 explosions | Intro
+menu_click | Menu

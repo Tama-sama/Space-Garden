@@ -81,6 +81,11 @@ void RessourcesLoad(std::string path)
 								tmpRessource.state = State::INTRO;
 								RessourcesList.push_back(tmpRessource);
 							}
+							if (ActiveStage == "Menu")
+							{
+								tmpRessource.state = State::MAIN_MENU;
+								RessourcesList.push_back(tmpRessource);
+							}
 
 							if (Line.find("|") == -1)
 								done = true;

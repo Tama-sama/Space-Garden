@@ -162,6 +162,7 @@
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Intro.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="RessourcesManager.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Texture_SpriteManager.cpp" />
@@ -171,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Explosion.hpp" />
+    <ClInclude Include="Menu.hpp" />
     <ClInclude Include="RessourcesManager.hpp" />
     <ClInclude Include="SoundManager.hpp" />
     <ClInclude Include="StateManager.hpp" />
