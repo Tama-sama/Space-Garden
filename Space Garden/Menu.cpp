@@ -190,6 +190,15 @@ void UpdateCredits()
 }
 void UpdateHowToPlay()
 {
+	static float ActionTiming = 0.f;
+	ActionTiming += MainTime.GetTimeDeltaF();
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && ActionTiming >= 0.3)
+	{
+		ActionTiming = 0;
+		getSound("menu_click").play();
+		ActualMenu = Menus::PLAY;
+	}
+
 	for (PlayerBullet& ActualShoot : Bullets)
 	{
 		ActualShoot.Update();
@@ -569,4 +578,10 @@ void DisplayHowToPlay()
 	getSprite("Joystick").setTextureRect(JoystickRect);
 	getSprite("Joystick").setPosition(1420, 20);
 	win.Window().draw(getSprite("Joystick"));
+
+	sf::Text Return("B Retour", Font, 75);
+	Return.setFillColor(sf::Color::Color(180, 50, 0));
+	Return.setPosition(1450, 940);
+	win.Window().draw(Return);
+
 }
