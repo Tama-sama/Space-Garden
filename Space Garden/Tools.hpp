@@ -117,6 +117,16 @@ double random(float Min, float Max);
 bool Circle_Collision(sf::Vector2f _pos1, sf::Vector2f _pos2, float _rayon1, float _rayon2);
 
 /////////////
+/// \brief Check if a circle is in a rectangle
+/// \param sf::Vector2f CirclePosition : Position of the center of the circle
+/// \param sf::Vector2f RectanglePosition : Position of the Top-Left corner of the rectangle
+/// \param float CircleRadius : Radius of the circle
+/// \param sf::Vector2f RectangleSize : Size of the rectangle
+/// \return bool : true if they are inside each other
+/////////////
+bool Circle_Rect_Collision(sf::Vector2f CirclePosition, sf::Vector2f RectanglePosition, float CircleRadius, sf::Vector2f RectangleSize);
+
+/////////////
 /// \brief get the rotation beetween two points
 /// \param pointA : sf::Vector2f
 /// \param pointB : sf::Vector2f

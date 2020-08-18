@@ -60,6 +60,30 @@ double random(float Min, float Max)
 	return ((rand() / (double)RAND_MAX) * ((double)Max - (double)Min) + (double)Min);
 }
 
+bool Circle_Rect_Collision(sf::Vector2f CirclePosition, sf::Vector2f RectanglePosition, float CircleRadius, sf::Vector2f RectangleSize)
+{
+	sf::Vector2f Test(CirclePosition);
+
+	if (CirclePosition.x < RectanglePosition.x)
+		Test.x = RectanglePosition.x;
+	else if (CirclePosition.x > RectanglePosition.x + RectangleSize.x)
+		Test.x = RectanglePosition.x + RectangleSize.x;
+
+	if (CirclePosition.y < RectanglePosition.y)
+		Test.y = RectanglePosition.y;
+	else if (CirclePosition.y > RectanglePosition.y + RectangleSize.y)
+		Test.y = RectanglePosition.y + RectangleSize.y;
+
+	sf::Vector2f Dist(CirclePosition.x - Test.x, CirclePosition.y - Test.y);
+	float distance = sqrt((Dist.x * Dist.x) + (Dist.y * Dist.y));
+
+	if (distance <= CircleRadius)
+		return true;
+	else
+		return false;
+}
+
+
 bool Circle_Collision(sf::Vector2f Pos1, sf::Vector2f Pos2, float Rayon1, float Rayon2)
 {
 	if (sqrt(pow(Pos1.x - Pos2.x, 2) + pow(Pos1.y - Pos2.y, 2)) < Rayon1 + Rayon2)

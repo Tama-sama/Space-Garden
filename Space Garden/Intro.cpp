@@ -12,7 +12,7 @@
 void Intro()
 {
 	static sf::Vector2f Name_pos = { 240,-70 };
-	static sf::Vector2f ship_pos = { 950, 1200 };
+	static sf::Vector2f ship_pos = { 960, 1200 };
 	static sf::Text buttons_text[5];
 
 	static bool one_pass = false;
@@ -52,7 +52,7 @@ void Intro()
 		static bool one_pass2;
 		if (!one_pass2)
 		{
-			Bullets.push_back(PlayerBullet(sf::Vector2f(ship_pos.x + 22, ship_pos.y ), 0, 0, 5));
+			Bullets.push_back(PlayerBullet(sf::Vector2f(ship_pos.x, ship_pos.y ), 0, 0, 5));
 			getSound("shoot").play();
 			
 			one_pass2 = true;
@@ -118,6 +118,7 @@ void Intro()
 		changestate = true;
 	
 
+	getSprite("Test").setOrigin(getSprite("Test").getGlobalBounds().width / 2, 0);
 	getSprite("Test").setPosition(ship_pos);
 	win.Window().draw(getSprite("Test"));
 

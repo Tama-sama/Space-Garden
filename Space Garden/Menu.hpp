@@ -7,6 +7,7 @@ void UpdateMenu();
 void UpdateMainMenu();
 void UpdatePlayMenu();
 void UpdateCredits();
+void UpdateHowToPlay();
 
 
 

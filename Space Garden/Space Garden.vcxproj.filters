@@ -66,6 +66,15 @@
     <ClCompile Include="StateManager.cpp">
       <Filter>Fichiers sources\Ressources</Filter>
     </ClCompile>
+    <ClCompile Include="Ennemies.cpp">
+      <Filter>Fichiers sources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Fichiers sources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Buffs.cpp">
+      <Filter>Fichiers sources\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.hpp">
@@ -97,6 +106,15 @@
     </ClInclude>
     <ClInclude Include="Menu.hpp">
       <Filter>Fichiers d%27en-tête\Stages</Filter>
+    </ClInclude>
+    <ClInclude Include="Ennemies.hpp">
+      <Filter>Fichiers d%27en-tête\Objects\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Buffs.hpp">
+      <Filter>Fichiers d%27en-tête\Objects\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.hpp">
+      <Filter>Fichiers d%27en-tête\Objects\GameObj</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
