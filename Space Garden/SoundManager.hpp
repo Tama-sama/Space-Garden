@@ -3,14 +3,17 @@
 #include "StateManager.hpp"
 #include "RessourcesManager.hpp"
 
+extern int MusicMultip;
+extern int SoundMultip;
 
 class Sound
 {
 public:
-	Sound(std::string Name, State _state, std::string Path)
+	Sound(std::string Name, State _state, std::string Path, float VolumeMultiplier)
 	{
 		m_name = Name;
 		m_state = _state;
+		m_volume_multi = VolumeMultiplier;
 
 		if (m_Buffer.loadFromFile(Path))
 		{
@@ -24,10 +27,12 @@ public:
 	~Sound() {};
 
 	std::string getName() const { return m_name; };
+	State getState() const { return m_state; };
 	sf::Sound& getSound() { return m_sound; };
 	sf::SoundBuffer& getSoundBuffer() { return m_Buffer; };
 	void update() 
 	{ 
+		m_sound.setVolume(SoundMultip * m_volume_multi);
 		if (m_sound.getStatus() != sf::Sound::Playing)
 			m_sound.setBuffer(m_Buffer); 
 	};
@@ -47,6 +52,7 @@ private:
 
 
 extern std::list<Sound> SoundList;
+
 
 void LoadSounds(State _state);
 sf::Sound& getSound(std::string Name);

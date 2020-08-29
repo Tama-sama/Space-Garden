@@ -1,5 +1,5 @@
-Miki 4550
-Tama 2840
-tama 2700
-Krorips 2530
-tama 2500
+R Miki 4550
+R Tama 2840
+R tama 2700
+R Krorips 2530
+B tama 1

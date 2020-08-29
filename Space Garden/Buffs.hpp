@@ -9,6 +9,7 @@ public:
 
 	sf::Vector2f getpos() const { return m_pos; };
 	bool Exist() const { return m_life > 0; }
+	int getType() const { return m_type; };
 
 	void Update();
 	void Kill() { m_life = 0; };
@@ -25,3 +26,5 @@ private:
 };
 
 extern std::list<Buffs> BuffsList;
+
+void RemoveAllBuffs();

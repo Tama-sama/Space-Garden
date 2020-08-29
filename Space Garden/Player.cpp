@@ -15,13 +15,32 @@ Player::Player(sf::Vector2f pos, int BaseDamages, int PlayerNumber)
 	m_shootSin = 3;
 	invulnerability = false;
 	InvuTimer = 0;
+	SpeAtkPts = 0;
+	SpeAtkActive = false;
+	shootSinCounter = 0;
+	m_speTimer = 3;
+	GameControler = -2;
+	m_Ship = 'R';
 }
 
 void Player::TimersUpdate(float TimingAdd)
 {
 	m_firingTimer += TimingAdd;
+	m_speTimer += TimingAdd;
 	InvuTimer += TimingAdd;
+}
 
+void Player::TakeDamage(int Damage)
+{
+	if (!invulnerability)
+	{
+		invulnerability = true;
+		InvuTimer = 0;
+		m_vie -= Damage;
+	}
+
+	if (m_vie < 0) 
+		m_vie = 0;
 }
 
 void Player::Fire()
@@ -72,12 +91,22 @@ void Player::Fire()
 
 void Player::FirePissenlit()
 {
-	Bullets.push_back(PlayerBullet(sf::Vector2f(m_pos.x, m_pos.y), 2, m_PlayerNumber, 5));
+	if (m_speTimer >= 2 && m_shootPissenlit > 0)
+	{
+		m_speTimer = 0;
+		m_shootPissenlit--;
+		Bullets.push_back(PlayerBullet(sf::Vector2f(m_pos.x, m_pos.y), 2, m_PlayerNumber, 5));
+	}
 }
 
 void Player::SetFireSin()
 {
-	shootingSin = true;
+	if (m_speTimer >= 2 && m_shootSin > 0)
+	{
+		m_speTimer = 0;
+		m_shootSin--;
+		shootingSin = true;
+	}
 }
 
 void Player::FireSin()
@@ -96,4 +125,31 @@ void Player::FireSin()
 			shootingSin = false;
 		}
 	}
+}
+
+void Player::Update()
+{
+	if (invulnerability)
+	{
+		InvuTimer += MainTime.GetTimeDeltaF();
+		if (InvuTimer > 2.f)
+		{
+			InvuTimer = 0;
+			invulnerability = false;
+		}
+	}
+}
+
+void Player::Reset()
+{
+	m_anim = sf::IntRect(0, 0, 62, 101);
+
+	m_vie = 3;
+	m_score = 0;
+	m_firingTimer = 0;
+	m_shootPissenlit = 3;
+	shootingSin = false;
+	m_shootSin = 3;
+	invulnerability = false;
+	InvuTimer = 0;
 }

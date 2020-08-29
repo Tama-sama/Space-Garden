@@ -160,13 +160,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Buffs.cpp" />
+    <ClCompile Include="Controles.cpp" />
     <ClCompile Include="Ennemies.cpp" />
+    <ClCompile Include="EnnemiesShoots.cpp" />
     <ClCompile Include="Explosion.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GamePad.cpp" />
     <ClCompile Include="Intro.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RessourcesManager.cpp" />
+    <ClCompile Include="Save.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="Texture_SpriteManager.cpp" />
     <ClCompile Include="StateManager.cpp" />
@@ -175,8 +180,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buffs.hpp" />
+    <ClInclude Include="Controles.hpp" />
     <ClInclude Include="Ennemies.hpp" />
+    <ClInclude Include="EnnemiesShoots.hpp" />
     <ClInclude Include="Explosion.hpp" />
+    <ClInclude Include="Game.hpp" />
+    <ClInclude Include="GamePad.hpp" />
     <ClInclude Include="Menu.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="RessourcesManager.hpp" />

@@ -24,4 +24,14 @@ void Buffs::Update()
 		m_delta.y = 225;
 
 	m_pos += m_delta * MainTime.GetTimeDeltaF();
+
+	if (!sf::IntRect(0, -100, 1920, 1080).contains(sf::Vector2i(m_pos)))
+		m_life = 0;
+}
+
+
+void RemoveAllBuffs()
+{
+	while (BuffsList.size() != 0)
+		BuffsList.pop_back();
 }

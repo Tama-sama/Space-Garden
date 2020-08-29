@@ -75,6 +75,21 @@
     <ClCompile Include="Buffs.cpp">
       <Filter>Fichiers sources\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Fichiers sources\Stages</Filter>
+    </ClCompile>
+    <ClCompile Include="EnnemiesShoots.cpp">
+      <Filter>Fichiers sources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePad.cpp">
+      <Filter>Fichiers sources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Controles.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Save.cpp">
+      <Filter>Fichiers sources\Stages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.hpp">
@@ -115,6 +130,18 @@
     </ClInclude>
     <ClInclude Include="Player.hpp">
       <Filter>Fichiers d%27en-tête\Objects\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.hpp">
+      <Filter>Fichiers d%27en-tête\Stages</Filter>
+    </ClInclude>
+    <ClInclude Include="EnnemiesShoots.hpp">
+      <Filter>Fichiers d%27en-tête\Objects\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePad.hpp">
+      <Filter>Fichiers d%27en-tête\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Controles.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

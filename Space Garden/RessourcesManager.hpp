@@ -16,6 +16,7 @@ struct Ressources
 	RessourceType type;
 	std::string name;
 	std::string path;
+	float soundmultiplier;
 };
 
 extern std::list<Ressources> RessourcesList;

@@ -1,15 +1,29 @@
 // Name | State1 | State2 ...
-Fond_menu2 | Intro | Menu
+Fond_menu2 | All
+JoueurR | All
+JoueurB | All
 Spaces_garden | Intro
 Test | Intro
 Button | Intro | Menu
 Credits | Menu
 Comment_jouer | Menu
-Joueur1 | Menu
-XP | Menu
-XpBar | Menu
+XP | Menu | Game
+XpBar | Menu | Game
 LB | Menu
 RB | Menu
 RT | Menu
 Joystick | Menu
-Power_Up | Menu
+Power_Up | Menu | Game
+Score_Up | Game
+HP_Up | Game
+Pissenlit_Up | Game
+Sin_Up | Game
+Fond | Game
+Bubulles | Game
+HUD_J1 | Game
+HUD_J2 | Game
+HUDJ1 | Game
+HUDJ2 | Game
+Coeur | Game
+Bande_L | Menu
+Bande_R | Menu

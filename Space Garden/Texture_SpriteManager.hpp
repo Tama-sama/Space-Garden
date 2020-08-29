@@ -24,9 +24,9 @@ public:
 	~Sprite() {};
 
 	std::string getName() const { return m_name; };
+	State getState() const { return m_state; };
 	sf::Sprite& getSprite() { return m_sprite; };
 	sf::Texture& getTexture() { return m_texture; };
-	
 
 	bool operator == (const Sprite& s) const { return m_name == s.m_name && m_state == s.m_state; };
 	bool operator != (const Sprite& s) const { return !operator==(s); };

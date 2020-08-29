@@ -5,8 +5,11 @@
 enum class State
 {
 	RTNULL,
+	ALL,
 	INTRO,
 	MAIN_MENU,
+	GAME,
+	SAVE,
 };
 extern State state;
 

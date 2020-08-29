@@ -69,6 +69,9 @@ void PlayerBullet::Update()
 	}
 
 	sprite.setPosition(bul_pos);
+
+	if (!sf::IntRect(0, 0, 1920, 1080).contains(sf::Vector2i(bul_pos)))
+		bul_vie = 0;
 }
 
 
@@ -76,4 +79,12 @@ void PlayerBullet::Update()
 void PlayerBullet::TakeDamage()
 {
 	bul_vie = 0;
+}
+
+
+
+void RemoveAllPlayerShoots()
+{
+	while (Bullets.size() != 0)
+		Bullets.pop_back();
 }

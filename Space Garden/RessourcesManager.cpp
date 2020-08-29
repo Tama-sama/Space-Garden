@@ -67,15 +67,28 @@ void RessourcesLoad(std::string path)
 
 					if (FileName == tmp)
 					{
-						std::cout << FileName;
 						Line.erase(0, FileName.size() + 3);
+
+						if (InfoPath == "../Ressources/Infos/Sound.load")
+						{
+							std::cout << Line << "\n";
+							tmpRessource.soundmultiplier = std::stof(Line.substr(0, Line.find(" ")));
+							Line.erase(0, Line.substr(0, Line.find(" ")).size() + 3);
+							std::cout << Line << "\n";
+						}
+
+
 						bool done = false;
 						while (!done)
 						{
 							std::string ActiveStage = Line.substr(0, Line.find(" "));
 							Line.erase(0, ActiveStage.size());
-							std::cout << " | " << ActiveStage;
 
+							if (ActiveStage == "All")
+							{
+								tmpRessource.state = State::ALL;
+								RessourcesList.push_back(tmpRessource);
+							}
 							if (ActiveStage == "Intro")
 							{
 								tmpRessource.state = State::INTRO;
@@ -86,6 +99,11 @@ void RessourcesLoad(std::string path)
 								tmpRessource.state = State::MAIN_MENU;
 								RessourcesList.push_back(tmpRessource);
 							}
+							if (ActiveStage == "Game")
+							{
+								tmpRessource.state = State::GAME;
+								RessourcesList.push_back(tmpRessource);
+							}
 
 							if (Line.find("|") == -1)
 								done = true;
@@ -93,7 +111,6 @@ void RessourcesLoad(std::string path)
 								Line.erase(0, 3);
 
 						};
-						std::cout << std::endl;
 						break;
 
 					}
@@ -104,7 +121,5 @@ void RessourcesLoad(std::string path)
 			else
 				std::cout << "Error Open File : " << InfoPath << std::endl;
 		}
-
-		// std::cout << tmp << "  extension : " << tmpExtension << std::endl;
 	}
 }

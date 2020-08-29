@@ -1,5 +1,5 @@
-Leo 4430 7990 3560 Krorips
-Miki 2870 5010 2140 KroripS
-Leo 1920 4000 2080 Krorips
-Ophiushus 1220 3300 2080 Leo
-Ophiushus 1540 2880 1340 Kliaz
+R Leo 4430 7990 3560 Krorips R
+R Miki 2870 5010 2140 KroripS R
+B Leo 1920 4000 2080 Krorips R
+R Ophiushus 1220 3300 2080 Leo R
+R Ophiushus 1540 2880 1340 Kliaz B

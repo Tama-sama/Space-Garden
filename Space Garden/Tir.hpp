@@ -38,3 +38,4 @@ private:
 
 
 extern std::list<PlayerBullet> Bullets;
+void RemoveAllPlayerShoots();

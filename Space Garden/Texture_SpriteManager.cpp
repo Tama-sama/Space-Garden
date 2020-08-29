@@ -42,12 +42,18 @@ sf::Texture& getTexture(std::string Name)
 
 void RemoveAllSprites()
 {
-	while (SpriteList.size() != 0)
+	bool Removed = true;
+	while (Removed)
 	{
+		Removed = false;
 		for (Sprite& ActualSprite : SpriteList)
 		{
-			SpriteList.remove(ActualSprite);
-			break;
+			if (ActualSprite.getState() != State::ALL)
+			{
+				SpriteList.remove(ActualSprite);
+				Removed = true;
+				break;
+			}
 		}
 	}
 }

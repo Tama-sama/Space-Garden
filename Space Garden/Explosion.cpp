@@ -1,5 +1,7 @@
 #include "Explosion.hpp"
 
+std::list<Explosion> Explosions;
+
 sf::Texture _exposion_1;
 sf::Texture _exposion_2;
 sf::Texture _exposion_Boss1;
@@ -52,7 +54,30 @@ Explosion::Explosion(sf::Vector2f _elemvector, int _type)
 	sprite.setOrigin(anim.width / 2, anim.height / 2);
 	pos = _elemvector;
 	timer = 0;
+	life = 1;
+}
+
+void Explosion::update()
+{
+	if (animator.getXFrame() < animator.getMaxXFrame() - 1)
+		animator.Animate(sprite);
+
+	sprite.setPosition(pos);
+
+	if (animator.getXFrame() >= animator.getMaxXFrame() - 1)
+	{
+		timer += MainTime.GetTimeDeltaF();
+		if (timer >= 0.075f)
+		{
+			life = 0;
+		}
+	}
 }
 
 
-std::list<Explosion> Explosions;
+
+void RemoveAllExplosions()
+{
+	while (Explosions.size() != 0)
+		Explosions.pop_back();
+}
