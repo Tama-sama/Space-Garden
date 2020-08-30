@@ -34,6 +34,8 @@ enum class Menus
 };
 Menus ActualMenu;
 
+std::string To_String(Action _Action);
+
 // options
 bool OptionChangeKeys = false;
 std::string ret;
@@ -439,6 +441,7 @@ void UpdateScoreBoardMenu()
 void UpdateOptionMenu()
 {
 	static float ActionTiming = 0.f;
+	static bool Save = false;
 	ActionTiming += MainTime.GetTimeDeltaF();
 	if (ChangingControle != 0)
 		ActionTiming = 0.f;
@@ -446,6 +449,7 @@ void UpdateOptionMenu()
 	if (isButtonPressed(Action::Return) && ActionTiming >= 0.3)
 	{
 		ActionTiming = 0;
+		Save = true;
 		getSound("menu_click").play();
 
 		if (!OptionChangeKeys)
@@ -505,6 +509,7 @@ void UpdateOptionMenu()
 		if (isButtonPressed(Action::Left) && ActionTiming >= 0.3)
 		{
 			ActionTiming = 0;
+			Save = true;
 
 			switch (changeKeyChoice)
 			{
@@ -537,6 +542,7 @@ void UpdateOptionMenu()
 				break;
 
 			default:
+				Save = false;
 				break;
 			}
 		}
@@ -544,6 +550,7 @@ void UpdateOptionMenu()
 		if (isButtonPressed(Action::Right) && ActionTiming >= 0.3)
 		{
 			ActionTiming = 0;
+			Save = true;
 
 			switch (changeKeyChoice)
 			{
@@ -576,6 +583,7 @@ void UpdateOptionMenu()
 				break;
 
 			default:
+				Save = false;
 				break;
 			}
 		}
@@ -587,6 +595,55 @@ void UpdateOptionMenu()
 			{
 				OptionChangeKeys = true;
 			}
+		}
+	}
+
+
+	if (Save)
+	{
+		std::ofstream FileWrite("../Ressources/Infos/Settings.bin", std::ofstream::binary);
+		if (FileWrite.is_open())
+		{
+			std::string LineToWrite;
+
+			for (Controle& actualControl : controles)
+			{
+				int name = (int)actualControl.name;
+				int KeyBoard = actualControl.KeyBoard;
+				int PadKey = (int)actualControl.PadKey;
+
+
+				FileWrite.write((char*) &name, sizeof(int));
+				FileWrite.write((char*) &KeyBoard, sizeof(int));
+				FileWrite.write((char*) &PadKey, sizeof(int));
+				FileWrite.write((char*) &actualControl.AxisDirection, sizeof(int));
+			}
+			
+			int Style = win.getStyle();
+			bool Vsync = win.getVerticalSync();
+			int Frames = win.getFrameRate();
+
+			FileWrite.write((char*)&MusicMultip, sizeof(int));
+			FileWrite.write((char*)&SoundMultip, sizeof(int));
+			FileWrite.write((char*)&Style, sizeof(int));
+			FileWrite.write((char*)&Vsync, sizeof(bool));
+			FileWrite.write((char*)&Frames, sizeof(int));
+
+			//keyboard key
+			//for (Controle& actualControl : controles)
+			//{
+			//	FileWrite << To_String(actualControl.name) << " " << actualControl.KeyBoard << " " << (int)actualControl.PadKey << " " << actualControl.AxisDirection << "\n";
+			//}
+
+			////options
+			//FileWrite << MusicMultip << "\n";
+			//FileWrite << SoundMultip << "\n";
+			//FileWrite << win.getStyle() << "\n";
+			//FileWrite << win.getVerticalSync() << "\n";
+			//FileWrite << win.getFrameRate() << "\n";
+
+			FileWrite.close();
+			Save = false;
 		}
 	}
 }
@@ -1359,4 +1416,46 @@ void DisplayHowToPlay()
 	Return.setPosition(1450, 940);
 	win.Window().draw(Return);
 
+}
+
+
+
+std::string To_String(Action _Action)
+{
+	switch (_Action)
+	{
+	case Action::Up:
+		return "Up";
+		break;
+	case Action::Down:
+		return "Down";
+		break;
+	case Action::Left:
+		return "Left";
+		break;
+	case Action::Right:
+		return "Right";
+		break;
+	case Action::Interact:
+		return "Interact";
+		break;
+	case Action::Return:
+		return "Return";
+		break;
+	case Action::Start:
+		return "Start";
+		break;
+	case Action::Fire:
+		return "Fire";
+		break;
+	case Action::Fire_Spe1:
+		return "Fire_Spe1";
+		break;
+	case Action::Fire_Spe2:
+		return "Fire_Spe2";
+		break;
+
+	default:
+		break;
+	}
 }

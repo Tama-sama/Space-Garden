@@ -2,7 +2,7 @@
 #include "Window.hpp"
 #include "StateManager.hpp"
 #include "RessourcesManager.hpp"
-
+#include "SoundManager.hpp"
 #include "Controles.hpp"
 
 
@@ -21,7 +21,52 @@ void ControlInit()
 	controles.push_back(Controle(Action::Fire_Spe1, sf::Keyboard::LShift , true, gamepadPS4::L1));
 	controles.push_back(Controle(Action::Fire_Spe2, sf::Keyboard::LControl , true, gamepadPS4::R1));
 }
+std::string To_String(Action _Action);
+void OptionLoad()
+{
+	std::ifstream SettingFile("../Ressources/Infos/Settings.bin", std::ifstream::binary);
+	if (SettingFile.is_open())
+	{
 
+		for (Controle& ActualControle : controles)
+		{
+			int name = 0;
+			int KeyBoard = 0;
+			int PadKey = 0;
+			int Dir = 0;
+
+			SettingFile.read((char*) &name, sizeof(int));
+			SettingFile.read((char*) &KeyBoard, sizeof(int));
+			SettingFile.read((char*) &PadKey, sizeof(int));
+			SettingFile.read((char*) &Dir, sizeof(int));
+
+			ActualControle.KeyBoard = (sf::Keyboard::Key)KeyBoard;
+			ActualControle.PadKey = (gamepadPS4)PadKey;
+			ActualControle.AxisDirection = Dir;
+
+			ActualControle.isButton = true;
+			if (Dir != 0)
+				ActualControle.isButton = false;
+		}
+
+		int Style = 0;
+		bool Vsync = true;
+		int Frames = 0;
+
+		SettingFile.read((char*)&MusicMultip, sizeof(int));
+		SettingFile.read((char*)&SoundMultip, sizeof(int));
+		SettingFile.read((char*)&Style, sizeof(int));
+		SettingFile.read((char*)&Vsync, sizeof(bool));
+		SettingFile.read((char*)&Frames, sizeof(int));
+
+		win.setStyle(Style);
+		win.setVerticalSync(Vsync);
+		win.setFrameRate(Frames);
+
+
+		SettingFile.close();
+	}
+}
 
 
 Windows win(sf::VideoMode::getDesktopMode(), "Space Garden", 120, sf::Style::None);
@@ -32,6 +77,7 @@ int main(int argc, char** argv)
 	LaunchArguments(argc, argv);
 
 	ControlInit();
+	OptionLoad();
 	RessourcesLoad("../Ressources/");
 	ChangeState(State::ALL);
 	ChangeState(State::INTRO);
