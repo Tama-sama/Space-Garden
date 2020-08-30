@@ -1,0 +1,4 @@
+// Name | Volume multi | State1 | State2 ...
+Boss | 1.0 | Game
+Game | 1.0 | Game
+Menu | 1.0 | All

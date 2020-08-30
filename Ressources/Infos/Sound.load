@@ -1,4 +1,5 @@
-// Name | State1 | State2 ...
-shoot | 0.3 | Intro | Game
-explosions | 1.0 | Intro | Game
+// Name | Volume multi | State1 | State2 ...
+shoot | 0.15 | Intro | Game
+explosions | 0.8 | All
 menu_click | 1.0 | All
+player_damage | 0.2 | Game

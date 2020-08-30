@@ -58,3 +58,46 @@ void LoadSounds(State _state);
 sf::Sound& getSound(std::string Name);
 void RemoveAllSounds();
 
+
+
+class Musics
+{
+public:
+	Musics() {};
+	~Musics() {};
+
+	std::string getName() const { return m_name; };
+	State getState() const { return m_state; };
+	sf::Music& getMusic() { return m_Music; };
+	void update() {	m_Music.setVolume(MusicMultip * m_volume_multi); };
+
+	void Construct(std::string Name, State _state, std::string Path, float VolumeMultiplier)
+	{
+		m_name = Name;
+		m_state = _state;
+		m_volume_multi = VolumeMultiplier;
+
+		if (m_Music.openFromFile(Path))
+		{
+		}
+		else
+		{
+			std::cout << "ERROR: Music : " << m_name << " didn't load" << std::endl;
+		}
+	};
+
+	bool operator == (const Musics& s) const { return m_name == s.m_name && m_state == s.m_state; };
+	bool operator != (const Musics& s) const { return !operator==(s); };
+
+private:
+	std::string m_name;
+	//RessourceType m_type;
+	State m_state;
+	sf::Music m_Music;
+	float m_volume_multi;
+};
+
+
+extern std::list<Musics*> MusicList;
+sf::Music& getMusic(std::string Name);
+void MusicPlayManager();

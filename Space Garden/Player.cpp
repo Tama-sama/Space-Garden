@@ -1,5 +1,6 @@
 #include "Player.hpp"
 #include "StateManager.hpp"
+#include "SoundManager.hpp"
 
 Player::Player(sf::Vector2f pos, int BaseDamages, int PlayerNumber)
 {
@@ -56,6 +57,9 @@ void Player::Fire()
 		{
 			Bullets.push_back(PlayerBullet(sf::Vector2f(m_pos.x, m_pos.y), 0, m_PlayerNumber, m_damage));
 			m_firingTimer = 0.f;
+
+			if (state != State::MAIN_MENU)
+				getSound("shoot").play();
 		}
 	}
 	else
@@ -70,6 +74,7 @@ void Player::Fire()
 				Bullets.push_back(PlayerBullet(sf::Vector2f(m_pos.x - 25, m_pos.y + 10), 0, m_PlayerNumber, m_damage));
 				Bullets.push_back(PlayerBullet(sf::Vector2f(m_pos.x, m_pos.y), 0, m_PlayerNumber, m_damage));
 				Bullets.push_back(PlayerBullet(sf::Vector2f(m_pos.x + 25, m_pos.y + 10), 0, m_PlayerNumber, m_damage));
+				getSound("shoot").play();
 			}
 			else
 			{

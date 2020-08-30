@@ -364,14 +364,6 @@ void UpdateScoreBoardMenu()
 			ScoreBoardSeen = 2;
 	}
 
-
-
-	getSprite("JoueurR").setTextureRect(sf::IntRect(0, 0, 62, 101));
-	getSprite("JoueurB").setTextureRect(sf::IntRect(0, 0, 62, 101));
-
-	getSprite("JoueurR").setOrigin(getSprite("JoueurR").getGlobalBounds().width / 2, getSprite("JoueurR").getGlobalBounds().height / 2);
-	getSprite("JoueurB").setOrigin(getSprite("JoueurB").getGlobalBounds().width / 2, getSprite("JoueurB").getGlobalBounds().height / 2);
-
 	if (NeedReload)
 	{
 		NeedReload = false;
@@ -612,7 +604,6 @@ void UpdateOptionMenu()
 				int KeyBoard = actualControl.KeyBoard;
 				int PadKey = (int)actualControl.PadKey;
 
-
 				FileWrite.write((char*) &name, sizeof(int));
 				FileWrite.write((char*) &KeyBoard, sizeof(int));
 				FileWrite.write((char*) &PadKey, sizeof(int));
@@ -628,19 +619,6 @@ void UpdateOptionMenu()
 			FileWrite.write((char*)&Style, sizeof(int));
 			FileWrite.write((char*)&Vsync, sizeof(bool));
 			FileWrite.write((char*)&Frames, sizeof(int));
-
-			//keyboard key
-			//for (Controle& actualControl : controles)
-			//{
-			//	FileWrite << To_String(actualControl.name) << " " << actualControl.KeyBoard << " " << (int)actualControl.PadKey << " " << actualControl.AxisDirection << "\n";
-			//}
-
-			////options
-			//FileWrite << MusicMultip << "\n";
-			//FileWrite << SoundMultip << "\n";
-			//FileWrite << win.getStyle() << "\n";
-			//FileWrite << win.getVerticalSync() << "\n";
-			//FileWrite << win.getFrameRate() << "\n";
 
 			FileWrite.close();
 			Save = false;
@@ -678,6 +656,8 @@ void UpdateHowToPlay()
 
 	PlayerShootsColisions();
 
+	for (Buffs& ActualBuff : BuffsList)
+		ActualBuff.Update();
 	BuffsCollisions(Tutos[2]);
 	RemoveDeadBuffs();
 
@@ -750,6 +730,9 @@ void UpdateHowToPlay()
 	}
 
 	RemoveDeadPlayerShoots();
+
+	for (Explosion& ActualExplosion : Explosions)
+		ActualExplosion.update();	
 	RemoveDeadExplosions();
 
 
@@ -913,12 +896,6 @@ void DisplayPlayMenu()
 void DisplayShipSelection()
 {
 	win.Window().draw(getSprite("Fond_menu2"));
-
-	getSprite("JoueurR").setTextureRect(sf::IntRect(0, 0, 62, 101));
-	getSprite("JoueurB").setTextureRect(sf::IntRect(0, 0, 62, 101));
-
-	getSprite("JoueurR").setOrigin(getSprite("JoueurR").getGlobalBounds().width / 2, getSprite("JoueurR").getGlobalBounds().height / 2);
-	getSprite("JoueurB").setOrigin(getSprite("JoueurB").getGlobalBounds().width / 2, getSprite("JoueurB").getGlobalBounds().height / 2);
 
 	getSprite("JoueurR").setPosition(690,850);
 	getSprite("JoueurB").setPosition(1330,850);
@@ -1224,7 +1201,7 @@ void DisplayOptionMenu()
 			ButtonText.setFillColor(sf::Color::Red);
 
 		ButtonText.setString("Change KeyBinding");
-		ButtonText.setPosition(Boxs.getPosition().x + 10, Boxs.getPosition().y);
+		ButtonText.setPosition(Boxs.getPosition().x + 395, Boxs.getPosition().y);
 		win.Window().draw(ButtonText);
 
 		for (int i = 1; i < 6; i++)
@@ -1233,6 +1210,7 @@ void DisplayOptionMenu()
 			Boxs.setPosition(490, Boxs.getPosition().y + Boxs.getSize().y + 1);
 			win.Window().draw(Boxs);
 
+			ButtonText.setPosition(Boxs.getPosition().x + 10, Boxs.getPosition().y);
 			if (changeKeyChoice == i)
 				ButtonText.setFillColor(sf::Color::Red);
 			else
@@ -1366,8 +1344,6 @@ void DisplayHowToPlay()
 		
 	for (int i = 0; i < 4; i++)
 	{
-		getSprite("JoueurR").setTextureRect(Tutos[i].getIntRect());
-		getSprite("JoueurR").setOrigin(getSprite("JoueurR").getGlobalBounds().width / 2, getSprite("JoueurR").getGlobalBounds().height / 2);
 		getSprite("JoueurR").setPosition(Tutos[i].getPosition());
 		win.Window().draw(getSprite("JoueurR"));
 	}

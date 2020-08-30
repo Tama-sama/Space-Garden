@@ -107,7 +107,10 @@ void GamepadManager(int _joystickId, sf::Event event)
 					ChangingControle->AxisDirection = -1;
 				if (event.joystickMove.position > 30.0f)
 					ChangingControle->AxisDirection = 1;
-				
+
+				if (ChangingControle->PadKey == gamepadPS4::TriggerR2)
+					ChangingControle->AxisDirection = 1;
+
 				if (ChangingControle->AxisDirection != 0)
 				{
 					ChangingControle->isButton = false;

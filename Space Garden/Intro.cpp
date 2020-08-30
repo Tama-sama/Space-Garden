@@ -11,6 +11,12 @@
 
 void Intro()
 {
+	getSprite("JoueurR").setTextureRect(sf::IntRect(0, 0, 62, 101));
+	getSprite("JoueurR").setOrigin(getSprite("JoueurR").getGlobalBounds().width / 2, getSprite("JoueurR").getGlobalBounds().height / 2);
+	getSprite("JoueurB").setTextureRect(sf::IntRect(0, 0, 62, 101));
+	getSprite("JoueurB").setOrigin(getSprite("JoueurB").getGlobalBounds().width / 2, getSprite("JoueurB").getGlobalBounds().height / 2);
+
+
 	static sf::Vector2f Name_pos = { 240,-70 };
 	static sf::Vector2f ship_pos = { 960, 1200 };
 	static sf::Text buttons_text[5];
@@ -37,13 +43,7 @@ void Intro()
 		one_pass = true;
 	}
 
-	for (Sound& ActualSound : SoundList)
-		ActualSound.update();
-
 	win.Window().draw(getSprite("Fond_menu2"));
-
-	getSprite("Spaces_garden").setPosition(Name_pos);
-	win.Window().draw(getSprite("Spaces_garden"));
 
 	if (ship_pos.y > 950)
 		ship_pos.y += -150 * MainTime.GetTimeDeltaF();
@@ -92,6 +92,9 @@ void Intro()
 		}
 	}
 
+	getSprite("Spaces_garden").setPosition(Name_pos);
+	win.Window().draw(getSprite("Spaces_garden"));
+
 	for (Explosion& ExplosionList : Explosions)
 	{
 		if (ExplosionList.getAnimator().getXFrame() < ExplosionList.getAnimator().getMaxXFrame() - 1)
@@ -117,10 +120,8 @@ void Intro()
 	else if (Name_pos.x > 9000 && ship_pos.y <= -150)
 		changestate = true;
 	
-
-	getSprite("Test").setOrigin(getSprite("Test").getGlobalBounds().width / 2, 0);
-	getSprite("Test").setPosition(ship_pos);
-	win.Window().draw(getSprite("Test"));
+	getSprite("JoueurR").setPosition(ship_pos);
+	win.Window().draw(getSprite("JoueurR"));
 
 	buttons_text[0].setPosition(sf::Vector2f(850, 50 + (ship_pos.y + 150)));
 	buttons_text[1].setPosition(sf::Vector2f(975, 265 + (ship_pos.y + 150)));

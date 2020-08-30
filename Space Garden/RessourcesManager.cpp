@@ -41,6 +41,7 @@ void RessourcesLoad(std::string path)
 		else if (tmpExtension == ".ogg")
 		{
 			tmpRessource.type = RessourceType::MUSIC;
+			InfoPath = "../Ressources/Infos/Music.load";
 		}
 		else if (tmpExtension == ".png")
 		{
@@ -69,8 +70,8 @@ void RessourcesLoad(std::string path)
 					{
 						Line.erase(0, FileName.size() + 3);
 
-						if (InfoPath == "../Ressources/Infos/Sound.load")
-						{;
+						if (InfoPath == "../Ressources/Infos/Sound.load" || InfoPath == "../Ressources/Infos/Music.load")
+						{
 							tmpRessource.soundmultiplier = std::stof(Line.substr(0, Line.find(" ")));
 							Line.erase(0, Line.substr(0, Line.find(" ")).size() + 3);
 						}

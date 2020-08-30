@@ -1,5 +1,6 @@
 #include "Game.hpp"
 #include "Texture_SpriteManager.hpp"
+#include "SoundManager.hpp"
 #include "Window.hpp"
 
 #include "Buffs.hpp"
@@ -7,6 +8,13 @@
 #include "EnnemiesShoots.hpp"
 #include "Explosion.hpp"
 #include "Controles.hpp"
+
+#define SIZE_BUFFS 30
+#define RADIUS_PLAYER_SHOOT 10
+#define RADIUS_ENNEMIES_SHOOT 9
+#define RADIUS_ENNEMIES 45
+
+
 
 void RemoveDeadPlayerShoots()
 {
@@ -49,15 +57,12 @@ void BuffsCollisions(Player& _Player)
 {
 	for (Buffs& ActualBuff : BuffsList)
 	{
-		ActualBuff.Update();
 		if (_Player.getLife() > 0)
 		{
-			sf::RectangleShape BuffsHitBox(sf::Vector2f(30, 30));
-			BuffsHitBox.setOrigin(15, 15);
+			sf::RectangleShape BuffsHitBox(sf::Vector2f(SIZE_BUFFS, SIZE_BUFFS));
+			BuffsHitBox.setOrigin(SIZE_BUFFS / 2, SIZE_BUFFS / 2);
 			BuffsHitBox.setPosition(ActualBuff.getpos());
 
-			getSprite(_Player.getShip()).setTextureRect(_Player.getIntRect());
-			getSprite(_Player.getShip()).setOrigin(getSprite(_Player.getShip()).getGlobalBounds().width / 2, getSprite(_Player.getShip()).getGlobalBounds().height / 2);
 			getSprite(_Player.getShip()).setPosition(_Player.getPosition());
 
 			if (BuffsHitBox.getGlobalBounds().intersects(getSprite(_Player.getShip()).getGlobalBounds()))
@@ -105,7 +110,7 @@ void PlayerShootsColisions()
 
 		for (Ennemies& ActualEnnemie : ennemies)
 		{
-			if (Circle_Collision(ActualShoot.Pos(), ActualEnnemie.getPos(), 10, 45))
+			if (Circle_Collision(ActualShoot.Pos(), ActualEnnemie.getPos(), RADIUS_PLAYER_SHOOT, RADIUS_ENNEMIES))
 			{
 				if (ActualShoot.getLife() > 0 && ActualEnnemie.getLife() > 0)
 				{
@@ -125,6 +130,9 @@ void PlayerShootsColisions()
 					if (ActualEnnemie.getLife() <= 0)
 					{
 						Explosions.push_back(Explosion(ActualEnnemie.getPos(), ActualEnnemie.getType()));
+
+						if (state == State::GAME)
+							getSound("explosions").play();
 					}
 
 					break;
@@ -144,17 +152,16 @@ void EnnemiesPlayerCollision(Player& _Player)
 	{
 		if (Actualennemies.getLife() > 0 && _Player.getLife() > 0 && !_Player.isInvulnerable())
 		{
-			getSprite(_Player.getShip()).setTextureRect(_Player.getIntRect());
-			getSprite(_Player.getShip()).setOrigin(getSprite(_Player.getShip()).getGlobalBounds().width / 2, getSprite(_Player.getShip()).getGlobalBounds().height / 2);
 			getSprite(_Player.getShip()).setPosition(_Player.getPosition());
 
 			sf::Vector2f PlayerSize(getSprite(_Player.getShip()).getGlobalBounds().width , getSprite(_Player.getShip()).getGlobalBounds().height);
 			sf::Vector2f PlayerPos(_Player.getPosition().x - PlayerSize.x / 2, _Player.getPosition().y - PlayerSize.y / 2);
 
-			if (Circle_Rect_Collision(Actualennemies.getPos(), PlayerPos, 45, PlayerSize))
+			if (Circle_Rect_Collision(Actualennemies.getPos(), PlayerPos, RADIUS_ENNEMIES, PlayerSize))
 			{
 				Actualennemies.TakeDamage(Actualennemies.getLife());
 				_Player.TakeDamage(1);
+				getSound("player_damage").play();
 			}
 		}
 	}
@@ -165,17 +172,16 @@ void EnnemiesShootPlayerCollision(Player& _Player)
 	{
 		if (ActualEnnemiesShoot.getLife() > 0 && _Player.getLife() > 0 && !_Player.isInvulnerable())
 		{
-			getSprite(_Player.getShip()).setTextureRect(_Player.getIntRect());
-			getSprite(_Player.getShip()).setOrigin(getSprite(_Player.getShip()).getGlobalBounds().width / 2, getSprite(_Player.getShip()).getGlobalBounds().height / 2);
 			getSprite(_Player.getShip()).setPosition(_Player.getPosition());
 
 			sf::Vector2f PlayerSize(getSprite(_Player.getShip()).getGlobalBounds().width, getSprite(_Player.getShip()).getGlobalBounds().height);
 			sf::Vector2f PlayerPos(_Player.getPosition().x - PlayerSize.x / 2, _Player.getPosition().y - PlayerSize.y / 2);
 
-			if (Circle_Rect_Collision(ActualEnnemiesShoot.getpos(), PlayerPos, 45, PlayerSize))
+			if (Circle_Rect_Collision(ActualEnnemiesShoot.getpos(), PlayerPos, RADIUS_ENNEMIES_SHOOT, PlayerSize))
 			{
 				ActualEnnemiesShoot.TakeDamage();
 				_Player.TakeDamage(1);
+				getSound("player_damage").play();
 			}
 		}
 	}
@@ -1288,6 +1294,9 @@ void UpdateGame()
 		ActualPlayerBullet.Update();
 	}
 
+	for (Buffs& ActualBuff : BuffsList)
+		ActualBuff.Update();
+
 	BuffsCollisions(Player1); 
 	BuffsCollisions(Player2); 
 	RemoveDeadBuffs();
@@ -1430,8 +1439,6 @@ void DisplayGame()
 
 
 	// Player 1
-	getSprite(Player1.getShip()).setTextureRect(Player1.getIntRect());
-	getSprite(Player1.getShip()).setOrigin(getSprite(Player1.getShip()).getGlobalBounds().width / 2, getSprite(Player1.getShip()).getGlobalBounds().height / 2);
 	getSprite(Player1.getShip()).setPosition(Player1.getPosition());
 	getSprite(Player1.getShip()).setColor(sf::Color::White);
 
@@ -1441,8 +1448,6 @@ void DisplayGame()
 	win.Window().draw(getSprite(Player1.getShip()));
 
 	// Player 2
-	getSprite(Player2.getShip()).setTextureRect(Player2.getIntRect());
-	getSprite(Player2.getShip()).setOrigin(getSprite(Player2.getShip()).getGlobalBounds().width / 2, getSprite(Player2.getShip()).getGlobalBounds().height / 2);
 	getSprite(Player2.getShip()).setPosition(Player2.getPosition());
 	getSprite(Player2.getShip()).setColor(sf::Color::White);
 
@@ -1529,15 +1534,15 @@ void DisplayGame()
 		
 		for (Buffs& ActualBuff : BuffsList)
 		{
-			RectHitBox.setSize(sf::Vector2f(30, 30));
-			RectHitBox.setOrigin(15, 15);
+			RectHitBox.setSize(sf::Vector2f(SIZE_BUFFS, SIZE_BUFFS));
+			RectHitBox.setOrigin(SIZE_BUFFS / 2, SIZE_BUFFS / 2);
 			RectHitBox.setPosition(ActualBuff.getpos());
 			win.Window().draw(RectHitBox);
 		}
 
 		for (PlayerBullet& ActualPlayerBullet : Bullets)
 		{
-			CircleHitBox.setRadius(10);
+			CircleHitBox.setRadius(RADIUS_PLAYER_SHOOT);
 			CircleHitBox.setOrigin(sf::Vector2f(CircleHitBox.getRadius(), CircleHitBox.getRadius()));
 			CircleHitBox.setPosition(ActualPlayerBullet.Pos());
 			win.Window().draw(CircleHitBox);
@@ -1545,7 +1550,7 @@ void DisplayGame()
 
 		for (EnnemiesShoots& ActualEnnemieBullet : EnnemiesShootsList)
 		{
-			CircleHitBox.setRadius(8);
+			CircleHitBox.setRadius(RADIUS_ENNEMIES_SHOOT);
 			CircleHitBox.setOrigin(sf::Vector2f(CircleHitBox.getRadius(), CircleHitBox.getRadius()));
 			CircleHitBox.setPosition(ActualEnnemieBullet.getpos());
 			win.Window().draw(CircleHitBox);
@@ -1553,7 +1558,7 @@ void DisplayGame()
 
 		for (Ennemies& ActualEnnemie : ennemies)
 		{
-			CircleHitBox.setRadius(45);
+			CircleHitBox.setRadius(RADIUS_ENNEMIES);
 			CircleHitBox.setOrigin(sf::Vector2f(CircleHitBox.getRadius(), CircleHitBox.getRadius()));
 			CircleHitBox.setPosition(ActualEnnemie.getPos());
 			win.Window().draw(CircleHitBox);

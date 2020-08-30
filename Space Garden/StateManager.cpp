@@ -61,6 +61,12 @@ void UpdateManager()
 	//restart of the clock (time per frame)
 	MainTime.RestartClock();
 
+	for (Sound& ActualSound : SoundList)
+		ActualSound.update();
+
+	for (Musics* ActualMusic : MusicList)
+		ActualMusic->update();
+	MusicPlayManager();
 
 	switch (state)
 	{
@@ -121,6 +127,7 @@ void DisplayManager()
 	DebugInfos += "Ressources registered : " + std::to_string(RessourcesList.size()) + "\n";
 	DebugInfos += "Textures / Sprites Loaded : " + std::to_string(SpriteList.size()) + "\n";
 	DebugInfos += "Sounds Loaded : " + std::to_string(SoundList.size()) + "\n";
+	DebugInfos += "Music Loaded : " + std::to_string(MusicList.size()) + "\n";
 	DebugInfos += "\n";
 	DebugInfos += "Player Bullets : " + std::to_string(Bullets.size()) + "\n";
 	DebugInfos += "Ennemies Bullets : " + std::to_string(EnnemiesShootsList.size()) + "\n";
