@@ -2,6 +2,7 @@
 #include "Texture_SpriteManager.hpp"
 #include "SoundManager.hpp"
 #include "Window.hpp"
+#include "Menu.hpp"
 
 #include "Buffs.hpp"
 #include "Ennemies.hpp"
@@ -13,7 +14,6 @@
 #define RADIUS_PLAYER_SHOOT 10
 #define RADIUS_ENNEMIES_SHOOT 9
 #define RADIUS_ENNEMIES 45
-
 
 
 void RemoveDeadPlayerShoots()
@@ -117,6 +117,15 @@ void PlayerShootsColisions()
 					ActualEnnemie.TakeDamage(ActualShoot.getDamages());
 					ActualShoot.TakeDamage();
 
+					if (ActualShoot.getOwner() == 1)
+					{
+						Player1.addScore(10);
+					}
+					else
+					{
+						Player2.addScore(10);
+					}
+
 					if (ActualShoot.getType() == 2)
 					{
 						for (int i = 0; i < 16; i++)
@@ -132,7 +141,20 @@ void PlayerShootsColisions()
 						Explosions.push_back(Explosion(ActualEnnemie.getPos(), ActualEnnemie.getType()));
 
 						if (state == State::GAME)
+						{
 							getSound("explosions").play();
+							if (rand() % 100 + 1 <= 70)
+							{
+								if (rand() % 100 + 1 <= 65)
+								{
+									BuffsList.push_back(Buffs(1, ActualEnnemie.getPos()));
+								}
+								else
+								{
+									BuffsList.push_back(Buffs(2, ActualEnnemie.getPos()));
+								}
+							}
+						}
 					}
 
 					break;
@@ -241,9 +263,11 @@ void RemoveDeadExplosions()
 
 
 Player Player1(sf::Vector2f(1920 / 2, 900), 1, 1);
-Player Player2(sf::Vector2f(1920 / 1.3f, 900), 1, 1);
+Player Player2(sf::Vector2f(1920 / 1.3f, 900), 1, 2);
 bool SoloGame = true;
-
+bool isPause = false;
+int IgMenu_Choice = 0;
+bool IgMenu_Options = false;
 
 int _game_phase = 0;
 float Game_timer = 0;
@@ -1202,6 +1226,7 @@ void GameInit()
 {
 	_game_phase = 0;
 	Game_timer = 0;
+	isPause = false;
 
 	RemoveAllBuffs();
 	RemoveAllEnnemies();
@@ -1221,16 +1246,20 @@ void GameInit()
 	}
 }
 
-
 void UpdateGame()
 {
+	static float ActionTiming = 0.f;
+	ActionTiming += MainTime.GetTimeDeltaF();
+	
 	Player* ptPlayer = 0;
 	for (int i = 0; i < 2; i++)
 	{
 		if (i == 0)
 			ptPlayer = &Player1;
+		else if (!SoloGame)
+			ptPlayer = &Player2;		
 		else
-			ptPlayer = &Player2;
+			break;
 
 
 		ptPlayer->setLRectFrame(0);
@@ -1279,6 +1308,12 @@ void UpdateGame()
 			ptPlayer->SetFireSin();
 		}
 		ptPlayer->FireSin();
+
+		if (isButtonPressed(Action::Start, ptPlayer->getController()) && ActionTiming >= 0.3)
+		{
+			ActionTiming = 0.f;
+			isPause = true;
+		}
 	}
 
 	ennemies_Loop_1P();
@@ -1332,6 +1367,101 @@ void UpdateGame()
 		RemoveAllPlayerShoots();
 
 		ChangeState(State::SAVE);
+	}
+}
+void UpdateGamePause()
+{
+	extern bool OptionChangeKeys;
+
+	static float ActionTiming = 0.f;
+	ActionTiming += MainTime.GetTimeDeltaF();
+
+	if (IgMenu_Options)
+	{
+		UpdateOptionMenu();
+
+		if (isButtonPressed(Action::Return) && ActionTiming >= 0.3)
+		{
+			ActionTiming = 0;
+			if (!OptionChangeKeys)
+			{
+				IgMenu_Options = false;
+			}
+		}
+	}
+	else
+	{
+		Player* ptPlayer = 0;
+		for (int i = 0; i < 2; i++)
+		{
+			if (i == 0)
+				ptPlayer = &Player1;
+			else if (!SoloGame)
+				ptPlayer = &Player2;
+			else
+				break;
+
+
+			ptPlayer->setLRectFrame(0);
+
+			if (isButtonPressed(Action::Up, ptPlayer->getController()) && ActionTiming >= 0.3)
+			{
+				if (IgMenu_Choice > 0)
+				{
+					IgMenu_Choice--;
+					ActionTiming = 0;
+				}
+			}
+
+			if (isButtonPressed(Action::Down, ptPlayer->getController()) && ActionTiming >= 0.3)
+			{
+				if (IgMenu_Choice < 3)
+				{
+					IgMenu_Choice++;
+					ActionTiming = 0;
+				}
+			}
+
+			if (isButtonPressed(Action::Interact, ptPlayer->getController()) && ActionTiming >= 0.3)
+			{
+				ActionTiming = 0;
+
+				switch (IgMenu_Choice)
+				{
+				case 0: // resume
+					isPause = false;
+					IgMenu_Choice = 0;
+					break;
+				case 1: // options
+					IgMenu_Options = true;
+					break;
+				case 2:	// restart
+					GameInit();
+					IgMenu_Choice = 0;
+					break;
+				case 3: // Menu
+					RemoveAllBuffs();
+					RemoveAllEnnemies();
+					RemoveAllEnnemiesShoots();
+					RemoveAllExplosions();
+					RemoveAllPlayerShoots();
+					IgMenu_Choice = 0;
+					ChangeState(State::MAIN_MENU);
+					break;
+
+				default:
+					break;
+				}
+
+			}
+
+			if (isButtonPressed(Action::Start, ptPlayer->getController()) && ActionTiming >= 0.3)
+			{
+				ActionTiming = 0;
+				isPause = false;
+				IgMenu_Choice = 0;
+			}
+		}
 	}
 }
 
@@ -1477,15 +1607,15 @@ void DisplayGame()
 	}
 
 
-	getSprite("XpBar").setPosition(17, 593);
-	win.Window().draw(getSprite("XpBar"));
-
-
 	sf::IntRect XpRect(0, 0, 210, 88);
 	XpRect.width = 52 + (210 - 52) * ((float)Player1.getAtkPoints() / 10);
 	getSprite("XP").setTextureRect(XpRect);
 	getSprite("XP").setPosition(17, 593);
 	win.Window().draw(getSprite("XP"));
+	getSprite("XpBar").setPosition(17, 593);
+	win.Window().draw(getSprite("XpBar"));
+
+
 
 
 	sf::Text Scores("", Font, 65);
@@ -1504,13 +1634,13 @@ void DisplayGame()
 			win.Window().draw(getSprite("Coeur"));
 		}
 
-		getSprite("XpBar").setPosition(1700, 593);
-		win.Window().draw(getSprite("XpBar"));
-				
 		XpRect.width = 52 + (210 - 52) * ((float)Player2.getAtkPoints() / 10);
 		getSprite("XP").setTextureRect(XpRect);
 		getSprite("XP").setPosition(1700, 593);
 		win.Window().draw(getSprite("XP"));
+		getSprite("XpBar").setPosition(1700, 593);
+		win.Window().draw(getSprite("XpBar"));
+				
 
 		strScores = "  " + std::to_string(Player2.getScore()) + "\n\n\n\n\t * " + std::to_string(Player2.getPissenlitShoot()) + "\n\n\t * " + std::to_string(Player2.getSinShoot());
 		Scores.setString(strScores);
@@ -1573,5 +1703,58 @@ void DisplayGame()
 		RectHitBox.setOrigin(RectHitBox.getSize().x / 2, RectHitBox.getSize().y / 2);
 		RectHitBox.setPosition(Player2.getPosition());
 		win.Window().draw(RectHitBox);
+	}
+}
+void DisplayGamePause()
+{
+	if (IgMenu_Options)
+	{
+		DisplayOptionMenu();
+	}
+	else
+	{
+		sf::RectangleShape Shady(sf::Vector2f(1920, 1080));
+		Shady.setFillColor(sf::Color::Color(0, 0, 0, 50));
+		win.Window().draw(Shady);
+
+		win.Window().draw(getSprite("Bande_L"));
+		getSprite("Bande_R").setPosition(1680, 0);
+		win.Window().draw(getSprite("Bande_R"));
+
+		sf::Text buttons_text("", Font, 70);
+		std::string Textyes[4]{ "Return","Options","Restart","Menu" };
+		sf::Vector2f TextPos[4]{ sf::Vector2f(850,175),sf::Vector2f(990,375), sf::Vector2f(800,580), sf::Vector2f(990,775) };
+
+		for (int i = 0; i < 4; i++)
+		{
+			if (i == IgMenu_Choice)
+			{
+				getSprite("Button").setTextureRect(sf::IntRect(477, 0, 477, 217));
+				buttons_text.setFillColor(sf::Color::Color(180, 50, 0));
+			}
+			else
+			{
+				getSprite("Button").setTextureRect(sf::IntRect(0, 0, 477, 217));
+				buttons_text.setFillColor(sf::Color::Black);
+			}
+
+
+			if (i % 2 == 0)
+			{
+				getSprite("Button").setRotation(180);
+				getSprite("Button").setPosition(sf::Vector2f(600 + getSprite("Button").getGlobalBounds().width, 125 + (200 * i + getSprite("Button").getGlobalBounds().height)));
+			}
+			else
+			{
+				getSprite("Button").setRotation(0);
+				getSprite("Button").setPosition(sf::Vector2f(600 + 250, 125 + (200 * i)));
+			}
+
+			buttons_text.setString(Textyes[i]);
+			buttons_text.setPosition(TextPos[i]);
+
+			win.Window().draw(getSprite("Button"));
+			win.Window().draw(buttons_text);
+		}
 	}
 }

@@ -2,8 +2,8 @@
 Fond_menu2 | All
 JoueurR | All
 JoueurB | All
+Button | All
 Spaces_garden | Intro
-Button | Intro | Menu
 Credits | Menu
 Comment_jouer | Menu
 XP | Menu | Game
@@ -24,5 +24,5 @@ HUD_J2 | Game
 HUDJ1 | Game
 HUDJ2 | Game
 Coeur | Game
-Bande_L | Menu
-Bande_R | Menu
+Bande_L | Menu | Game
+Bande_R | Menu | Game

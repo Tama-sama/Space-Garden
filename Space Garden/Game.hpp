@@ -16,6 +16,9 @@ void RemoveDeadEnnemiesShoots();
 void RemoveDeadExplosions();
 
 void UpdateGame();
+void UpdateGamePause();
+
 void DisplayGame();
+void DisplayGamePause();
 
 void GameInit();

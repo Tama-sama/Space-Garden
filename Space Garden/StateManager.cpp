@@ -16,6 +16,8 @@
 State state = State::INTRO;
 extern bool changingkey;
 extern Controle* ChangingControle;
+extern bool isPause;
+
 void UpdateSave();
 void DisplaySave();
 
@@ -75,7 +77,10 @@ void UpdateManager()
 		break;
 
 	case State::GAME:
-		UpdateGame();
+		if (!isPause)
+			UpdateGame();
+		else
+			UpdateGamePause();
 		break;
 
 	case State::SAVE:
@@ -111,6 +116,10 @@ void DisplayManager()
 
 	case State::GAME:
 		DisplayGame();
+
+		if (isPause)
+			DisplayGamePause();
+
 		break;
 
 	case State::SAVE:

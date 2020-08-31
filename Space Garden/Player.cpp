@@ -84,9 +84,9 @@ void Player::Fire()
 			}
 			
 
+			SpeAtkPts--;
 			if (numbersOfShoots >= 2)
 			{
-				SpeAtkPts--;
 				numbersOfShoots = 0;
 			}
 			m_firingTimer = 0.f;

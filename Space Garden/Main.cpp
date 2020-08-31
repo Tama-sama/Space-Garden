@@ -78,7 +78,7 @@ int main(int argc, char** argv)
 
 	ControlInit();
 	OptionLoad();
-	RessourcesLoad("../Ressources/");
+	RessourcesLoad("../Ressources/Textures/");
 	RessourcesLoad("../Ressources/SFX/");
 	RessourcesLoad("../Ressources/Musics/");
 	ChangeState(State::ALL);

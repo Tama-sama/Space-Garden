@@ -442,6 +442,7 @@ void UpdateOptionMenu()
 	{
 		ActionTiming = 0;
 		Save = true;
+		changeKeyChoice = 0;
 		getSound("menu_click").play();
 
 		if (!OptionChangeKeys)
