@@ -4,7 +4,7 @@ std::list<Sound> SoundList;
 std::list<Musics*> MusicList;
 int MusicMultip = 50;
 int SoundMultip = 30;
-
+extern int _game_phase;
 
 void LoadSounds(State _state)
 {
@@ -92,14 +92,29 @@ void MusicPlayManager()
 		if (getMusic("Menu").getStatus() == sf::Music::Playing)
 			getMusic("Menu").stop();
 	}
-
+	
 	if (state == State::GAME)	// Music Game et boss charger que dans le state Game
 	{
-		// si se n'est pas le boss
-		getMusic("Game").setLoop(true);
-		if (getMusic("Game").getStatus() != sf::Music::Playing)
-			getMusic("Game").play();
-		// else si c'est le boss
-		// To Do ...
+		
+		if (_game_phase != 42 && _game_phase != 43)
+		{
+			getMusic("Game").setLoop(true);
+
+			if (getMusic("Boss").getStatus() == sf::Music::Playing)
+				getMusic("Boss").stop();
+
+			if (getMusic("Game").getStatus() != sf::Music::Playing)
+				getMusic("Game").play();
+		}
+		else
+		{
+			getMusic("Boss").setLoop(true);
+
+			if (getMusic("Game").getStatus() == sf::Music::Playing)
+				getMusic("Game").stop();
+
+			if (getMusic("Boss").getStatus() != sf::Music::Playing)
+				getMusic("Boss").play();
+		}
 	}
 }

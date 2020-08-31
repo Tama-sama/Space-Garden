@@ -18,6 +18,7 @@ public:
 	int getPhase() const { return phase; };
 	sf::Vector2f getDelta() const { return Delta; };
 	sf::Vector2f getLastSwitch() const { return LastSwitch; };
+	bool isHit() const { return hit; };
 
 	sf::Sprite& getSprite() { return sprite; };
 	void setPosition(sf::Vector2f _pos) { pos = _pos; sprite.setPosition(pos); };

@@ -14,6 +14,7 @@
 #define RADIUS_PLAYER_SHOOT 10
 #define RADIUS_ENNEMIES_SHOOT 9
 #define RADIUS_ENNEMIES 45
+extern sf::Image BossCollision;
 
 
 void RemoveDeadPlayerShoots()
@@ -108,63 +109,91 @@ void PlayerShootsColisions()
 	{
 		ActualShoot.Update();
 
-		for (Ennemies& ActualEnnemie : ennemies)
+		if (ActualShoot.getLife() > 0)
 		{
-			if (Circle_Collision(ActualShoot.Pos(), ActualEnnemie.getPos(), RADIUS_PLAYER_SHOOT, RADIUS_ENNEMIES))
+			for (Ennemies& ActualEnnemie : ennemies)
 			{
-				if (ActualShoot.getLife() > 0 && ActualEnnemie.getLife() > 0)
+				if (ActualEnnemie.getType() != 100)
 				{
-					ActualEnnemie.TakeDamage(ActualShoot.getDamages());
-					ActualShoot.TakeDamage();
-
-					if (ActualShoot.getOwner() == 1)
+					if (Circle_Collision(ActualShoot.Pos(), ActualEnnemie.getPos(), RADIUS_PLAYER_SHOOT, RADIUS_ENNEMIES))
 					{
-						Player1.addScore(10);
-					}
-					else
-					{
-						Player2.addScore(10);
-					}
-
-					if (ActualShoot.getType() == 2)
-					{
-						for (int i = 0; i < 16; i++)
+						if (ActualEnnemie.getLife() > 0)
 						{
-							float Dir_Tir = (i * (pi / 8));
+							ActualEnnemie.TakeDamage(ActualShoot.getDamages());
+							ActualShoot.TakeDamage();
 
-							Bullets.push_back(PlayerBullet(sf::Vector2f(ActualShoot.Pos().x, ActualShoot.Pos().y), 3, ActualShoot.getOwner(), 1, Dir_Tir));
+							if (ActualShoot.getOwner() == 1)
+							{
+								Player1.addScore(10);
+							}
+							else
+							{
+								Player2.addScore(10);
+							}
+
+							if (ActualShoot.getType() == 2)
+							{
+								for (int i = 0; i < 16; i++)
+								{
+									float Dir_Tir = (i * (pi / 8));
+
+									Bullets.push_back(PlayerBullet(sf::Vector2f(ActualShoot.Pos().x, ActualShoot.Pos().y), 3, ActualShoot.getOwner(), 1, Dir_Tir));
+								}
+							}
+
+							if (ActualEnnemie.getLife() <= 0)
+							{
+								Explosions.push_back(Explosion(ActualEnnemie.getPos(), ActualEnnemie.getType()));
+
+								if (state == State::GAME)
+								{
+									getSound("explosions").play();
+									if (rand() % 100 + 1 <= 70)
+									{
+										if (rand() % 100 + 1 <= 65)
+										{
+											BuffsList.push_back(Buffs(1, ActualEnnemie.getPos()));
+										}
+										else
+										{
+											BuffsList.push_back(Buffs(2, ActualEnnemie.getPos()));
+										}
+									}
+								}
+							}
+
+							break;
 						}
 					}
+				}
+				else
+				{
+					sf::Color ImagePixel;
+					if (ActualShoot.Pos().y > 0 && ActualShoot.Pos().x > 0 && ActualShoot.Pos().x < 1920 && ActualShoot.Pos().x > 0)
+						ImagePixel = BossCollision.getPixel(ActualShoot.Pos().x, ActualShoot.Pos().y);
 
-					if (ActualEnnemie.getLife() <= 0)
+					if (ImagePixel == sf::Color::White && ActualEnnemie.getLife() > 0 && !ActualEnnemie.isHit() && ActualEnnemie.getPos().y == 0)
 					{
-						Explosions.push_back(Explosion(ActualEnnemie.getPos(), ActualEnnemie.getType()));
+						ActualShoot.TakeDamage();
+						ActualEnnemie.TakeDamage(ActualShoot.getDamages());
 
-						if (state == State::GAME)
+						if (ActualShoot.getType() == 2)
 						{
-							getSound("explosions").play();
-							if (rand() % 100 + 1 <= 70)
+							for (int i = 0; i < 16; i++)
 							{
-								if (rand() % 100 + 1 <= 65)
-								{
-									BuffsList.push_back(Buffs(1, ActualEnnemie.getPos()));
-								}
-								else
-								{
-									BuffsList.push_back(Buffs(2, ActualEnnemie.getPos()));
-								}
+								float Dir_Tir = (i * (pi / 8));
+
+								Bullets.push_back(PlayerBullet(sf::Vector2f(ActualShoot.Pos().x, ActualShoot.Pos().y), 3, ActualShoot.getOwner(), 1, Dir_Tir));
 							}
 						}
 					}
-
-					break;
 				}
 			}
-		}
 
-		if (ActualShoot.getType() == 3 && ActualShoot.getLife() > 0 && ActualShoot.getTimer() > 4.f)
-		{
-			ActualShoot.TakeDamage();
+			if (ActualShoot.getType() == 3 && ActualShoot.getTimer() > 4.f)
+			{
+				ActualShoot.TakeDamage();
+			}
 		}
 	}
 }
@@ -269,8 +298,9 @@ bool isPause = false;
 int IgMenu_Choice = 0;
 bool IgMenu_Options = false;
 
-int _game_phase = 0;
+int _game_phase = -1;
 float Game_timer = 0;
+CAnimations FogAnim(0, sf::Vector2i(1458, 412), 0.15, 3);
 ///////////////////////////////////////////
 // Boucle scripter de jeux jusqu'au boss //
 ///////////////////////////////////////////
@@ -278,19 +308,13 @@ void ennemies_Loop_1P()
 {
 	Game_timer += MainTime.GetTimeDeltaF();
 
-	/*if (*_game_phase == -1)
+	
+	if (_game_phase == -1) // is here for not tp ennemies on load
 	{
-		if (sfMusic_getStatus(Game_music.music) == sfStopped)
-		{
-			sfMusic_stop(Menu_music.music);
-			sfMusic_stop(Boss_music.music);
-			sfMusic_play(Game_music.music);
-			sfMusic_setLoop(Game_music.music, sfTrue);
-		}
-		*_game_phase += 1;
+		_game_phase += 1;
 		Game_timer = 0;
-	}*/
-	if (_game_phase == 0)
+	}
+	else if (_game_phase == 0)
 	{
 		if (Game_timer >= 2)
 		{
@@ -406,8 +430,8 @@ void ennemies_Loop_1P()
 	{
 		if (Game_timer >= 6)
 		{
-			//ennemies.push_back(Ennemies(sf::Vector2f(780, -30), 4)); // it is not where it need to be
-			//ennemies.push_back(Ennemies(sf::Vector2f(1140, -30), 5));
+			BuffsList.push_back(Buffs(4, sf::Vector2f(780, -30)));
+			BuffsList.push_back(Buffs(5, sf::Vector2f(1140, -30)));
 			 _game_phase += 1;
 			Game_timer = 0;
 		}
@@ -680,117 +704,97 @@ void ennemies_Loop_1P()
 	{
 		if (Game_timer >= 3)
 		{
-			//ennemies.push_back(Ennemies(sf::Vector2f(960, -30), 3));
+			BuffsList.push_back(Buffs(3, sf::Vector2f(960, -30)));
 			 _game_phase += 1;
 			Game_timer = 0;
 		}
 	}
-	//else if ( _game_phase == 42)
-	//{
-	//	if (sfMusic_getStatus(Boss_music.music) == sfStopped)
-	//	{
-	//		sfMusic_stop(Menu_music.music);
-	//		sfMusic_stop(Game_music.music);
-	//		sfMusic_play(Boss_music.music);
-	//		sfMusic_setLoop(Boss_music.music, sfTrue);
-	//	}
+	else if (_game_phase == 42)
+	{
+		if (Game_timer >= 7)
+		{
+			ennemies.push_back(Ennemies(sf::Vector2f(0, 0), 100));
+			_game_phase += 1;
+			Game_timer = 0;
+		}
+	}
+	else if (_game_phase == 43)
+	{
+		for (Ennemies& ActualEnnemies : ennemies)
+		{
+			if (ActualEnnemies.getType() == 100)
+				return;
+		}
+		_game_phase += 1;
+		Game_timer = 0;
+	}
+	else if ( _game_phase == 44) // After
+	{
+		static int type_2 = 0;
+		static int type_3 = 0;
+		static int type_4 = 0;
+		static int type_5 = 0;
+		static float Last_spawxX = 0;
+		static float Last_spawxX2 = 0;
+		static float spawn_speed = 2;
+		if (Game_timer >= spawn_speed)
+		{
+			float randX = rand() % 1300 + 300; // 300 - 1600
+			while (randX > Last_spawxX - 100 && randX < Last_spawxX + 100 && randX > Last_spawxX2 - 100 && randX < Last_spawxX2 + 100)
+				randX = rand() % 1300 + 300; // 300 - 1600
+
+			ennemies.push_back(Ennemies(sf::Vector2f(randX, 0), 5));
+			Last_spawxX2 = Last_spawxX;
+			Last_spawxX = randX;
+
+			type_2++;
+			type_3++;
+			type_4++;
+			type_5++;
+
+			if (spawn_speed > 1.25)
+				spawn_speed -= 0.05;
+
+			if (type_2 == 4)
+			{
+				if (rand() % 2 + 1 == 1)
+					ennemies.push_back(Ennemies(sf::Vector2f(290, 425), 3));
+				else
+					ennemies.push_back(Ennemies(sf::Vector2f(1632, 425), 4));
+				type_2 = 0;
+			}
+			if (type_3 == 6)
+			{
+				if (rand() % 2 + 1 == 1)
+					ennemies.push_back(Ennemies(sf::Vector2f(290, 25), 1));
+				else
+					ennemies.push_back(Ennemies(sf::Vector2f(1632, 25), 2));
+				type_3 = 0;
+			}
+			if (type_4 == 8)
+			{
+				if (rand() % 2 + 1 == 1)
+					ennemies.push_back(Ennemies(sf::Vector2f(630, -25), 6));
+				else
+					ennemies.push_back(Ennemies(sf::Vector2f(1310, -25), 7));
+				type_4 = 0;
+			}
+			if (type_5 >= 15)
+			{
+				int temprand = rand() % 100 + 1;
+				if (temprand >= 75)
+					BuffsList.push_back(Buffs(3, sf::Vector2f(960, -20)));
+				else if (temprand >= 55 && temprand < 75)
+					BuffsList.push_back(Buffs(4, sf::Vector2f(960, -20)));
+				else if (temprand >= 35 && temprand < 55)
+					BuffsList.push_back(Buffs(5, sf::Vector2f(960, -20)));
+				type_5 = 0;
+			}
 
 
-	//	static sfBool boss_spawn = sfFalse;
-	//	if (Game_timer >= 7 && !boss_spawn)
-	//	{
-	//		PrepareBOSS();
-	//		boss_spawn = sfTrue;
-	//	}
-	//	if (Game_timer >= 10 && boss_spawn)
-	//	{
-	//		int boss_is_alive = 0;
-	//		BOSS  tempboss;
-	//		tempboss = BOSSDepart;
-	//		while (tempboss)
-	//		{
-	//			boss_is_alive++;
-	//			tempboss = tempboss->Suivant;
-	//		}
-
-	//		if (boss_is_alive == 0)
-	//		{
-	//			sfMusic_stop(Boss_music.music);
-	//			sfMusic_play(Game_music.music);
-	//			sfMusic_setLoop(Game_music.music, sfTrue);
-	//			boss_spawn = sfFalse;
-	//			 _game_phase += 1;
-	//			Game_timer = 0;
-	//		}
-	//	}
-	//}
-	//else if ( _game_phase == 43)
-	//{
-	//	static int type_2 = 0;
-	//	static int type_3 = 0;
-	//	static int type_4 = 0;
-	//	static int type_5 = 0;
-	//	static float Last_spawxX = 0;
-	//	static float Last_spawxX2 = 0;
-	//	static float spawn_speed = 2;
-	//	if (Game_timer >= spawn_speed)
-	//	{
-	//		float randX = rand() % 1300 + 300; // 300 - 1600
-	//		while (randX > Last_spawxX - 100 && randX < Last_spawxX + 100 && randX > Last_spawxX2 - 100 && randX < Last_spawxX2 + 100)
-	//			randX = rand() % 1300 + 300; // 300 - 1600
-
-	//		PrepareMonstre1((sfVector2f) { randX, 0 }, 5);
-	//		Last_spawxX2 = Last_spawxX;
-	//		Last_spawxX = randX;
-
-	//		type_2++;
-	//		type_3++;
-	//		type_4++;
-	//		type_5++;
-
-	//		if (spawn_speed > 1.25)
-	//			spawn_speed -= 0.05;
-
-	//		if (type_2 == 4)
-	//		{
-	//			if (rand() % 2 + 1 == 1)
-	//				PrepareMonstre1((sfVector2f) { 290, 425 }, 3);
-	//			else
-	//				PrepareMonstre1((sfVector2f) { 1632, 425 }, 4);
-	//			type_2 = 0;
-	//		}
-	//		if (type_3 == 6)
-	//		{
-	//			if (rand() % 2 + 1 == 1)
-	//				PrepareMonstre1((sfVector2f) { 290, 25 }, 1);
-	//			else
-	//				PrepareMonstre1((sfVector2f) { 1632, 25 }, 2);
-	//			type_3 = 0;
-	//		}
-	//		if (type_4 == 8)
-	//		{
-	//			if (rand() % 2 + 1 == 1)
-	//				PrepareMonstre1((sfVector2f) { 630, -25 }, 6);
-	//			else
-	//				PrepareMonstre1((sfVector2f) { 1310, -25 }, 7);
-	//			type_4 = 0;
-	//		}
-	//		if (type_5 >= 15)
-	//		{
-	//			int temprand = rand() % 100 + 1;
-	//			if (temprand >= 75)
-	//				prepareBuff((sfVector2f) { 960, -20 }, 3);
-	//			else if (temprand >= 55 && temprand < 75)
-	//				prepareBuff((sfVector2f) { 960, -20 }, 4);
-	//			else if (temprand >= 35 && temprand < 55)
-	//				prepareBuff((sfVector2f) { 960, -20 }, 5);
-	//			type_5 = 0;
-	//		}
-
-
-	//		Game_timer = 0;
-	//	}
-	//}
+			Game_timer = 0;
+		}
+	}
 }
 
 void ennemies_patern()
@@ -1216,6 +1220,23 @@ void ennemies_patern()
 
 			}
 		}
+		else if (ActualEnnemie.getType() == 100)
+		{
+			if (ActualEnnemie.getPhase() == 0)
+		{
+			if (ActualEnnemie.getPos().y > 0)
+			{
+				ActualEnnemie.setPosition(960, 0);
+				ActualEnnemie.setDelta(0, 0);
+				ActualEnnemie.setPhase(1);
+				ActualEnnemie.resetTimer();
+			}
+		}
+			else if (ActualEnnemie.getPhase() == 1)
+			{
+				ActualEnnemie.Fire();
+			}
+		}
 
 		ActualEnnemie.Update();
 	}
@@ -1224,7 +1245,7 @@ void ennemies_patern()
 
 void GameInit()
 {
-	_game_phase = 0;
+	_game_phase = -1;
 	Game_timer = 0;
 	isPause = false;
 
@@ -1264,51 +1285,54 @@ void UpdateGame()
 
 		ptPlayer->setLRectFrame(0);
 
-		if (isButtonPressed(Action::Up, ptPlayer->getController()))
+		if (_game_phase != -1)
 		{
-			if (ptPlayer->getPosition().y >= 55)
-				ptPlayer->addPositionY(-325 * MainTime.GetTimeDeltaF());
-			ptPlayer->setLRectFrame(1);
-		}
+			if (isButtonPressed(Action::Up, ptPlayer->getController()))
+			{
+				if (ptPlayer->getPosition().y >= 55)
+					ptPlayer->addPositionY(-325 * MainTime.GetTimeDeltaF());
+				ptPlayer->setLRectFrame(1);
+			}
 
-		if (isButtonPressed(Action::Down, ptPlayer->getController()))
-		{
-			if (ptPlayer->getPosition().y <= 1025)
-				ptPlayer->addPositionY(325 * MainTime.GetTimeDeltaF());
-			ptPlayer->setLRectFrame(0);
-		}
+			if (isButtonPressed(Action::Down, ptPlayer->getController()))
+			{
+				if (ptPlayer->getPosition().y <= 1025)
+					ptPlayer->addPositionY(325 * MainTime.GetTimeDeltaF());
+				ptPlayer->setLRectFrame(0);
+			}
 
-		if (isButtonPressed(Action::Left, ptPlayer->getController()))
-		{
-			if (ptPlayer->getPosition().x >= 275)
-				ptPlayer->addPositionX(-325 * MainTime.GetTimeDeltaF());
-			ptPlayer->setLRectFrame(3);
-		}
+			if (isButtonPressed(Action::Left, ptPlayer->getController()))
+			{
+				if (ptPlayer->getPosition().x >= 275)
+					ptPlayer->addPositionX(-325 * MainTime.GetTimeDeltaF());
+				ptPlayer->setLRectFrame(3);
+			}
 
-		if (isButtonPressed(Action::Right, ptPlayer->getController()))
-		{
-			if (ptPlayer->getPosition().x <= 1645)
-				ptPlayer->addPositionX(325 * MainTime.GetTimeDeltaF());
-			ptPlayer->setLRectFrame(2);
-		}
+			if (isButtonPressed(Action::Right, ptPlayer->getController()))
+			{
+				if (ptPlayer->getPosition().x <= 1645)
+					ptPlayer->addPositionX(325 * MainTime.GetTimeDeltaF());
+				ptPlayer->setLRectFrame(2);
+			}
 
-		ptPlayer->TimersUpdate(MainTime.GetTimeDeltaF());
-		if (isButtonPressed(Action::Fire, ptPlayer->getController()))
-		{
-			ptPlayer->Fire();
-		}
+			ptPlayer->TimersUpdate(MainTime.GetTimeDeltaF());
+			if (isButtonPressed(Action::Fire, ptPlayer->getController()))
+			{
+				ptPlayer->Fire();
+			}
 
-		if (isButtonPressed(Action::Fire_Spe1, ptPlayer->getController()))
-		{
-			ptPlayer->FirePissenlit();
-		}
+			if (isButtonPressed(Action::Fire_Spe1, ptPlayer->getController()))
+			{
+				ptPlayer->FirePissenlit();
+			}
 
-		if (isButtonPressed(Action::Fire_Spe2, ptPlayer->getController()))
-		{
-			ptPlayer->SetFireSin();
-		}
-		ptPlayer->FireSin();
+			if (isButtonPressed(Action::Fire_Spe2, ptPlayer->getController()))
+			{
+				ptPlayer->SetFireSin();
+			}
+			ptPlayer->FireSin();
 
+		}
 		if (isButtonPressed(Action::Start, ptPlayer->getController()) && ActionTiming >= 0.3)
 		{
 			ActionTiming = 0.f;
@@ -1560,6 +1584,15 @@ void DisplayGame()
 	for (Ennemies& ActualEnnemie : ennemies)
 	{
 		win.Window().draw(ActualEnnemie.getSprite());
+
+		if (ActualEnnemie.getType() == 100)
+		{
+			FogAnim.Animate(getSprite("Fog_Anim"));
+			getSprite("Fog_Anim").setOrigin(729, 0);
+			getSprite("Fog_Anim").setPosition(ActualEnnemie.getPos());
+			win.Window().draw(getSprite("Fog_Anim"));
+
+		}
 	}
 
 	for (Explosion& ActualExplosion : Explosions)

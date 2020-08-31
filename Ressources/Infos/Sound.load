@@ -3,3 +3,4 @@ shoot | 0.15 | Intro | Game
 explosions | 0.8 | All
 menu_click | 1.0 | All
 player_damage | 0.2 | Game
+Explosion_Boss | 0.8 | Game

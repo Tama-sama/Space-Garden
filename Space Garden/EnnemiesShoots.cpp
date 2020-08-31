@@ -3,11 +3,11 @@
 
 std::list<EnnemiesShoots> EnnemiesShootsList;
 
-static sf::Texture TexEnnemies_shoot1;
-static sf::Texture TexEnnemies_shoot2;
-static sf::Texture TexBoss_shoot1;
-static sf::Texture TexBoss_shoot2;
-static bool EnnemieShoot_pass = true;
+sf::Texture TexEnnemies_shoot1;
+sf::Texture TexEnnemies_shoot2;
+sf::Texture TexBoss_shoot1;
+sf::Texture TexBoss_shoot2;
+bool EnnemieShoot_pass = true;
 
 EnnemiesShoots::EnnemiesShoots(sf::Vector2f pos, sf::Vector2f Delta, int type, float rotation)
 {
@@ -54,9 +54,9 @@ EnnemiesShoots::EnnemiesShoots(sf::Vector2f pos, sf::Vector2f Delta, int type, f
 		float angleCible = 1.570;
 
 		if (random == 0)
-			angleCible = Angle_calc(Player1.getPosition(), pos);
+			angleCible = Angle_calc(pos, Player1.getPosition());
 		else if (random == 1)
-			angleCible = Angle_calc(Player2.getPosition(), pos);
+			angleCible = Angle_calc(pos, Player2.getPosition());
 
 
 

@@ -25,7 +25,7 @@ void Buffs::Update()
 
 	m_pos += m_delta * MainTime.GetTimeDeltaF();
 
-	if (!sf::IntRect(0, -100, 1920, 1080).contains(sf::Vector2i(m_pos)))
+	if (!sf::IntRect(0, -100, 1920, 1180).contains(sf::Vector2i(m_pos)))
 		m_life = 0;
 }
 

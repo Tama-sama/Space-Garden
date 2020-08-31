@@ -205,6 +205,7 @@ void UpdateSave()
 				if (a.size() < 10 && isModif != '_')
 				{
 					a += isModif;
+					isModif = '_';
 				}
 			}
 
@@ -279,6 +280,7 @@ void UpdateSave()
 					if (b.size() < 10 && isModif2 != '_')
 					{
 						b += isModif2;
+						isModif = '_';
 					}
 				}
 
