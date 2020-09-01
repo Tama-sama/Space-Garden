@@ -8,10 +8,6 @@ Credits | Menu
 Comment_jouer | Menu
 XP | Menu | Game
 XpBar | Menu | Game
-LB | Menu
-RB | Menu
-RT | Menu
-Joystick | Menu
 Power_Up | Menu | Game
 Score_Up | Game
 HP_Up | Game
@@ -27,3 +23,21 @@ Coeur | Game
 Bande_L | Menu | Game
 Bande_R | Menu | Game
 Fog_Anim | Game
+Icons | Menu | Game
+E1 | Menu | Game
+E2 | Game
+Boss1 | Game
+Boss2 | Game
+Tir_Default | All
+Tir_Sinu | Menu | Game
+Tir_Pissenlit | Menu | Game
+Tir_Pissenlit2 | Menu | Game
+Explosion_logo | Intro
+Explosion_E1 | Game
+Explosion_E2 | Game
+Explosion_B1 | Game
+Explosion_B2 | Game
+Tir_E1 | Game
+Tir_E2 | Game
+Tir_B1 | Game
+Tir_B2 | Game

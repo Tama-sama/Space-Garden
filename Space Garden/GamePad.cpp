@@ -187,7 +187,7 @@ void GamepadManager(int _joystickId, sf::Event event)
 
 			if (event.joystickMove.axis == PadAxis::JoystickGachettes) // L2 et R2
 			{
-				if (event.joystickMove.position > 1.0f)
+				if (event.joystickMove.position > 10.0f)
 				{
 					Gamepad[_joystickId].TriggerL = event.joystickMove.position;
 				}
@@ -195,7 +195,7 @@ void GamepadManager(int _joystickId, sf::Event event)
 				{
 					Gamepad[_joystickId].TriggerL = 0.0f;
 				}
-				if (event.joystickMove.position < -1.0f)
+				if (event.joystickMove.position < -10.0f)
 				{
 					Gamepad[_joystickId].TriggerR = -event.joystickMove.position;
 				}

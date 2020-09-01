@@ -47,8 +47,9 @@ Controle* ChangingControle = 0;
 extern bool SoloGame;
 bool Readys[2] = { false,false };
 
+
 int ScoreBoardSeen = 1;
-std::string SoloLines[5];
+std::string SoloLines[5] = {"#1 - Nobody - 000","#2 - Nobody - 000","#3 - Nobody - 000","#4 - Nobody - 000","#5 - Nobody - 000"};
 std::string DuoLines[5];
 
 // Linenumber // playernumber
@@ -272,7 +273,14 @@ void UpdateShipMenu()
 			ActualMenu = Menus::MAIN;
 			MenuChoice = 0;
 		}
-		
+
+		if (isButtonPressed(Action::Return, Player1.getController()) && ActionTiming >= 0.3f)
+		{
+			ActionTiming = 0;
+			
+			getSound("menu_click").play();
+			ActualMenu = Menus::PLAY;
+		}
 	}
 	else
 	{
@@ -683,10 +691,9 @@ void UpdateHowToPlay()
 	FirePissenlitTimer += MainTime.GetTimeDeltaF();
 	if (FirePissenlitTimer >= 4)
 	{
-		ennemies.push_back(Ennemies(sf::Vector2f(Tutos[0].getPosition().x + 110, Tutos[0].getPosition().y - 440), 5));
+		ennemies.push_back(Ennemies(sf::Vector2f(Tutos[0].getPosition().x + 130, Tutos[0].getPosition().y - 440), 5));
 		ennemies.push_back(Ennemies(sf::Vector2f(Tutos[0].getPosition().x, Tutos[0].getPosition().y - 420), 5));
-		ennemies.push_back(Ennemies(sf::Vector2f(Tutos[0].getPosition().x, Tutos[0].getPosition().y - 525), 5));
-		ennemies.push_back(Ennemies(sf::Vector2f(Tutos[0].getPosition().x - 110, Tutos[0].getPosition().y - 440), 5));
+		ennemies.push_back(Ennemies(sf::Vector2f(Tutos[0].getPosition().x - 130, Tutos[0].getPosition().y - 440), 5));
 
 		Tutos[0].FirePissenlit();
 		Tutos[0].addPissenlitShoot();
@@ -854,7 +861,6 @@ void DisplayPlayMenu()
 	sf::Text buttons_text("", Font, 70);
 	std::string Textyes[3]{ "Solo","Coop","Comment jouer" };
 	sf::Vector2f TextPos[3]{ sf::Vector2f(850,55),sf::Vector2f(1020,245), sf::Vector2f(800,450) };
-	sf::Text Return("B Retour", Font, 75);
 
 	win.Window().draw(getSprite("Fond_menu2"));
 
@@ -888,11 +894,6 @@ void DisplayPlayMenu()
 		win.Window().draw(getSprite("Button"));
 		win.Window().draw(buttons_text);
 	}
-
-	
-	Return.setFillColor(sf::Color::Color(180, 50, 0));
-	Return.setPosition(1300, 800);
-	win.Window().draw(Return);
 }
 void DisplayShipSelection()
 {
@@ -945,13 +946,9 @@ void DisplayShipSelection()
 void DisplayScoreBoardMenu()
 {
 	sf::Text TLine("", Font, 80);
-	sf::Text Return("B Retour", Font, 75);
 	static int PosX = 960;
 
 	TLine.setFillColor(sf::Color::Color(180, 50, 0));
-
-	Return.setFillColor(sf::Color::Color(180, 50, 0));
-	Return.setPosition(1500, 940);
 
 	if (ScoreBoardSeen == 1)
 	{
@@ -969,7 +966,6 @@ void DisplayScoreBoardMenu()
 	}
 
 	win.Window().draw(getSprite("Fond_menu2"));
-	win.Window().draw(Return);
 			
 	// Solo Board
 	TLine.setString("Solo Scores");
@@ -1101,7 +1097,6 @@ void DisplayOptionMenu()
 			ActionName.setPosition(ActionKey.getPosition().x + 20, ActionKey.getPosition().y);
 			win.Window().draw(ActionName);
 			
-
 			switch (ActualControle.KeyBoard)
 			{
 				ITEM(A);
@@ -1130,11 +1125,81 @@ void DisplayOptionMenu()
 				ITEM(X);
 				ITEM(Y);
 				ITEM(Z);
-				ITEM(Return);
+				ITEM(Num0);
+				ITEM(Num1);
+				ITEM(Num2);
+				ITEM(Num3);
+				ITEM(Num4);
+				ITEM(Num5);
+				ITEM(Num6);
+				ITEM(Num7);
+				ITEM(Num8);
+				ITEM(Num9);
 				ITEM(Escape);
-				ITEM(Space);
-				ITEM(LShift);
 				ITEM(LControl);
+				ITEM(LShift);
+				ITEM(LAlt);
+				ITEM(LSystem);
+				ITEM(RControl);
+				ITEM(RShift);
+				ITEM(RAlt);
+				ITEM(RSystem);
+				ITEM(Menu);
+				ITEM(LBracket);
+				ITEM(RBracket);
+				ITEM(Semicolon);
+				ITEM(Comma);
+				ITEM(Period);
+				ITEM(Quote);
+				ITEM(Slash);
+				ITEM(Backslash);
+				ITEM(Tilde);
+				ITEM(Equal);
+				ITEM(Hyphen);
+				ITEM(Space);
+				ITEM(Enter);
+				ITEM(Backspace);
+				ITEM(Tab);
+				ITEM(PageUp);
+				ITEM(PageDown);
+				ITEM(End);
+				ITEM(Home);
+				ITEM(Insert);
+				ITEM(Delete);
+				ITEM(Add);
+				ITEM(Subtract);
+				ITEM(Multiply);
+				ITEM(Divide);
+				ITEM(Left);
+				ITEM(Right);
+				ITEM(Up);
+				ITEM(Down);
+				ITEM(Numpad0);
+				ITEM(Numpad1);
+				ITEM(Numpad2);
+				ITEM(Numpad3);
+				ITEM(Numpad4);
+				ITEM(Numpad5);
+				ITEM(Numpad6);
+				ITEM(Numpad7);
+				ITEM(Numpad8);
+				ITEM(Numpad9);
+				ITEM(F1);
+				ITEM(F2);
+				ITEM(F3);
+				ITEM(F4);
+				ITEM(F5);
+				ITEM(F6);
+				ITEM(F7);
+				ITEM(F8);
+				ITEM(F9);
+				ITEM(F10);
+				ITEM(F11);
+				ITEM(F12);
+				ITEM(F13);
+				ITEM(F14);
+				ITEM(F15);
+				ITEM(Pause);
 
 			default:
 				ret = "NONE";
@@ -1177,12 +1242,16 @@ void DisplayOptionMenu()
 				ret = "NONE";
 				break;
 			}
+			
+			if (ActualControle.PadKey < gamepadPS4::StickLX)
+				getSprite("Icons").setTextureRect(sf::IntRect((int)ActualControle.PadKey * 40, 0, 40, 40));
+			else if (ActualControle.AxisDirection == -1)
+				getSprite("Icons").setTextureRect(sf::IntRect((int)ActualControle.PadKey * 40, 0, 40, 40));
+			else if(ActualControle.AxisDirection == 1)
+				getSprite("Icons").setTextureRect(sf::IntRect((int)ActualControle.PadKey * 40, 1 * 40, 40, 40));
 
-			ActionName.setCharacterSize(40);
-			ActionName.setString(ret);
-			ActionName.setPosition(KeyPad.getPosition().x + 10, KeyBoard.getPosition().y);
-			win.Window().draw(ActionName);
-			ActionName.setCharacterSize(50);
+			getSprite("Icons").setPosition(KeyPad.getPosition().x + 50, KeyBoard.getPosition().y + 10);
+			win.Window().draw(getSprite("Icons"));
 
 			i++;
 		}
@@ -1300,20 +1369,10 @@ void DisplayOptionMenu()
 	}
 	
 
-	sf::Text Return("B Retour", Font, 75);
-	Return.setFillColor(sf::Color::Color(180, 50, 0));
-	Return.setPosition(1500, 940);
-	win.Window().draw(Return);
 }
 void DisplayCredits()
 {
-	sf::Text Return("B Retour", Font, 75);
-	Return.setFillColor(sf::Color::Color(180, 50, 0));
-	Return.setPosition(1500,940);
-
 	win.Window().draw(getSprite("Credits"));
-	win.Window().draw(Return);
-
 }
 void DisplayHowToPlay()
 {			
@@ -1338,61 +1397,72 @@ void DisplayHowToPlay()
 	}
 
 	for (PlayerBullet& ActualShoot : Bullets)
-		win.Window().draw(ActualShoot.Sprite());
+		ActualShoot.Draw();
 
 	for (Ennemies& ActualEnnemie : ennemies)
-		win.Window().draw(ActualEnnemie.getSprite());
+	{
+		getSprite("E1").setRotation(0);
+		getSprite("E1").setOrigin(getSprite("E1").getGlobalBounds().width / 2, getSprite("E1").getGlobalBounds().height / 2);
+		getSprite("E1").setRotation(ActualEnnemie.getRotation());
+		getSprite("E1").setPosition(ActualEnnemie.getPos());
+		win.Window().draw(getSprite("E1"));
+	}
 		
 	for (int i = 0; i < 4; i++)
 	{
 		getSprite("JoueurR").setPosition(Tutos[i].getPosition());
+		getSprite("JoueurR").setTextureRect(Tutos[i].getIntRect());
 		win.Window().draw(getSprite("JoueurR"));
 	}
 
-	static float LB_RBTimer = 0;
-	sf::IntRect LB_RBRect(0, 0, 280, 113);
-	sf::IntRect RTRect(0, 0, 145, 113);
-	sf::IntRect JoystickRect(0, 0, 113, 113);
-	LB_RBTimer += MainTime.GetTimeDeltaF();
-	if (LB_RBTimer < 1.5f)
+	for (Controle& ActualControle : controles)
 	{
-		LB_RBRect.left = 0;
-		RTRect.left = 0;
+		int DirLine = 0;
+		if (ActualControle.AxisDirection == -1)
+			DirLine = 0;
+		if (ActualControle.AxisDirection == 1)
+			DirLine = 1;
+
+		getSprite("Icons").setScale(1.5f, 1.5f);
+
+		if (ActualControle.name == Action::Fire_Spe1)
+		{
+			getSprite("Icons").setTextureRect(sf::IntRect((int)ActualControle.PadKey * 40, DirLine * 40, 40, 40));
+			getSprite("Icons").setPosition(470, 75);
+			win.Window().draw(getSprite("Icons"));
+		}
+		if (ActualControle.name == Action::Fire_Spe2)
+		{
+			getSprite("Icons").setTextureRect(sf::IntRect((int)ActualControle.PadKey * 40, DirLine * 40, 40, 40));
+			getSprite("Icons").setPosition(820, 75);
+			win.Window().draw(getSprite("Icons"));
+		}
+		if (ActualControle.name == Action::Fire)
+		{
+			getSprite("Icons").setTextureRect(sf::IntRect((int)ActualControle.PadKey * 40, DirLine * 40, 40, 40));
+			getSprite("Icons").setPosition(1170, 75);
+			win.Window().draw(getSprite("Icons"));
+		}
+		if (Tutos[3].getIntRect().left == 63 * 3)
+		{
+			if (ActualControle.name == Action::Left)
+			{
+				getSprite("Icons").setTextureRect(sf::IntRect((int)ActualControle.PadKey * 40, DirLine * 40, 40, 40));
+				getSprite("Icons").setPosition(1430, 75);
+				win.Window().draw(getSprite("Icons"));
+			}
+		}
+		else
+		{
+			if (ActualControle.name == Action::Right)
+			{
+				getSprite("Icons").setTextureRect(sf::IntRect((int)ActualControle.PadKey * 40, DirLine * 40, 40, 40));
+				getSprite("Icons").setPosition(1430, 75);
+				win.Window().draw(getSprite("Icons"));
+			}
+		}
 	}
-	else if (LB_RBTimer > 1.5f && LB_RBTimer < 3)
-	{
-		LB_RBRect.left = LB_RBRect.width;
-		RTRect.left = RTRect.width;
-	}
-	else
-		LB_RBTimer = 0;
-	
-	if (Tutos[3].getIntRect().left == Tutos[3].getIntRect().width * 3)
-		JoystickRect.left = JoystickRect.width * 1;
-	else
-		JoystickRect.left = JoystickRect.width * 2;
-
-	getSprite("LB").setTextureRect(LB_RBRect);
-	getSprite("LB").setPosition(375, 20);
-	win.Window().draw(getSprite("LB"));
-
-	getSprite("RB").setTextureRect(LB_RBRect);
-	getSprite("RB").setPosition(700,20);
-	win.Window().draw(getSprite("RB"));
-
-	getSprite("RT").setTextureRect(RTRect);
-	getSprite("RT").setPosition(1140, 20);
-	win.Window().draw(getSprite("RT"));
-
-	getSprite("Joystick").setTextureRect(JoystickRect);
-	getSprite("Joystick").setPosition(1420, 20);
-	win.Window().draw(getSprite("Joystick"));
-
-	sf::Text Return("B Retour", Font, 75);
-	Return.setFillColor(sf::Color::Color(180, 50, 0));
-	Return.setPosition(1450, 940);
-	win.Window().draw(Return);
-
+	getSprite("Icons").setScale(1, 1);
 }
 
 

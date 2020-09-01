@@ -59,10 +59,12 @@ public:
 	/// \param _Line : Disired line (Default = actual line)
 	/////////////
 	void Animate(sf::Sprite& _SpriteSheet, int _Line = -1);
+	void Animate(int _Line = -1);
 
 	void Initialitation(int AnimationLine, sf::Vector2i FrameSize, float _AnimationTiming, int _MaxFrames);
 	int getXFrame() const { return m_AnimationFrameX; };
 	int getMaxXFrame() const { return m_TotalFramesX; };
+	sf::IntRect getAnimateRect() { return m_AnimatedRect; };
 
 private:
 	sf::IntRect m_AnimatedRect;

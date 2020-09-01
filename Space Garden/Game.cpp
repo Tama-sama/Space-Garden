@@ -11,7 +11,7 @@
 #include "Controles.hpp"
 
 #define SIZE_BUFFS 30
-#define RADIUS_PLAYER_SHOOT 10
+#define RADIUS_PLAYER_SHOOT 11
 #define RADIUS_ENNEMIES_SHOOT 9
 #define RADIUS_ENNEMIES 45
 extern sf::Image BossCollision;
@@ -300,7 +300,6 @@ bool IgMenu_Options = false;
 
 int _game_phase = -1;
 float Game_timer = 0;
-CAnimations FogAnim(0, sf::Vector2i(1458, 412), 0.15, 3);
 ///////////////////////////////////////////
 // Boucle scripter de jeux jusqu'au boss //
 ///////////////////////////////////////////
@@ -807,7 +806,7 @@ void ennemies_patern()
 		{
 			if (ActualEnnemie.getPhase() == 0)
 			{
-				ActualEnnemie.getSprite().setRotation(135);
+				ActualEnnemie.setRotation(135);
 				ActualEnnemie.setDelta(225, 150);
 				if (ActualEnnemie.getTimer() > 2)
 				{
@@ -819,14 +818,14 @@ void ennemies_patern()
 			}
 			else if (ActualEnnemie.getPhase() == 1)
 			{
-				if (ActualEnnemie.getSprite().getRotation() < 180 && ActualEnnemie.getTimer() > 0.2)
-					ActualEnnemie.getSprite().rotate(140 * MainTime.GetTimeDeltaF());
+				if (ActualEnnemie.getRotation() < 180 && ActualEnnemie.getTimer() > 0.2)
+					ActualEnnemie.rotate(140 * MainTime.GetTimeDeltaF());
 
 				if (ActualEnnemie.getTimer() > 0.5)
 				{
 					ActualEnnemie.NewLastSwitch(ActualEnnemie.getLastSwitch().x + ActualEnnemie.getDelta().x * 0.5, ActualEnnemie.getLastSwitch().y + ActualEnnemie.getDelta().y * 0.5);
 					ActualEnnemie.setPosition(ActualEnnemie.getLastSwitch());
-					ActualEnnemie.getSprite().setRotation(180);
+					ActualEnnemie.setRotation(180);
 					ActualEnnemie.setDelta(0, 0);
 					ActualEnnemie.setPhase(2);
 					ActualEnnemie.resetTimer();
@@ -863,10 +862,10 @@ void ennemies_patern()
 			{
 				if (ActualEnnemie.getTimer() > 0.8)
 				{
-					if (ActualEnnemie.getSprite().getRotation() < 210)
-						ActualEnnemie.getSprite().rotate(140 * MainTime.GetTimeDeltaF());
+					if (ActualEnnemie.getRotation() < 210)
+						ActualEnnemie.rotate(140 * MainTime.GetTimeDeltaF());
 					else
-						ActualEnnemie.getSprite().setRotation(210);
+						ActualEnnemie.setRotation(210);
 
 					ActualEnnemie.setDelta(75, -100);
 				}
@@ -876,7 +875,7 @@ void ennemies_patern()
 		{
 			if (ActualEnnemie.getPhase() == 0)
 			{
-				ActualEnnemie.getSprite().setRotation(225);
+				ActualEnnemie.setRotation(225);
 				ActualEnnemie.setDelta(-225, 150);
 				if (ActualEnnemie.getTimer() > 2)
 				{
@@ -888,14 +887,14 @@ void ennemies_patern()
 			}
 			else if (ActualEnnemie.getPhase() == 1)
 			{
-				if (ActualEnnemie.getSprite().getRotation() > 180 && ActualEnnemie.getTimer() > 0.2)
-					ActualEnnemie.getSprite().rotate(-140 * MainTime.GetTimeDeltaF());
+				if (ActualEnnemie.getRotation() > 180 && ActualEnnemie.getTimer() > 0.2)
+					ActualEnnemie.rotate(-140 * MainTime.GetTimeDeltaF());
 
 				if (ActualEnnemie.getTimer() > 0.5)
 				{
 					ActualEnnemie.NewLastSwitch(ActualEnnemie.getLastSwitch().x + ActualEnnemie.getDelta().x * 0.5, ActualEnnemie.getLastSwitch().y + ActualEnnemie.getDelta().y * 0.5);
 					ActualEnnemie.setPosition(ActualEnnemie.getLastSwitch());
-					ActualEnnemie.getSprite().setRotation(180);
+					ActualEnnemie.setRotation(180);
 					ActualEnnemie.setDelta(0, 0);
 					ActualEnnemie.setPhase(2);
 					ActualEnnemie.resetTimer();
@@ -932,10 +931,10 @@ void ennemies_patern()
 			{
 				if (ActualEnnemie.getTimer() > 0.8)
 				{
-					if (ActualEnnemie.getSprite().getRotation() > 150)
-						ActualEnnemie.getSprite().rotate(-25 * MainTime.GetTimeDeltaF());
+					if (ActualEnnemie.getRotation() > 150)
+						ActualEnnemie.rotate(-25 * MainTime.GetTimeDeltaF());
 					else
-						ActualEnnemie.getSprite().setRotation(150);
+						ActualEnnemie.setRotation(150);
 
 					ActualEnnemie.setDelta(-75, -100);
 				}
@@ -945,7 +944,7 @@ void ennemies_patern()
 		{
 			if (ActualEnnemie.getPhase() == 0)
 			{
-				ActualEnnemie.getSprite().setRotation(90);
+				ActualEnnemie.setRotation(90);
 				ActualEnnemie.setDelta(300, 0);
 				if (ActualEnnemie.getTimer() > 1.75)
 				{
@@ -957,10 +956,10 @@ void ennemies_patern()
 			}
 			else if (ActualEnnemie.getPhase() == 1)
 			{
-				if (ActualEnnemie.getSprite().getRotation() < 180)
-					ActualEnnemie.getSprite().rotate(125 * MainTime.GetTimeDeltaF());
+				if (ActualEnnemie.getRotation() < 180)
+					ActualEnnemie.rotate(125 * MainTime.GetTimeDeltaF());
 				else
-					ActualEnnemie.getSprite().setRotation(180);
+					ActualEnnemie.setRotation(180);
 
 				if (ActualEnnemie.getTimer() > 0.25)
 				{
@@ -1007,7 +1006,7 @@ void ennemies_patern()
 		{
 			if (ActualEnnemie.getPhase() == 0)
 			{
-				ActualEnnemie.getSprite().setRotation(270);
+				ActualEnnemie.setRotation(270);
 				ActualEnnemie.setDelta(-300, 0);
 				if (ActualEnnemie.getTimer() > 1.75)
 				{
@@ -1019,10 +1018,10 @@ void ennemies_patern()
 			}
 			else if (ActualEnnemie.getPhase() == 1)
 			{
-				if (ActualEnnemie.getSprite().getRotation() > 180)
-					ActualEnnemie.getSprite().rotate(-125 * MainTime.GetTimeDeltaF());
+				if (ActualEnnemie.getRotation() > 180)
+					ActualEnnemie.rotate(-125 * MainTime.GetTimeDeltaF());
 				else
-					ActualEnnemie.getSprite().setRotation(180);
+					ActualEnnemie.setRotation(180);
 
 				if (ActualEnnemie.getTimer() > 0.25)
 				{
@@ -1069,7 +1068,7 @@ void ennemies_patern()
 		{
 			if (ActualEnnemie.getPhase() == 0)
 			{
-				ActualEnnemie.getSprite().setRotation(180);
+				ActualEnnemie.setRotation(180);
 				ActualEnnemie.setDelta(0, 300);
 				if (ActualEnnemie.getTimer() > 1)
 				{
@@ -1112,7 +1111,7 @@ void ennemies_patern()
 		{
 			if (ActualEnnemie.getPhase() == 0)
 			{
-				ActualEnnemie.getSprite().setRotation(180);
+				ActualEnnemie.setRotation(180);
 				ActualEnnemie.setDelta(0, 400);
 				if (ActualEnnemie.getTimer() > 1.5)
 				{
@@ -1134,10 +1133,10 @@ void ennemies_patern()
 				else
 					ActualEnnemie.setDelta(ActualEnnemie.getDelta().x, 0);
 
-				if (ActualEnnemie.getSprite().getRotation() > 90)
-					ActualEnnemie.getSprite().rotate(-85 * MainTime.GetTimeDeltaF());
+				if (ActualEnnemie.getRotation() > 90)
+					ActualEnnemie.rotate(-85 * MainTime.GetTimeDeltaF());
 				else
-					ActualEnnemie.getSprite().setRotation(90);
+					ActualEnnemie.setRotation(90);
 
 				if (ActualEnnemie.getTimer() > 2)
 				{
@@ -1157,10 +1156,10 @@ void ennemies_patern()
 				else
 					ActualEnnemie.setDelta(ActualEnnemie.getDelta().x, -250);
 
-				if (ActualEnnemie.getSprite().getRotation() > 0 && ActualEnnemie.getSprite().getRotation() < 340)
-					ActualEnnemie.getSprite().rotate(-85 * MainTime.GetTimeDeltaF());
+				if (ActualEnnemie.getRotation() > 0 && ActualEnnemie.getRotation() < 340)
+					ActualEnnemie.rotate(-85 * MainTime.GetTimeDeltaF());
 				else
-					ActualEnnemie.getSprite().setRotation(0);
+					ActualEnnemie.setRotation(0);
 
 			}
 		}
@@ -1168,7 +1167,7 @@ void ennemies_patern()
 		{
 			if (ActualEnnemie.getPhase() == 0)
 			{
-				ActualEnnemie.getSprite().setRotation(180);
+				ActualEnnemie.setRotation(180);
 				ActualEnnemie.setDelta(0, 400);
 				if (ActualEnnemie.getTimer() > 1.5)
 				{
@@ -1190,10 +1189,10 @@ void ennemies_patern()
 				else
 					ActualEnnemie.setDelta(ActualEnnemie.getDelta().x, 0);
 
-				if (ActualEnnemie.getSprite().getRotation() < 270)
-					ActualEnnemie.getSprite().rotate(85 * MainTime.GetTimeDeltaF());
+				if (ActualEnnemie.getRotation() < 270)
+					ActualEnnemie.rotate(85 * MainTime.GetTimeDeltaF());
 				else
-					ActualEnnemie.getSprite().setRotation(270);
+					ActualEnnemie.setRotation(270);
 
 				if (ActualEnnemie.getTimer() > 2)
 				{
@@ -1213,10 +1212,10 @@ void ennemies_patern()
 				else
 					ActualEnnemie.setDelta(ActualEnnemie.getDelta().x, -250);
 
-				if (ActualEnnemie.getSprite().getRotation() < 360 && ActualEnnemie.getSprite().getRotation() > 20)
-					ActualEnnemie.getSprite().rotate(85 * MainTime.GetTimeDeltaF());
+				if (ActualEnnemie.getRotation() < 360 && ActualEnnemie.getRotation() > 20)
+					ActualEnnemie.rotate(85 * MainTime.GetTimeDeltaF());
 				else
-					ActualEnnemie.getSprite().setRotation(0);
+					ActualEnnemie.setRotation(0);
 
 			}
 		}
@@ -1470,6 +1469,8 @@ void UpdateGamePause()
 					RemoveAllExplosions();
 					RemoveAllPlayerShoots();
 					IgMenu_Choice = 0;
+					getSprite("JoueurR").setColor(sf::Color::White);
+					getSprite("JoueurB").setColor(sf::Color::White);
 					ChangeState(State::MAIN_MENU);
 					break;
 
@@ -1573,31 +1574,22 @@ void DisplayGame()
 
 	for (PlayerBullet& ActualPlayerBullet : Bullets)
 	{
-		win.Window().draw(ActualPlayerBullet.Sprite());
+		ActualPlayerBullet.Draw();
 	}
 
 	for (EnnemiesShoots& ActualEnnemieBullet : EnnemiesShootsList)
 	{
-		win.Window().draw(ActualEnnemieBullet.getSprite());
+		ActualEnnemieBullet.draw();
 	}
 
 	for (Ennemies& ActualEnnemie : ennemies)
 	{
-		win.Window().draw(ActualEnnemie.getSprite());
-
-		if (ActualEnnemie.getType() == 100)
-		{
-			FogAnim.Animate(getSprite("Fog_Anim"));
-			getSprite("Fog_Anim").setOrigin(729, 0);
-			getSprite("Fog_Anim").setPosition(ActualEnnemie.getPos());
-			win.Window().draw(getSprite("Fog_Anim"));
-
-		}
+		ActualEnnemie.Draw();
 	}
 
 	for (Explosion& ActualExplosion : Explosions)
 	{
-		win.Window().draw(ActualExplosion.getSprite());
+		ActualExplosion.draw();
 	}
 
 

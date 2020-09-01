@@ -2,25 +2,20 @@
 #include "EnnemiesShoots.hpp"
 #include "Game.hpp"
 #include "SoundManager.hpp"
+#include "Texture_SpriteManager.hpp"
 #include "Explosion.hpp"
+#include "Window.hpp"
 
 std::list<Ennemies> ennemies;
 
-sf::Texture Ennemi1;
-sf::Texture Ennemi2;
-sf::Texture Boss;
-sf::Texture Boss2;
 sf::Image BossCollision;
+CAnimations FogAnim(0, sf::Vector2i(1458, 412), 0.15, 3);
 
 bool Ennemies_one_pass = true;
 Ennemies::Ennemies(sf::Vector2f Pos, int MoveType, int Life)
 {
 	if (Ennemies_one_pass)
 	{
-		Ennemi1.loadFromFile("../Ressources/E1.png");
-		Ennemi2.loadFromFile("../Ressources/E2.png");
-		Boss.loadFromFile("../Ressources/Boss.png");
-		Boss2.loadFromFile("../Ressources/Boss2.png");
 		BossCollision.loadFromFile("../Ressources/Boss_collision.png");
 		Ennemies_one_pass = false;
 	}
@@ -28,12 +23,10 @@ Ennemies::Ennemies(sf::Vector2f Pos, int MoveType, int Life)
 
 	if (MoveType == 1 || MoveType == 2 || MoveType == 5)
 	{
-		sprite.setTexture(Ennemi1);
 		vie = 2;
 	}
 	else if (MoveType != 100)
 	{
-		sprite.setTexture(Ennemi2);
 		vie = 3;
 	}
 	if (Life != -1)
@@ -51,19 +44,14 @@ Ennemies::Ennemies(sf::Vector2f Pos, int MoveType, int Life)
 	hit = false;
 	timer_hit = 0;
 	LastSwitch = pos;
-	sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
-	sprite.setRotation(180);
-	sprite.setPosition(pos);
+	m_rotation = 180;
 
 	if (MoveType == 100)
 	{
 		pos = sf::Vector2f(960, -400);
 		Delta = sf::Vector2f(0, 133);
 		vie = 100;
-		sprite.setRotation(0);
-		sprite.setTexture(Boss);
-		sprite.setOrigin(sprite.getGlobalBounds().width / 2, 0);
-		sprite.setPosition(pos);
+		m_rotation = 0;
 	}
 
 }
@@ -80,8 +68,6 @@ void Ennemies::TakeDamage(int Damage)
 			Explosions.push_back(Explosion(sf::Vector2f(560,230), 98));
 			Explosions.push_back(Explosion(sf::Vector2f(1360,210), 99));
 			Explosions.push_back(Explosion(sf::Vector2f(1360,230), 99));
-
-			sprite.setTexture(Boss2);
 		}
 		if (vie > 0 && vie - Damage <= 0)
 		{
@@ -281,10 +267,10 @@ void Ennemies::Update()
 	if (hit)
 	{
 		timer_hit += MainTime.GetTimeDeltaF();
-		sprite.setColor(sf::Color::Color(255,0,0,200));
+		//sprite.setColor(sf::Color::Color(255,0,0,200));
 		if (timer_hit >= 0.075f)
 		{
-			sprite.setColor(sf::Color::White);
+			//sprite.setColor(sf::Color::White);
 			hit = false;
 			timer_hit = 0;
 		}
@@ -292,13 +278,61 @@ void Ennemies::Update()
 
 
 	pos = sf::Vector2f(pos.x + Delta.x * MainTime.GetTimeDeltaF(), pos.y + Delta.y * MainTime.GetTimeDeltaF());
-	sprite.setPosition(pos);
+	//sprite.setPosition(pos);
 
 	if (!sf::IntRect(0, -410, 1920, 1490).contains(sf::Vector2i(pos)))
 	{
 		vie = 0;
 	}
 }
+
+
+void Ennemies::Draw()
+{
+	if (Move_Type == 1 || Move_Type == 2 || Move_Type == 5)
+	{
+		getSprite("E1").setRotation(0);
+		getSprite("E1").setOrigin(getSprite("E1").getGlobalBounds().width / 2, getSprite("E1").getGlobalBounds().height / 2);
+		getSprite("E1").setRotation(m_rotation);
+		getSprite("E1").setPosition(pos);
+		win.Window().draw(getSprite("E1"));
+	}
+	else if (Move_Type != 100)
+	{
+		getSprite("E2").setRotation(0);
+		getSprite("E2").setOrigin(getSprite("E2").getGlobalBounds().width / 2, getSprite("E2").getGlobalBounds().height / 2);
+		getSprite("E2").setRotation(m_rotation);
+		getSprite("E2").setPosition(pos);
+		win.Window().draw(getSprite("E2"));
+	}
+	else
+	{
+		if (vie > 50)
+		{
+			getSprite("Boss1").setRotation(0);
+			getSprite("Boss1").setOrigin(getSprite("Boss1").getGlobalBounds().width / 2, 0);
+			getSprite("Boss1").setRotation(m_rotation);
+			getSprite("Boss1").setPosition(pos);
+			win.Window().draw(getSprite("Boss1"));
+		}
+		else
+		{
+			getSprite("Boss2").setRotation(0);
+			getSprite("Boss2").setOrigin(getSprite("Boss2").getGlobalBounds().width / 2, 0);
+			getSprite("Boss2").setRotation(m_rotation);
+			getSprite("Boss2").setPosition(pos);
+			win.Window().draw(getSprite("Boss2"));
+		}
+
+
+		FogAnim.Animate(getSprite("Fog_Anim"));
+		getSprite("Fog_Anim").setOrigin(729, 0);
+		getSprite("Fog_Anim").setPosition(pos);
+		win.Window().draw(getSprite("Fog_Anim"));
+
+	}
+}
+
 
 void RemoveAllEnnemies()
 {

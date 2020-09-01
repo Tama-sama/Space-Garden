@@ -137,7 +137,7 @@ void Player::Update()
 	if (invulnerability)
 	{
 		InvuTimer += MainTime.GetTimeDeltaF();
-		if (InvuTimer > 2.f)
+		if (InvuTimer > 2.f || m_vie <= 0)
 		{
 			InvuTimer = 0;
 			invulnerability = false;

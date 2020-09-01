@@ -66,11 +66,11 @@ void OptionLoad()
 
 		SettingFile.close();
 	}
+	win.Window().setMouseCursorVisible(false);
 }
 
 
 Windows win(sf::VideoMode::getDesktopMode(), "Space Garden", 120, sf::Style::None);
-
 
 int main(int argc, char** argv)
 {

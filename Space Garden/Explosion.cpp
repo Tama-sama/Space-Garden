@@ -1,57 +1,36 @@
 #include "Explosion.hpp"
+#include "Texture_SpriteManager.hpp"
+#include "Window.hpp"
 
 std::list<Explosion> Explosions;
 
-sf::Texture _exposion_1;
-sf::Texture _exposion_2;
-sf::Texture _exposion_Boss1;
-sf::Texture _exposion_Boss2;
-sf::Texture _exposion_logo;
-bool Explo_one_pass = true;
 
 Explosion::Explosion(sf::Vector2f _elemvector, int _type) 
 {
-	if (Explo_one_pass)
-	{
-		_exposion_1.loadFromFile("../Ressources/Explosion_ennemi_1.png");
-		_exposion_2.loadFromFile("../Ressources/Explosion_ennemi_2.png");
-		_exposion_Boss1.loadFromFile("../Ressources/Explosion_boss_1.png");
-		_exposion_Boss2.loadFromFile("../Ressources/Explosion_boss_2.png");
-		_exposion_logo.loadFromFile("../Ressources/LOGO_explo.png");
-
-		Explo_one_pass = false;
-	}
-
-
+	type = _type;
 	if (_type == 1 || _type == 2 || _type == 5)
 	{
-		sprite.setTexture(_exposion_1);
 		anim = sf::IntRect(0, 0, 256, 262);
 	}
 	else if (_type == 98)
 	{
-		sprite.setTexture(_exposion_Boss1);
 		anim = sf::IntRect(0, 0, 437, 343);
 	}
 	else if (_type == 99)
 	{
-		sprite.setTexture(_exposion_Boss2);
 		anim = sf::IntRect(0, 0, 437, 434);
 	}
 	else if (_type == 100)
 	{
-		sprite.setTexture(_exposion_logo);
 		anim = sf::IntRect(0, 0, 412, 428);
 	}
 	else
 	{
-		sprite.setTexture(_exposion_2);
 		anim = sf::IntRect(0, 0, 325, 262);
 	}
 
 	animator.Initialitation(0, sf::Vector2i(anim.width, anim.height), 0.075f, 5);
 
-	sprite.setOrigin(anim.width / 2, anim.height / 2);
 	pos = _elemvector;
 	timer = 0;
 	life = 1;
@@ -60,9 +39,7 @@ Explosion::Explosion(sf::Vector2f _elemvector, int _type)
 void Explosion::update()
 {
 	if (animator.getXFrame() < animator.getMaxXFrame() - 1)
-		animator.Animate(sprite);
-
-	sprite.setPosition(pos);
+		animator.Animate();
 
 	if (animator.getXFrame() >= animator.getMaxXFrame() - 1)
 	{
@@ -74,6 +51,44 @@ void Explosion::update()
 	}
 }
 
+void Explosion::draw()
+{
+	if (type == 1 || type == 2 || type == 5)
+	{
+		getSprite("Explosion_E1").setTextureRect(animator.getAnimateRect());
+		getSprite("Explosion_E1").setOrigin(getSprite("Explosion_E1").getGlobalBounds().width / 2, getSprite("Explosion_E1").getGlobalBounds().height / 2);
+		getSprite("Explosion_E1").setPosition(pos);
+		win.Window().draw(getSprite("Explosion_E1"));
+	}
+	else if (type == 98)
+	{
+		getSprite("Explosion_B1").setTextureRect(animator.getAnimateRect());
+		getSprite("Explosion_B1").setOrigin(getSprite("Explosion_B1").getGlobalBounds().width / 2, getSprite("Explosion_B1").getGlobalBounds().height / 2);
+		getSprite("Explosion_B1").setPosition(pos);
+		win.Window().draw(getSprite("Explosion_B1"));
+	}
+	else if (type == 99)
+	{
+		getSprite("Explosion_B2").setTextureRect(animator.getAnimateRect());
+		getSprite("Explosion_B2").setOrigin(getSprite("Explosion_B2").getGlobalBounds().width / 2, getSprite("Explosion_B2").getGlobalBounds().height / 2);
+		getSprite("Explosion_B2").setPosition(pos);
+		win.Window().draw(getSprite("Explosion_B2"));
+	}
+	else if (type == 100)
+	{
+		getSprite("Explosion_logo").setTextureRect(animator.getAnimateRect());
+		getSprite("Explosion_logo").setOrigin(getSprite("Explosion_logo").getGlobalBounds().width / 2, getSprite("Explosion_logo").getGlobalBounds().height / 2);
+		getSprite("Explosion_logo").setPosition(pos);
+		win.Window().draw(getSprite("Explosion_logo"));
+	}
+	else
+	{
+		getSprite("Explosion_E2").setTextureRect(animator.getAnimateRect());
+		getSprite("Explosion_E2").setOrigin(getSprite("Explosion_E2").getGlobalBounds().width / 2, getSprite("Explosion_E2").getGlobalBounds().height / 2);
+		getSprite("Explosion_E2").setPosition(pos);
+		win.Window().draw(getSprite("Explosion_E2"));
+	}
+}
 
 
 void RemoveAllExplosions()

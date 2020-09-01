@@ -48,6 +48,27 @@ void CAnimations::Animate(sf::Sprite& _SpriteSheet, int _Line)
 	_SpriteSheet.setTextureRect(m_AnimatedRect);
 }
 
+void CAnimations::Animate(int _Line)
+{
+	m_Timer += MainTime.GetTimeDeltaF();
+
+	if (m_Timer > m_AnimationTime)
+	{
+		m_Timer = 0;
+
+		if (_Line > -1)
+			m_line = _Line;
+
+		if (m_AnimationFrameX < m_TotalFramesX - 1)
+			m_AnimationFrameX++;
+		else
+			m_AnimationFrameX = 1;
+
+		m_AnimatedRect.top = m_line * m_Size.y;
+		m_AnimatedRect.left = m_AnimationFrameX * m_Size.x;
+	}
+}
+
 
 
 int random(int Min, int Max)

@@ -3,7 +3,7 @@
 #include "StateManager.hpp"
 #include "Tir.hpp"
 #include "Explosion.hpp"
-
+#include "Game.hpp"
 
 #include "RessourcesManager.hpp"
 #include "SoundManager.hpp"
@@ -66,8 +66,7 @@ void Intro()
 				for (PlayerBullet& BulletList : Bullets)
 				{
 					BulletList.Pos().y += -150 * MainTime.GetTimeDeltaF();
-					BulletList.Sprite().setPosition(BulletList.Pos());
-					win.Window().draw(BulletList.Sprite());
+					BulletList.Draw();
 
 					if (BulletList.Pos().y < 630)
 					{
@@ -97,23 +96,10 @@ void Intro()
 
 	for (Explosion& ExplosionList : Explosions)
 	{
-		if (ExplosionList.getAnimator().getXFrame() < ExplosionList.getAnimator().getMaxXFrame() - 1)
-			ExplosionList.getAnimator().Animate(ExplosionList.getSprite());
-
-		ExplosionList.getSprite().setPosition(ExplosionList.getPos());
-		win.Window().draw(ExplosionList.getSprite());
-		
-		if (ExplosionList.getAnimator().getXFrame() >= ExplosionList.getAnimator().getMaxXFrame() - 1)
-		{
-			ExplosionList.addTimer(MainTime.GetTimeDeltaF());
-			if (ExplosionList.getTimer() >= 0.075f)
-			{
-				Explosions.remove(ExplosionList);
-				break;
-			}
-		}
+		ExplosionList.update();
+		ExplosionList.draw();		
 	}
-
+	RemoveDeadExplosions();
 
 	if (Name_pos.x > 9000 && ship_pos.y > -150)
 		ship_pos.y += -250 * MainTime.GetTimeDeltaF();

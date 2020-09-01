@@ -1,40 +1,18 @@
 #include "EnnemiesShoots.hpp"
 #include "Game.hpp"
+#include "Texture_SpriteManager.hpp"
+#include "Window.hpp"
 
 std::list<EnnemiesShoots> EnnemiesShootsList;
 
-sf::Texture TexEnnemies_shoot1;
-sf::Texture TexEnnemies_shoot2;
-sf::Texture TexBoss_shoot1;
-sf::Texture TexBoss_shoot2;
-bool EnnemieShoot_pass = true;
-
 EnnemiesShoots::EnnemiesShoots(sf::Vector2f pos, sf::Vector2f Delta, int type, float rotation)
 {
-	if (EnnemieShoot_pass)
-	{
-		TexEnnemies_shoot1.loadFromFile("../Ressources/Tir_ennemi_1.png");
-		TexEnnemies_shoot2.loadFromFile("../Ressources/Tir_ennemi_2.png");
 
-		TexBoss_shoot1.loadFromFile("../Ressources/Tir_boss_anim_11.png");
-		TexBoss_shoot2.loadFromFile("../Ressources/Tir_boss_2.png");
-
-		EnnemieShoot_pass = false;
-	}
 
 	//normal
-	if (type == -1)
+	if (type == -1 || type == -2)
 	{
-		m_sprite.setTexture(TexEnnemies_shoot1);
-		m_sprite.setOrigin(m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2);
-		m_sprite.setRotation(rotation);
-		m_delta = Delta;
-	}
-	else if (type == -2)
-	{
-		m_sprite.setTexture(TexEnnemies_shoot2);
-		m_sprite.setOrigin(m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2);
-		m_sprite.setRotation(rotation);
+		m_rotation = rotation;
 		m_delta = Delta;
 	}
 
@@ -64,17 +42,11 @@ EnnemiesShoots::EnnemiesShoots(sf::Vector2f pos, sf::Vector2f Delta, int type, f
 		m_delta.y = Delta.y * sin(angleCible);
 
 		anim = sf::IntRect(0,0,30,45);
-		m_sprite.setTexture(TexBoss_shoot2);
-		m_sprite.setTextureRect(anim);
-		m_sprite.setOrigin(m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2);
-		m_sprite.setRotation((angleCible * 180.0f / pi) - 90);
+		m_rotation = (angleCible * 180.0f / pi) - 90;
 	}
 	else
 	{
 		anim = sf::IntRect(0,0,63,45);
-		m_sprite.setTexture(TexBoss_shoot1);
-		m_sprite.setTextureRect(anim);
-		m_sprite.setOrigin(m_sprite.getGlobalBounds().width / 2, m_sprite.getGlobalBounds().height / 2);
 
 		m_delta.x = Delta.x;
 		m_delta.y = Delta.y;
@@ -99,14 +71,51 @@ void EnnemiesShoots::update()
 	m_timer += MainTime.GetTimeDeltaF();
 	m_pos += m_delta * MainTime.GetTimeDeltaF();
 	
-	m_sprite.setPosition(m_pos);
+	//m_sprite.setPosition(m_pos);
 
 	if (!sf::IntRect(0, 0, 1920, 1080).contains(sf::Vector2i(m_pos)))
 		m_life = 0;
 }
 
 
-
+void EnnemiesShoots::draw()
+{
+	if (m_type == -1)
+	{
+		getSprite("Tir_E1").setRotation(0);
+		getSprite("Tir_E1").setOrigin(getSprite("Tir_E1").getGlobalBounds().width / 2, getSprite("Tir_E1").getGlobalBounds().height / 2);
+		getSprite("Tir_E1").setRotation(m_rotation);
+		getSprite("Tir_E1").setPosition(m_pos);
+		win.Window().draw(getSprite("Tir_E1"));
+	}
+	else if (m_type == -2)
+	{
+		getSprite("Tir_E2").setRotation(0);
+		getSprite("Tir_E2").setOrigin(getSprite("Tir_E2").getGlobalBounds().width / 2, getSprite("Tir_E2").getGlobalBounds().height / 2);
+		getSprite("Tir_E2").setRotation(m_rotation);
+		getSprite("Tir_E2").setPosition(m_pos);
+		win.Window().draw(getSprite("Tir_E2"));
+	}
+	// Boss
+	else if (m_type == 4)
+	{
+		getSprite("Tir_B2").setRotation(0);
+		getSprite("Tir_B2").setTextureRect(anim);
+		getSprite("Tir_B2").setOrigin(getSprite("Tir_B2").getGlobalBounds().width / 2, getSprite("Tir_B2").getGlobalBounds().height / 2);
+		getSprite("Tir_B2").setRotation(m_rotation);
+		getSprite("Tir_B2").setPosition(m_pos);
+		win.Window().draw(getSprite("Tir_B2"));
+	}
+	else
+	{
+		getSprite("Tir_B1").setRotation(0);
+		getSprite("Tir_B1").setTextureRect(anim);
+		getSprite("Tir_B1").setOrigin(getSprite("Tir_B1").getGlobalBounds().width / 2, getSprite("Tir_B1").getGlobalBounds().height / 2);
+		getSprite("Tir_B1").setRotation(m_rotation);
+		getSprite("Tir_B1").setPosition(m_pos);
+		win.Window().draw(getSprite("Tir_B1"));
+	}
+}
 
 
 
