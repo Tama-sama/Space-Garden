@@ -11,14 +11,9 @@
 
 void Intro()
 {
-	getSprite("JoueurR").setTextureRect(sf::IntRect(0, 0, 62, 101));
-	getSprite("JoueurR").setOrigin(getSprite("JoueurR").getGlobalBounds().width / 2, getSprite("JoueurR").getGlobalBounds().height / 2);
-	getSprite("JoueurB").setTextureRect(sf::IntRect(0, 0, 62, 101));
-	getSprite("JoueurB").setOrigin(getSprite("JoueurB").getGlobalBounds().width / 2, getSprite("JoueurB").getGlobalBounds().height / 2);
-
-
 	static sf::Vector2f Name_pos = { 240,-70 };
 	static sf::Vector2f ship_pos = { 960, 1200 };
+	sf::IntRect ship_rect(0, 0, 62, 101);
 	static sf::Text buttons_text[6];
 
 	static bool one_pass = false;
@@ -48,7 +43,10 @@ void Intro()
 	win.Window().draw(getSprite("Fond_menu2"));
 
 	if (ship_pos.y > 950)
+	{
 		ship_pos.y += -150 * MainTime.GetTimeDeltaF();
+		ship_rect.left = ship_rect.width;
+	}
 	else
 	{
 		static bool one_pass2;
@@ -104,10 +102,14 @@ void Intro()
 	RemoveDeadExplosions();
 
 	if (Name_pos.x > 9000 && ship_pos.y > -150)
+	{
 		ship_pos.y += -250 * MainTime.GetTimeDeltaF();
+		ship_rect.left = ship_rect.width;
+	}
 	else if (Name_pos.x > 9000 && ship_pos.y <= -150)
 		changestate = true;
 	
+	getSprite("JoueurR").setTextureRect(ship_rect);
 	getSprite("JoueurR").setPosition(ship_pos);
 	win.Window().draw(getSprite("JoueurR"));
 

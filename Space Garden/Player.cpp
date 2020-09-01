@@ -1,6 +1,8 @@
 #include "Player.hpp"
 #include "StateManager.hpp"
 #include "SoundManager.hpp"
+#include "Texture_SpriteManager.hpp"
+#include "Window.hpp"
 
 Player::Player(sf::Vector2f pos, int BaseDamages, int PlayerNumber)
 {
@@ -157,4 +159,16 @@ void Player::Reset()
 	m_shootSin = 3;
 	invulnerability = false;
 	InvuTimer = 0;
+}
+
+void Player::Draw()
+{
+	getSprite(getShip()).setTextureRect(getIntRect());
+	getSprite(getShip()).setPosition(getPosition());
+	getSprite(getShip()).setColor(sf::Color::White);
+
+	if (isInvulnerable())
+		getSprite(getShip()).setColor(sf::Color::Color(255, 255, 255, 100));
+
+	win.Window().draw(getSprite(getShip()));
 }

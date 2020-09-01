@@ -88,7 +88,6 @@ void EnnemiesShoots::update()
 			else
 				anim.left = 0;
 		}
-		//std::cout << anim.left << std::endl;
 	}
 
 }

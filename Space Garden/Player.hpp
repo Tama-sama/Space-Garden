@@ -46,6 +46,7 @@ public:
 	void Fire();
 	void Update();
 	void Reset();
+	void Draw();
 
 private:
 	int m_PlayerNumber;

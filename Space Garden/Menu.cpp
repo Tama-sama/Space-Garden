@@ -182,19 +182,27 @@ void UpdateShipMenu()
 		if (isButtonPressed(Action::Right, Player1.getController()) && ActionTiming >= 0.3f)
 		{
 			ActionTiming = 0;
-			if (Player1.getShip() != "JoueurB")
-			{
+			if (Player1.getShip() == "JoueurR")
 				Player1.setShip('B');
-			}
+			else if (Player1.getShip() == "JoueurB")
+				Player1.setShip('V');
+			else if (Player1.getShip() == "JoueurV")
+				Player1.setShip('G');
+			else if (Player1.getShip() == "JoueurG")
+				Player1.setShip('N');
 		}
 
 		if (isButtonPressed(Action::Left, Player1.getController()) && ActionTiming >= 0.3f)
 		{
 			ActionTiming = 0;
-			if (Player1.getShip() != "JoueurR")
-			{
+			if (Player1.getShip() == "JoueurN")
+				Player1.setShip('G');
+			else if (Player1.getShip() == "JoueurG")
+				Player1.setShip('V');
+			else if (Player1.getShip() == "JoueurV")
+				Player1.setShip('B');
+			else if (Player1.getShip() == "JoueurB")
 				Player1.setShip('R');
-			}
 		}
 	
 		if (isButtonPressed(Action::Interact, Player1.getController()) && ActionTiming >= 0.3f)
@@ -791,10 +799,16 @@ void DisplayShipSelection()
 	win.Window().draw(getSprite("Fond_menu2"));
 
 	getSprite("JoueurR").setPosition(690,850);
-	getSprite("JoueurB").setPosition(1330,850);
+	getSprite("JoueurB").setPosition(890,850);
+	getSprite("JoueurV").setPosition(1090,850);
+	getSprite("JoueurG").setPosition(1290,850);
+	getSprite("JoueurN").setPosition(1490,850);
 	
 	win.Window().draw(getSprite("JoueurR"));
 	win.Window().draw(getSprite("JoueurB"));
+	win.Window().draw(getSprite("JoueurV"));
+	win.Window().draw(getSprite("JoueurG"));
+	win.Window().draw(getSprite("JoueurN"));
 
 	sf::Text V("P1\nV", Font, 100);
 	sf::Text V2("", Font, 100);
@@ -803,8 +817,14 @@ void DisplayShipSelection()
 	V.setFillColor(sf::Color::Black);
 	if (Player1.getShip() == "JoueurR")
 		V.setPosition(670, 570);
-	else
-		V.setPosition(1310, 570);
+	else if (Player1.getShip() == "JoueurB")
+		V.setPosition(870, 570);
+	else if (Player1.getShip() == "JoueurV")
+		V.setPosition(1070, 570);
+	else if (Player1.getShip() == "JoueurG")
+		V.setPosition(1270, 570);
+	else if (Player1.getShip() == "JoueurN")
+		V.setPosition(1470, 570);
 
 	if (!SoloGame)
 	{
@@ -812,8 +832,14 @@ void DisplayShipSelection()
 		V2.setFillColor(sf::Color::Black);
 		if (Player2.getShip() == "JoueurR")
 			V2.setPosition(670, 570);
-		else
-			V2.setPosition(1310, 570);
+		else if (Player2.getShip() == "JoueurB")
+			V2.setPosition(870, 570);
+		else if (Player2.getShip() == "JoueurV")
+			V2.setPosition(1070, 570);
+		else if (Player2.getShip() == "JoueurG")
+			V2.setPosition(1270, 570);
+		else if (Player2.getShip() == "JoueurN")
+			V2.setPosition(1470, 570);
 
 		sf::Text TReady("Ready", Font, 100);
 		TReady.setFillColor(sf::Color::Black);
@@ -1301,9 +1327,7 @@ void DisplayHowToPlay()
 		
 	for (int i = 0; i < 4; i++)
 	{
-		getSprite("JoueurR").setPosition(Tutos[i].getPosition());
-		getSprite("JoueurR").setTextureRect(Tutos[i].getIntRect());
-		win.Window().draw(getSprite("JoueurR"));
+		Tutos[i].Draw();
 	}
 
 	for (Controle& ActualControle : controles)

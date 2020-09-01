@@ -43,6 +43,22 @@ void InitManager()
 	if (!FirstInit)
 	{
 		Font.loadFromFile("../Ressources/Otto.ttf");
+
+		getSprite("JoueurR").setTextureRect(sf::IntRect(0, 0, 62, 101));
+		getSprite("JoueurR").setOrigin(getSprite("JoueurR").getGlobalBounds().width / 2, getSprite("JoueurR").getGlobalBounds().height / 2);
+		
+		getSprite("JoueurB").setTextureRect(sf::IntRect(0, 0, 62, 101));
+		getSprite("JoueurB").setOrigin(getSprite("JoueurB").getGlobalBounds().width / 2, getSprite("JoueurB").getGlobalBounds().height / 2);
+		
+		getSprite("JoueurG").setTextureRect(sf::IntRect(0, 0, 62, 101));
+		getSprite("JoueurG").setOrigin(getSprite("JoueurG").getGlobalBounds().width / 2, getSprite("JoueurG").getGlobalBounds().height / 2);
+		
+		getSprite("JoueurN").setTextureRect(sf::IntRect(0, 0, 62, 101));
+		getSprite("JoueurN").setOrigin(getSprite("JoueurN").getGlobalBounds().width / 2, getSprite("JoueurN").getGlobalBounds().height / 2);
+		
+		getSprite("JoueurV").setTextureRect(sf::IntRect(0, 0, 62, 101));
+		getSprite("JoueurV").setOrigin(getSprite("JoueurV").getGlobalBounds().width / 2, getSprite("JoueurV").getGlobalBounds().height / 2);
+
 		FirstInit = true;
 	}
 

@@ -798,7 +798,7 @@ void ennemies_Loop_1P()
 
 void GameInit()
 {
-	_game_phase = 31;
+	_game_phase = -1;
 	Game_timer = 0;
 	isPause = false;
 
@@ -1144,23 +1144,11 @@ void DisplayGame()
 	}
 
 
-	// Player 1
-	getSprite(Player1.getShip()).setPosition(Player1.getPosition());
-	getSprite(Player1.getShip()).setColor(sf::Color::White);
+	// Player 1 and 2
+	Player1.Draw();
+	if (!SoloGame)
+		Player2.Draw();
 
-	if (Player1.isInvulnerable())
-		getSprite(Player1.getShip()).setColor(sf::Color::Color(255, 255, 255, 100));
-
-	win.Window().draw(getSprite(Player1.getShip()));
-
-	// Player 2
-	getSprite(Player2.getShip()).setPosition(Player2.getPosition());
-	getSprite(Player2.getShip()).setColor(sf::Color::White);
-
-	if (Player2.isInvulnerable())
-		getSprite(Player2.getShip()).setColor(sf::Color::Color(255, 255, 255, 100));
-
-	win.Window().draw(getSprite(Player2.getShip()));
 
 	// Hud Background
 	win.Window().draw(getSprite("HUD_J1"));
