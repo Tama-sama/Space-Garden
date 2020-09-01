@@ -19,13 +19,13 @@ void Intro()
 
 	static sf::Vector2f Name_pos = { 240,-70 };
 	static sf::Vector2f ship_pos = { 960, 1200 };
-	static sf::Text buttons_text[5];
+	static sf::Text buttons_text[6];
 
 	static bool one_pass = false;
 	bool changestate = false;
 	if (!one_pass)
 	{
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 6; i++)
 		{
 			buttons_text[i].setFont(Font);
 			buttons_text[i].setCharacterSize(70);
@@ -35,10 +35,12 @@ void Intro()
 		buttons_text[0].setString("Jouer");
 		buttons_text[1].setString("ScoreBoards");
 		buttons_text[2].setString("Options");
-		buttons_text[3].setString("Credits");
-		buttons_text[4].setString("Quitter");
+		buttons_text[3].setString("How To Play");
+		buttons_text[4].setString("Credits");
+		buttons_text[5].setString("Quitter");
 
 		buttons_text[1].setCharacterSize(50);
+		buttons_text[3].setCharacterSize(50);
 
 		one_pass = true;
 	}
@@ -110,25 +112,26 @@ void Intro()
 	win.Window().draw(getSprite("JoueurR"));
 
 	buttons_text[0].setPosition(sf::Vector2f(850, 50 + (ship_pos.y + 150)));
-	buttons_text[1].setPosition(sf::Vector2f(975, 265 + (ship_pos.y + 150)));
-	buttons_text[2].setPosition(sf::Vector2f(850, 450 + (ship_pos.y + 150)));
-	buttons_text[3].setPosition(sf::Vector2f(1000, 650 + (ship_pos.y + 150)));
-	buttons_text[4].setPosition(sf::Vector2f(845, 850 + (ship_pos.y + 150)));
+	buttons_text[1].setPosition(sf::Vector2f(975, 235 + (ship_pos.y + 150)));
+	buttons_text[2].setPosition(sf::Vector2f(840, 395 + (ship_pos.y + 150)));
+	buttons_text[3].setPosition(sf::Vector2f(960, 580 + (ship_pos.y + 150)));
+	buttons_text[4].setPosition(sf::Vector2f(820, 735 + (ship_pos.y + 150)));
+	buttons_text[5].setPosition(sf::Vector2f(990, 900 + (ship_pos.y + 150)));
 
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 6; i++)
 	{		
 		getSprite("Button").setTextureRect(sf::IntRect(0, 0, 477, 217));
 
 		if (i % 2 == 0)
 		{
 			getSprite("Button").setRotation(180);
-			getSprite("Button").setPosition(sf::Vector2f(600 + getSprite("Button").getGlobalBounds().width, 200 * i + (ship_pos.y + 150 + getSprite("Button").getGlobalBounds().height)));
+			getSprite("Button").setPosition(sf::Vector2f(600 + getSprite("Button").getGlobalBounds().width, 170 * i + (ship_pos.y + 150 + getSprite("Button").getGlobalBounds().height)));
 		}
 		else
 		{
 			getSprite("Button").setRotation(0);
-			getSprite("Button").setPosition(sf::Vector2f(600 + 250 , 200 * i + (ship_pos.y + 150 )));
+			getSprite("Button").setPosition(sf::Vector2f(600 + 250 , 170 * i + (ship_pos.y + 150 )));
 		}
 
 		buttons_text[i].setFillColor(sf::Color::Black);

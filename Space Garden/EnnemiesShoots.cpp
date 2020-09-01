@@ -7,7 +7,7 @@ std::list<EnnemiesShoots> EnnemiesShootsList;
 
 EnnemiesShoots::EnnemiesShoots(sf::Vector2f pos, sf::Vector2f Delta, int type, float rotation)
 {
-
+	m_rotation = 0;
 
 	//normal
 	if (type == -1 || type == -2)
@@ -29,7 +29,7 @@ EnnemiesShoots::EnnemiesShoots(sf::Vector2f pos, sf::Vector2f Delta, int type, f
 			random = 1;
 
 
-		float angleCible = 1.570;
+		double angleCible = 1.570;
 
 		if (random == 0)
 			angleCible = Angle_calc(pos, Player1.getPosition());
@@ -38,11 +38,11 @@ EnnemiesShoots::EnnemiesShoots(sf::Vector2f pos, sf::Vector2f Delta, int type, f
 
 
 
-		m_delta.x = Delta.x * cos(angleCible);
-		m_delta.y = Delta.y * sin(angleCible);
+		m_delta.x = Delta.x * (float)cos(angleCible);
+		m_delta.y = Delta.y * (float)sin(angleCible);
 
 		anim = sf::IntRect(0,0,30,45);
-		m_rotation = (angleCible * 180.0f / pi) - 90;
+		m_rotation = (float)(angleCible * 180.0f / pi) - 90;
 	}
 	else
 	{
@@ -69,12 +69,28 @@ EnnemiesShoots::~EnnemiesShoots()
 void EnnemiesShoots::update()
 {
 	m_timer += MainTime.GetTimeDeltaF();
+	timer_anim += MainTime.GetTimeDeltaF();
 	m_pos += m_delta * MainTime.GetTimeDeltaF();
 	
-	//m_sprite.setPosition(m_pos);
 
 	if (!sf::IntRect(0, 0, 1920, 1080).contains(sf::Vector2i(m_pos)))
 		m_life = 0;
+
+
+	if (m_type != -1 && m_type != -2)
+	{
+		if (timer_anim >= 0.2f)
+		{
+			timer_anim = 0.f;
+
+			if (anim.left != anim.width * 2)
+				anim.left += anim.width;
+			else
+				anim.left = 0;
+		}
+		//std::cout << anim.left << std::endl;
+	}
+
 }
 
 

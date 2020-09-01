@@ -63,7 +63,7 @@ void RemoveAllSounds();
 class Musics
 {
 public:
-	Musics() {};
+	Musics() {	m_state = State::RTNULL; m_volume_multi = 0;};
 	~Musics() {};
 
 	std::string getName() const { return m_name; };

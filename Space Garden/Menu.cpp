@@ -24,7 +24,6 @@ Player Tutos[4]{ Player(sf::Vector2f(500,800), 1 ,0),Player(sf::Vector2f(850,800
 enum class Menus
 {
 	MAIN,
-	PLAY,
 	SELECTION,
 	SCOREBOARDS,
 	OPTIONS,
@@ -65,10 +64,6 @@ void UpdateMenu()
 		UpdateMainMenu();
 		break;
 
-	case Menus::PLAY:
-		UpdatePlayMenu();
-		break;
-
 	case Menus::SELECTION:
 		UpdateShipMenu();
 		break;
@@ -101,14 +96,6 @@ void UpdateMainMenu()
 
 	for (Sound& ActualSound : SoundList)
 		ActualSound.update();
-	// musics
-	/*if (sfMusic_getStatus(Menu_music.music) == sfStopped)
-	{
-		sfMusic_stop(Boss_music.music);
-		sfMusic_stop(Game_music.music);
-		sfMusic_play(Menu_music.music);
-		sfMusic_setLoop(Menu_music.music, sfTrue);
-	}*/
 
 	if (isButtonPressed(Action::Up) && ActionTiming >= 0.3)
 	{
@@ -121,73 +108,15 @@ void UpdateMainMenu()
 	if (isButtonPressed(Action::Down) && ActionTiming >= 0.3)
 	{
 		ActionTiming = 0;
-		if (MenuChoice < 4)
+		if (MenuChoice < 5)
 		{
 			MenuChoice++;
 		}
 	}
 	
-	if (isButtonPressed(Action::Interact) && ActionTiming >= 0.3)
-	{
-		ActionTiming = 0;
-		switch (MenuChoice)
-		{
-		case 0:
-			getSound("menu_click").play();
-			ActualMenu = Menus::PLAY;
-			break;
-		case 1:
-			getSound("menu_click").play();
-			ActualMenu = Menus::SCOREBOARDS;
-			break;
-		case 2:
-			getSound("menu_click").play();
-			ActualMenu = Menus::OPTIONS;
-			break;
-		case 3:
-			getSound("menu_click").play();
-			ActualMenu = Menus::CREDITS;
-			break;
-		case 4:
-			getSound("menu_click").play();
-			win.Window().close();
-			break;
-
-		default:
-			break;
-		}
-	}
-}
-void UpdatePlayMenu()
-{
-	static float ActionTiming = 0.f;
-	ActionTiming += MainTime.GetTimeDeltaF();
-
-	for (Sound& ActualSound : SoundList)
-		ActualSound.update();
-
-
-	if (isButtonPressed(Action::Up) && ActionTiming >= 0.3)
-	{
-		ActionTiming = 0;
-		if (MenuChoice > 0)
-		{
-			MenuChoice--;
-		}
-	}
-
-	if (isButtonPressed(Action::Down) && ActionTiming >= 0.3)
-	{
-		ActionTiming = 0;
-		if (MenuChoice < 2)
-		{
-			MenuChoice++;
-		}
-	}
-
 	for (int i = 0; i < 9; i++)
 	{
-		if (isButtonPressed(Action::Interact , i) && ActionTiming >= 0.3)
+		if (isButtonPressed(Action::Interact, i) && ActionTiming >= 0.3)
 		{
 			ActionTiming = 0;
 			switch (MenuChoice)
@@ -195,30 +124,35 @@ void UpdatePlayMenu()
 			case 0:
 				getSound("menu_click").play();
 				Player1.setController(i);
-				//GameInit(true);
-				//ChangeState(State::GAME);
 				SoloGame = true;
 				ActualMenu = Menus::SELECTION;
 				break;
 			case 1:
+				getSound("menu_click").play();
+				ActualMenu = Menus::SCOREBOARDS;
 				break;
 			case 2:
 				getSound("menu_click").play();
+				ActualMenu = Menus::OPTIONS;
+				break;
+			case 3:
+				getSound("menu_click").play();
 				ActualMenu = Menus::HOW_PLAY;
+				break;
+			case 4:
+				getSound("menu_click").play();
+				ActualMenu = Menus::CREDITS;
+				break;
+
+			case 5:
+				getSound("menu_click").play();
+				win.Window().close();
 				break;
 
 			default:
 				break;
 			}
 		}
-	}
-
-	if (isButtonPressed(Action::Return) && ActionTiming >= 0.3)
-	{
-		ActionTiming = 0;
-		getSound("menu_click").play();
-		MenuChoice = 0;
-		ActualMenu = Menus::MAIN;
 	}
 }
 void UpdateShipMenu()
@@ -279,7 +213,7 @@ void UpdateShipMenu()
 			ActionTiming = 0;
 			
 			getSound("menu_click").play();
-			ActualMenu = Menus::PLAY;
+			ActualMenu = Menus::MAIN;
 		}
 	}
 	else
@@ -325,7 +259,7 @@ void UpdateShipMenu()
 					{
 						Readys[1] = false;
 						getSound("menu_click").play();
-						ActualMenu = Menus::PLAY;
+						ActualMenu = Menus::MAIN;
 					}
 				}
 				else if (i == Player2.getController())
@@ -338,7 +272,7 @@ void UpdateShipMenu()
 					{
 						Readys[0] = false;
 						getSound("menu_click").play();
-						ActualMenu = Menus::PLAY;
+						ActualMenu = Menus::MAIN;
 					}
 				}
 			}
@@ -517,12 +451,12 @@ void UpdateOptionMenu()
 			case 1:
 				if (MusicMultip > 0)
 					MusicMultip--;
-				ActionTiming = 0.15;
+				ActionTiming = 0.15f;
 				break;
 			case 2:
 				if (SoundMultip > 0)
 					SoundMultip--;
-				ActionTiming = 0.15;
+				ActionTiming = 0.15f;
 				break;
 			case 3:
 				ResetButtonsPressed();
@@ -539,7 +473,7 @@ void UpdateOptionMenu()
 			case 5:
 				if (win.getFrameRate() > 30)
 					win.setFrameRate(win.getFrameRate() - 5);
-				ActionTiming = 0.15;
+				ActionTiming = 0.15f;
 				break;
 
 			default:
@@ -558,12 +492,12 @@ void UpdateOptionMenu()
 			case 1:
 				if (MusicMultip < 100)
 					MusicMultip++;
-				ActionTiming = 0.15;
+				ActionTiming = 0.15f;
 				break;
 			case 2:
 				if (SoundMultip < 100)
 					SoundMultip++;
-				ActionTiming = 0.15;
+				ActionTiming = 0.15f;
 				break;
 			case 3:
 				ResetButtonsPressed();
@@ -580,7 +514,7 @@ void UpdateOptionMenu()
 			case 5:
 				if (win.getFrameRate() < 240)
 					win.setFrameRate(win.getFrameRate() + 5);
-				ActionTiming = 0.15;
+				ActionTiming = 0.15f;
 				break;
 
 			default:
@@ -660,7 +594,7 @@ void UpdateHowToPlay()
 		RemoveAllExplosions();
 		RemoveAllPlayerShoots();
 
-		ActualMenu = Menus::PLAY;
+		ActualMenu = Menus::MAIN;
 	}
 
 	PlayerShootsColisions();
@@ -674,7 +608,7 @@ void UpdateHowToPlay()
 	Tutos[1].TimersUpdate(MainTime.GetTimeDeltaF());
 	Tutos[2].TimersUpdate(MainTime.GetTimeDeltaF());
 
-	static float testtimer = 5.1;
+	static float testtimer = 5.1f;
 	testtimer += MainTime.GetTimeDeltaF();
 	if (testtimer >= 5)
 	{
@@ -687,7 +621,7 @@ void UpdateHowToPlay()
 	}
 	Tutos[1].FireSin();
 
-	static float FirePissenlitTimer = 4.1;
+	static float FirePissenlitTimer = 4.1f;
 	FirePissenlitTimer += MainTime.GetTimeDeltaF();
 	if (FirePissenlitTimer >= 4)
 	{
@@ -783,10 +717,6 @@ void DisplayMenu()
 		DisplayMainMenu();
 		break;
 
-	case Menus::PLAY:
-		DisplayPlayMenu();
-		break;
-
 	case Menus::SELECTION:
 		DisplayShipSelection();
 		break;
@@ -815,12 +745,12 @@ void DisplayMenu()
 void DisplayMainMenu()
 {
 	sf::Text buttons_text("", Font, 70);
-	std::string Textyes[5]{ "Jouer","ScoreBoards","Options","Credits","Quitter" };
-	sf::Vector2f TextPos[5]{ sf::Vector2f(850,50),sf::Vector2f(975,265), sf::Vector2f(850,450), sf::Vector2f(1000,650), sf::Vector2f(845,850) };
+	std::string Textyes[6]{ "Jouer","ScoreBoards","Options","How To Play","Credits","Quitter" };
+	sf::Vector2f TextPos[6]{ sf::Vector2f(850,50),sf::Vector2f(975,235), sf::Vector2f(840,395), sf::Vector2f(960,580), sf::Vector2f(820,735), sf::Vector2f(990,900) };
 
 	win.Window().draw(getSprite("Fond_menu2"));
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		if (i == MenuChoice)
 		{
@@ -836,57 +766,18 @@ void DisplayMainMenu()
 		if (i % 2 == 0)
 		{
 			getSprite("Button").setRotation(180);
-			getSprite("Button").setPosition(sf::Vector2f(600 + getSprite("Button").getGlobalBounds().width, 200 * i + getSprite("Button").getGlobalBounds().height));
+			getSprite("Button").setPosition(sf::Vector2f(600 + getSprite("Button").getGlobalBounds().width, 170 * i + getSprite("Button").getGlobalBounds().height));
 		}
 		else
 		{
 			getSprite("Button").setRotation(0);
-			getSprite("Button").setPosition(sf::Vector2f(600 + 250, 200 * i ));
+			getSprite("Button").setPosition(sf::Vector2f(600.f + 250.f, 170.f * i ));
 		}
 
-		if (i == 1)
+		if (i == 1 || i == 3)
 			buttons_text.setCharacterSize(50);
 		else
 			buttons_text.setCharacterSize(70);
-
-		buttons_text.setString(Textyes[i]);
-		buttons_text.setPosition(TextPos[i]);
-
-		win.Window().draw(getSprite("Button"));
-		win.Window().draw(buttons_text);
-	}
-}
-void DisplayPlayMenu()
-{
-	sf::Text buttons_text("", Font, 70);
-	std::string Textyes[3]{ "Solo","Coop","Comment jouer" };
-	sf::Vector2f TextPos[3]{ sf::Vector2f(850,55),sf::Vector2f(1020,245), sf::Vector2f(800,450) };
-
-	win.Window().draw(getSprite("Fond_menu2"));
-
-	for (int i = 0; i < 3; i++)
-	{
-		if (i == MenuChoice)
-		{
-			getSprite("Button").setTextureRect(sf::IntRect(477, 0, 477, 217));
-			buttons_text.setFillColor(sf::Color::Color(180, 50, 0));
-		}
-		else
-		{
-			getSprite("Button").setTextureRect(sf::IntRect(0, 0, 477, 217));
-			buttons_text.setFillColor(sf::Color::Black);
-		}
-
-		if (i % 2 == 0)
-		{
-			getSprite("Button").setRotation(180);
-			getSprite("Button").setPosition(sf::Vector2f(600 + getSprite("Button").getGlobalBounds().width, 200 * i + getSprite("Button").getGlobalBounds().height));
-		}
-		else
-		{
-			getSprite("Button").setRotation(0);
-			getSprite("Button").setPosition(sf::Vector2f(600 + 250, 200 * i));
-		}
 
 		buttons_text.setString(Textyes[i]);
 		buttons_text.setPosition(TextPos[i]);
@@ -946,7 +837,7 @@ void DisplayShipSelection()
 void DisplayScoreBoardMenu()
 {
 	sf::Text TLine("", Font, 80);
-	static int PosX = 960;
+	static float PosX = 960;
 
 	TLine.setFillColor(sf::Color::Color(180, 50, 0));
 
@@ -970,13 +861,13 @@ void DisplayScoreBoardMenu()
 	// Solo Board
 	TLine.setString("Solo Scores");
 	TLine.setOrigin(TLine.getLocalBounds().left + TLine.getLocalBounds().width / 2, TLine.getLocalBounds().top + TLine.getLocalBounds().height / 2);
-	TLine.setPosition(PosX + 20, 150);
+	TLine.setPosition(PosX + 20.f, 150.f);
 	win.Window().draw(TLine);
 	for (int i = 0; i < 5; i++)
 	{
 		TLine.setString(SoloLines[i]);
 		TLine.setOrigin(TLine.getLocalBounds().left + TLine.getLocalBounds().width / 2, TLine.getLocalBounds().top + TLine.getLocalBounds().height / 2);
-		TLine.setPosition(PosX, 250 + (125 * (i + 1)));
+		TLine.setPosition(PosX, 250.f + (125.f * (i + 1.f)));
 		win.Window().draw(TLine);
 
 		std::string SpriteToGet;
@@ -988,13 +879,13 @@ void DisplayScoreBoardMenu()
 	// Duo Board 
 	TLine.setString("Duo Scores");
 	TLine.setOrigin(TLine.getLocalBounds().left + TLine.getLocalBounds().width / 2, TLine.getLocalBounds().top + TLine.getLocalBounds().height / 2);
-	TLine.setPosition(PosX + 1515 + 20, 150);
+	TLine.setPosition(PosX + 1515.f + 20.f, 150.f);
 	win.Window().draw(TLine);
 	for (int i = 0; i < 5; i++)
 	{
 		TLine.setString(DuoLines[i]);
 		TLine.setOrigin(TLine.getLocalBounds().left + TLine.getLocalBounds().width / 2, TLine.getLocalBounds().top + TLine.getLocalBounds().height / 2);
-		TLine.setPosition(PosX + 1515, 250 + (125 * (i + 1))); // 915
+		TLine.setPosition(PosX + 1515.f, 250.f + (125.f * (i + 1))); // 915
 		win.Window().draw(TLine);
 
 
@@ -1049,9 +940,9 @@ void DisplayOptionMenu()
 			else
 				ActionName.setFillColor(sf::Color::Black);
 
-			ActionKey.setPosition(575, 175 + 61 * i);
-			KeyBoard.setPosition(ActionKey.getPosition().x + ActionKey.getSize().x + 1 , 175 + 61 * i);
-			KeyPad.setPosition(KeyBoard.getPosition().x + KeyBoard.getSize().x + 1, 175 + 61 * i);
+			ActionKey.setPosition(575, 175.f + 61.f * i);
+			KeyBoard.setPosition(ActionKey.getPosition().x + ActionKey.getSize().x + 1 , 175.f + 61.f * i);
+			KeyPad.setPosition(KeyBoard.getPosition().x + KeyBoard.getSize().x + 1, 175.f + 61.f * i);
 
 			win.Window().draw(ActionKey);
 			win.Window().draw(KeyBoard);
@@ -1380,7 +1271,7 @@ void DisplayHowToPlay()
 
 
 	sf::IntRect XpRect(0, 0, 210, 88);
-	XpRect.width = 52 + (210 - 52) * ((float)Tutos[2].getAtkPoints() / 10 );
+	XpRect.width = 52 + (int)((210 - 52) * ((float)Tutos[2].getAtkPoints() / 10 ));
 
 
 	getSprite("XP").setTextureRect(XpRect);
@@ -1503,6 +1394,7 @@ std::string To_String(Action _Action)
 		break;
 
 	default:
+		return "";
 		break;
 	}
 }

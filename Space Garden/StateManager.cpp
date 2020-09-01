@@ -13,6 +13,10 @@
 #include "Menu.hpp"
 #include "Game.hpp"
 
+
+#pragma warning(disable : 26812)
+
+
 State state = State::INTRO;
 extern bool changingkey;
 extern Controle* ChangingControle;

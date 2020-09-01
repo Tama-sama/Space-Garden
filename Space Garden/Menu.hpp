@@ -5,7 +5,6 @@
 void UpdateMenu();
 
 void UpdateMainMenu();
-void UpdatePlayMenu();
 void UpdateShipMenu();
 void UpdateScoreBoardMenu();
 void UpdateOptionMenu();
@@ -17,7 +16,6 @@ void UpdateHowToPlay();
 void DisplayMenu();
 
 void DisplayMainMenu();
-void DisplayPlayMenu();
 void DisplayShipSelection();
 void DisplayScoreBoardMenu();
 void DisplayOptionMenu();

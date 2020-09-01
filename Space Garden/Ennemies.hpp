@@ -23,17 +23,30 @@ public:
 
 	//sf::Sprite& getSprite() { return sprite; };
 	void setRotation(float rotation) { m_rotation = rotation; };
+
+	void rotate(int rotation) { m_rotation += rotation; };
 	void rotate(float rotation) { m_rotation += rotation; };
+	void rotate(double rotation) { m_rotation += (float)rotation; };
+
 	void setPosition(sf::Vector2f _pos) { pos = _pos;  };
+	void setPosition(int X, int Y) { pos = sf::Vector2f((float)X, (float)Y); };
 	void setPosition(float X, float Y) { pos = sf::Vector2f(X, Y); };
+	void setPosition(double X, double Y) { pos = sf::Vector2f((float)X, (float)Y); };
+
 	void TakeDamage(int Damage);
 	void addTimer(float TimeToAdd) { timer += TimeToAdd; };
 	void resetTimer() { timer = 0; };
 	void setPhase(int NewPhase) { phase = NewPhase; };
+
 	void setDelta(sf::Vector2f NewDelta) { Delta = NewDelta; };
+	void setDelta(int X, int Y) { Delta = sf::Vector2f((float)X, (float)Y); };
 	void setDelta(float X, float Y) { Delta = sf::Vector2f(X, Y); };
+	void setDelta(double X, double Y) { Delta = sf::Vector2f((float)X, (float)Y); };
+
 	void NewLastSwitch(sf::Vector2f NewSwitch) { LastSwitch = NewSwitch; };
+	void NewLastSwitch(int X, int Y) { LastSwitch = sf::Vector2f((float)X, (float)Y); };
 	void NewLastSwitch(float X, float Y) { LastSwitch = sf::Vector2f(X, Y); };
+	void NewLastSwitch(double X, double Y) { LastSwitch = sf::Vector2f((float)X, (float)Y); };
 	void Draw();
 
 	void Update();

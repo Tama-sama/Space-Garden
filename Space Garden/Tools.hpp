@@ -49,7 +49,7 @@ extern Times MainTime;
 class CAnimations
 {
 public:
-	CAnimations() {};
+	CAnimations() {	m_line = 0;	m_TotalFramesX = 0;	m_AnimationFrameX = 0; m_AnimationTime = 0;	m_Timer = 0; };
 	CAnimations(int AnimationLine, sf::Vector2i FrameSize, float _AnimationTiming, int _MaxFrames);
 	~CAnimations() {};
 
