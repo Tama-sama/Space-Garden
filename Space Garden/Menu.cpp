@@ -45,6 +45,7 @@ bool changingkey = false;
 Controle* ChangingControle = 0;
 extern bool SoloGame;
 bool Readys[2] = { false,false };
+sf::Vector2f ShipSelectionPos[5] = { sf::Vector2f(690, 850),sf::Vector2f(890, 850), sf::Vector2f(1090, 850), sf::Vector2f(1290, 850), sf::Vector2f(1490, 850) };
 
 
 int ScoreBoardSeen = 1;
@@ -54,6 +55,9 @@ std::string DuoLines[5];
 // Linenumber // playernumber
 char ShipsColorsSolo[5] = { 'R','R','R','R','R'};
 char ShipsColorsDuo[5][2] = { 'R','R','R','R','R',	'R','R','R','R','R' };
+
+sf::Thread LoadGame(&LoadNextState, State::GAME);
+
 
 void UpdateMenu()
 {
@@ -157,131 +161,245 @@ void UpdateMainMenu()
 }
 void UpdateShipMenu()
 {
+	static bool Go_Back = false;
 	static float ActionTiming = 0.f;
 	ActionTiming += MainTime.GetTimeDeltaF();
-
-	if (SoloGame)
+	
+	if (!Go_Back)
 	{
-		for (int i = 0; i < 9; i++)
+		if (SoloGame)
 		{
-			if (i != Player1.getController())
+			for (int i = 0; i < 9; i++)
 			{
-				if (isButtonPressed(Action::Interact, i))
+				if (i != Player1.getController())
 				{
-					ActionTiming = 0;
-					SoloGame = false;
-					Player2.setController(i);
-					if (Player1.getShip() == "JoueurB")
-						Player2.setShip('R');
-					else
-						Player2.setShip('B');
+					if (isButtonPressed(Action::Interact, i))
+					{
+						ActionTiming = 0;
+						SoloGame = false;
+						Player2.setController(i);
+						if (Player1.getShip() == "JoueurB")
+							Player2.setShip('R');
+						else
+							Player2.setShip('B');
+					}
 				}
 			}
-		}
 
-		if (isButtonPressed(Action::Right, Player1.getController()) && ActionTiming >= 0.3f)
-		{
-			ActionTiming = 0;
-			if (Player1.getShip() == "JoueurR")
-				Player1.setShip('B');
-			else if (Player1.getShip() == "JoueurB")
-				Player1.setShip('V');
-			else if (Player1.getShip() == "JoueurV")
-				Player1.setShip('G');
-			else if (Player1.getShip() == "JoueurG")
-				Player1.setShip('N');
-		}
+			if (isButtonPressed(Action::Right, Player1.getController()) && ActionTiming >= 0.3f)
+			{
+				ActionTiming = 0;
+				if (Player1.getShip() == "JoueurR")
+					Player1.setShip('B');
+				else if (Player1.getShip() == "JoueurB")
+					Player1.setShip('V');
+				else if (Player1.getShip() == "JoueurV")
+					Player1.setShip('G');
+				else if (Player1.getShip() == "JoueurG")
+					Player1.setShip('N');
+			}
 
-		if (isButtonPressed(Action::Left, Player1.getController()) && ActionTiming >= 0.3f)
-		{
-			ActionTiming = 0;
-			if (Player1.getShip() == "JoueurN")
-				Player1.setShip('G');
-			else if (Player1.getShip() == "JoueurG")
-				Player1.setShip('V');
-			else if (Player1.getShip() == "JoueurV")
-				Player1.setShip('B');
-			else if (Player1.getShip() == "JoueurB")
-				Player1.setShip('R');
-		}
-	
-		if (isButtonPressed(Action::Interact, Player1.getController()) && ActionTiming >= 0.3f)
-		{
-			ActionTiming = 0;
-			GameInit();
-			ChangeState(State::GAME);
+			if (isButtonPressed(Action::Left, Player1.getController()) && ActionTiming >= 0.3f)
+			{
+				ActionTiming = 0;
+				if (Player1.getShip() == "JoueurN")
+					Player1.setShip('G');
+				else if (Player1.getShip() == "JoueurG")
+					Player1.setShip('V');
+				else if (Player1.getShip() == "JoueurV")
+					Player1.setShip('B');
+				else if (Player1.getShip() == "JoueurB")
+					Player1.setShip('R');
+			}
 
-			// Menu Reset
-			ActualMenu = Menus::MAIN;
-			MenuChoice = 0;
-		}
+			if (isButtonPressed(Action::Interact, Player1.getController()) && ActionTiming >= 0.3f)
+			{
+				ActionTiming = 0;
+				GameInit();
 
-		if (isButtonPressed(Action::Return, Player1.getController()) && ActionTiming >= 0.3f)
+				// launch Multi thread (load game files)
+				LoadGame.launch();
+			}
+
+			if (isButtonPressed(Action::Return, Player1.getController()) && ActionTiming >= 0.3f)
+			{
+				ActionTiming = 0;
+				Go_Back = true;
+				getSound("menu_click").play();
+			}
+
+		}
+		else
 		{
-			ActionTiming = 0;
-			
-			getSound("menu_click").play();
-			ActualMenu = Menus::MAIN;
+			if (Readys[0] && Readys[1])
+			{
+
+				GameInit();
+
+				// launch Multi thread (load game files)
+				LoadGame.launch();
+			}
+
+			Player* ptPlayer;
+			Player* ptOtherPlayer;
+			for (int i = 0; i < 2; i++)
+			{
+				if (i == 0)
+				{
+					ptPlayer = &Player1;
+					ptOtherPlayer = &Player2;
+				}
+				else
+				{
+					ptPlayer = &Player2;
+					ptOtherPlayer = &Player1;
+				}
+				if (isButtonPressed(Action::Interact, ptPlayer->getController()) && ActionTiming >= 0.3f)
+				{
+					if (!Readys[i])
+					{
+						ActionTiming = 0;
+						Readys[i] = true;
+					}
+				}
+
+				if (isButtonPressed(Action::Return, ptPlayer->getController()) && ActionTiming >= 0.3f)
+				{
+					ActionTiming = 0;
+
+					if (Readys[i])
+					{
+						Readys[i] = false;
+					}
+					else
+					{
+						if (i == 1)
+						{
+							SoloGame = true;
+							Readys[0] = false;
+							Readys[1] = false;
+							getSound("menu_click").play();
+						}
+						else
+						{
+							Readys[0] = false;
+							Readys[1] = false;
+							Go_Back = true;
+							getSound("menu_click").play();
+						}
+					}
+				}
+
+
+				if (isButtonPressed(Action::Right, ptPlayer->getController()) && ActionTiming >= 0.3f)
+				{
+					ActionTiming = 0;
+					if (ptPlayer->getShip() == "JoueurR")
+					{
+						if (ptOtherPlayer->getShip() != "JoueurB")
+							ptPlayer->setShip('B');
+						else
+							ptPlayer->setShip('V');
+					}
+					else if (ptPlayer->getShip() == "JoueurB")
+					{
+						if (ptOtherPlayer->getShip() != "JoueurV")
+							ptPlayer->setShip('V');
+						else
+							ptPlayer->setShip('G');
+					}
+					else if (ptPlayer->getShip() == "JoueurV")
+					{
+						if (ptOtherPlayer->getShip() != "JoueurG")
+							ptPlayer->setShip('G');
+						else
+							ptPlayer->setShip('N');
+					}
+					else if (ptPlayer->getShip() == "JoueurG")
+					{
+						if (ptOtherPlayer->getShip() != "JoueurN")
+							ptPlayer->setShip('N');
+					}
+				}
+
+				if (isButtonPressed(Action::Left, ptPlayer->getController()) && ActionTiming >= 0.3f)
+				{
+					ActionTiming = 0;
+					if (ptPlayer->getShip() == "JoueurN")
+					{
+						if (ptOtherPlayer->getShip() != "JoueurG")
+							ptPlayer->setShip('G');
+						else
+							ptPlayer->setShip('V');
+					}
+					else if (ptPlayer->getShip() == "JoueurG")
+					{
+						if (ptOtherPlayer->getShip() != "JoueurV")
+							ptPlayer->setShip('V');
+						else
+							ptPlayer->setShip('B');
+					}
+					else if (ptPlayer->getShip() == "JoueurV")
+					{
+						if (ptOtherPlayer->getShip() != "JoueurB")
+							ptPlayer->setShip('B');
+						else
+							ptPlayer->setShip('R');
+					}
+					else if (ptPlayer->getShip() == "JoueurB")
+					{
+						if (ptOtherPlayer->getShip() != "JoueurR")
+							ptPlayer->setShip('R');
+					}
+				}
+			}
 		}
 	}
 	else
 	{
-		if (Readys[0] && Readys[1])
+		int SelectedShips[2] = { 0,0 };
+		Player* ptPlayer;
+		for (int i = 0; i < 2; i++)
 		{
-			GameInit();
-			ChangeState(State::GAME);
+			if (i == 0)
+				ptPlayer = &Player1;
+			else
+				ptPlayer = &Player2;
 
-			// Menu Reset
-			Readys[0] = false;
-			Readys[1] = false;
-			ActualMenu = Menus::MAIN;
-			MenuChoice = 0;
+			if (ptPlayer->getShip() == "JoueurR")
+				SelectedShips[i] = 0;
+			else if (ptPlayer->getShip() == "JoueurB")
+				SelectedShips[i] = 1;
+			else if (ptPlayer->getShip() == "JoueurV")
+				SelectedShips[i] = 2;
+			else if (ptPlayer->getShip() == "JoueurG")
+				SelectedShips[i] = 3;
+			else if (ptPlayer->getShip() == "JoueurN")
+				SelectedShips[i] = 4;
+
+			if (SoloGame)
+			{
+				SelectedShips[1] = -1;
+				break;
+			}
 		}
 
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < 5; i++)
 		{
-			if (isButtonPressed(Action::Interact, i) && ActionTiming >= 0.3f)
+			if (SelectedShips[0] != i && SelectedShips[1] != i)
 			{
-				if (i == Player1.getController() && !Readys[0])
-				{
-					ActionTiming = 0;
-					Readys[0] = true;
-				}
-				else if (i == Player2.getController() && !Readys[1])
-				{
-					ActionTiming = 0;
-					Readys[1] = true;
-				}
-			}
+				ShipSelectionPos[i].y += -500.f * MainTime.GetTimeDeltaF();
 
-			if (isButtonPressed(Action::Return, i) && ActionTiming >= 0.3f)
-			{
-				ActionTiming = 0;
-				if (i == Player1.getController())
+				if (ShipSelectionPos[i].y < -50)
 				{
-					if (Readys[0])
+					ActionTiming = 0.f;
+					ActualMenu = Menus::MAIN;
+					Go_Back = false;
+					for (int y = 0; y < 5; y++)
 					{
-						Readys[0] = false;
+						ShipSelectionPos[y].y = 850;
 					}
-					else
-					{
-						Readys[1] = false;
-						getSound("menu_click").play();
-						ActualMenu = Menus::MAIN;
-					}
-				}
-				else if (i == Player2.getController())
-				{
-					if (Readys[1])
-					{
-						Readys[1] = false;
-					}
-					else
-					{
-						Readys[0] = false;
-						getSound("menu_click").play();
-						ActualMenu = Menus::MAIN;
-					}
+					break;
 				}
 			}
 		}
@@ -715,7 +833,125 @@ void UpdateHowToPlay()
 	}
 }
 
+void UpdateMenuToGame()
+{
+	bool Switching = false;
+	
+	int SelectedShips[2] = { 0,0 };
+	Player* ptPlayer;
+	for (int i = 0; i < 2; i++)
+	{
+		if (i == 0)
+			ptPlayer = &Player1;
+		else
+			ptPlayer = &Player2;
 
+		if (ptPlayer->getShip() == "JoueurR")
+			SelectedShips[i] = 0;
+		else if (ptPlayer->getShip() == "JoueurB")
+			SelectedShips[i] = 1;
+		else if (ptPlayer->getShip() == "JoueurV")
+			SelectedShips[i] = 2;
+		else if (ptPlayer->getShip() == "JoueurG")
+			SelectedShips[i] = 3;
+		else if (ptPlayer->getShip() == "JoueurN")
+			SelectedShips[i] = 4;
+
+		if (SoloGame)
+		{
+			SelectedShips[1] = -1;
+			break;
+		}
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		if (SelectedShips[0] != i && SelectedShips[1] != i)
+		{
+			ShipSelectionPos[i].y += 300.f * MainTime.GetTimeDeltaF();
+
+			if (ShipSelectionPos[i].y > 1100.f && can_Switch && !Loading)
+			{
+				Switching = true;
+				break;
+			}
+		}
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+		if (i == SelectedShips[0])
+		{
+			if (SoloGame)
+			{
+				if (960.f - ShipSelectionPos[i].x < -10)
+				{
+					ShipSelectionPos[i].x += -175 * MainTime.GetTimeDeltaF();
+					Switching = false;
+				}
+				else if (960.f - ShipSelectionPos[i].x > 10)
+				{
+					ShipSelectionPos[i].x += 175 * MainTime.GetTimeDeltaF();
+					Switching = false;
+				}
+				else
+					ShipSelectionPos[i].x = 960.f;
+				break;
+			}
+			else
+			{
+				if (720.f - ShipSelectionPos[i].x < -10)
+				{
+					ShipSelectionPos[i].x += -175 * MainTime.GetTimeDeltaF();
+					Switching = false;
+				}
+				else if (720.f - ShipSelectionPos[i].x > 10)
+				{
+					ShipSelectionPos[i].x += 175 * MainTime.GetTimeDeltaF();
+					Switching = false;
+				}
+				else
+					ShipSelectionPos[i].x = 720.f;
+			}
+		}
+		else if (i == SelectedShips[1])
+		{
+			if (1200.f - ShipSelectionPos[i].x < -10)
+			{
+				ShipSelectionPos[i].x += -175 * MainTime.GetTimeDeltaF();
+				Switching = false;
+			}
+			else if (1200.f - ShipSelectionPos[i].x > 10)
+			{
+				ShipSelectionPos[i].x += 175 * MainTime.GetTimeDeltaF();
+				Switching = false;
+			}
+			else
+				ShipSelectionPos[i].x = 1200.f;
+		}
+	}
+
+	if (can_Switch && !Loading && Switching) // une fois charger
+	{
+		can_Switch = false;
+
+		// Menu Reset
+		Readys[0] = false;
+		Readys[1] = false;
+		ActualMenu = Menus::MAIN;
+		MenuChoice = 0;
+
+		for (int i = 0; i < 5; i++)
+		{
+			ShipSelectionPos[i] = sf::Vector2f(690 + (200 * i), 850);
+		}
+
+
+		RemoveStateSounds(State::MAIN_MENU);
+		RemoveStateSprites(State::MAIN_MENU);
+		state = State::GAME;
+	}
+}
 
 void DisplayMenu()
 {
@@ -798,12 +1034,12 @@ void DisplayShipSelection()
 {
 	win.Window().draw(getSprite("Fond_menu2"));
 
-	getSprite("JoueurR").setPosition(690,850);
-	getSprite("JoueurB").setPosition(890,850);
-	getSprite("JoueurV").setPosition(1090,850);
-	getSprite("JoueurG").setPosition(1290,850);
-	getSprite("JoueurN").setPosition(1490,850);
-	
+	getSprite("JoueurR").setPosition(ShipSelectionPos[0]);
+	getSprite("JoueurB").setPosition(ShipSelectionPos[1]);
+	getSprite("JoueurV").setPosition(ShipSelectionPos[2]);
+	getSprite("JoueurG").setPosition(ShipSelectionPos[3]);
+	getSprite("JoueurN").setPosition(ShipSelectionPos[4]);
+
 	win.Window().draw(getSprite("JoueurR"));
 	win.Window().draw(getSprite("JoueurB"));
 	win.Window().draw(getSprite("JoueurV"));
@@ -816,30 +1052,30 @@ void DisplayShipSelection()
 
 	V.setFillColor(sf::Color::Black);
 	if (Player1.getShip() == "JoueurR")
-		V.setPosition(670, 570);
+		V.setPosition(ShipSelectionPos[0].x - 20, 570);
 	else if (Player1.getShip() == "JoueurB")
-		V.setPosition(870, 570);
+		V.setPosition(ShipSelectionPos[1].x - 20, 570);
 	else if (Player1.getShip() == "JoueurV")
-		V.setPosition(1070, 570);
+		V.setPosition(ShipSelectionPos[2].x - 20, 570);
 	else if (Player1.getShip() == "JoueurG")
-		V.setPosition(1270, 570);
+		V.setPosition(ShipSelectionPos[3].x - 20, 570);
 	else if (Player1.getShip() == "JoueurN")
-		V.setPosition(1470, 570);
+		V.setPosition(ShipSelectionPos[4].x - 20, 570);
 
 	if (!SoloGame)
 	{
 		V2.setString("P2\nV");
 		V2.setFillColor(sf::Color::Black);
 		if (Player2.getShip() == "JoueurR")
-			V2.setPosition(670, 570);
+			V2.setPosition(ShipSelectionPos[0].x - 20, 570);
 		else if (Player2.getShip() == "JoueurB")
-			V2.setPosition(870, 570);
+			V2.setPosition(ShipSelectionPos[1].x - 20, 570);
 		else if (Player2.getShip() == "JoueurV")
-			V2.setPosition(1070, 570);
+			V2.setPosition(ShipSelectionPos[2].x - 20, 570);
 		else if (Player2.getShip() == "JoueurG")
-			V2.setPosition(1270, 570);
+			V2.setPosition(ShipSelectionPos[3].x - 20, 570);
 		else if (Player2.getShip() == "JoueurN")
-			V2.setPosition(1470, 570);
+			V2.setPosition(ShipSelectionPos[4].x - 20, 570);
 
 		sf::Text TReady("Ready", Font, 100);
 		TReady.setFillColor(sf::Color::Black);
@@ -853,12 +1089,12 @@ void DisplayShipSelection()
 		{
 			TReady.setPosition(V2.getPosition().x, V2.getPosition().y - 75);
 			win.Window().draw(TReady);
+
 		}
 	}
 
 	win.Window().draw(V);
 	win.Window().draw(V2);
-
 }
 void DisplayScoreBoardMenu()
 {
@@ -1379,8 +1615,6 @@ void DisplayHowToPlay()
 	}
 	getSprite("Icons").setScale(1, 1);
 }
-
-
 
 std::string To_String(Action _Action)
 {

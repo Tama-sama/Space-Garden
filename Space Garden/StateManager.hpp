@@ -13,6 +13,10 @@ enum class State
 };
 extern State state;
 
+extern bool Loading;
+extern bool can_Switch;
+extern sf::Mutex MutexTest;
+
 /////////////
 /// \brief Managements of updates based on state
 /// \param Windows
@@ -28,6 +32,7 @@ void DisplayManager();
 void EventsManager();
 
 void ChangeState(State NextStage);
+void LoadNextState(State NextState);
 
 void InitManager();
 

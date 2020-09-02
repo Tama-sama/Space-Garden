@@ -49,6 +49,36 @@ sf::Music& getMusic(std::string Name)
 	}
 }
 
+void RemoveStateSounds(State _state)
+{
+	bool Removed = true;
+	while (Removed)
+	{
+		Removed = false;
+		for (Sound& ActualSound : SoundList)
+		{
+			if (ActualSound.getState() == _state && _state != State::ALL)
+			{
+				SoundList.remove(ActualSound);
+				Removed = true;
+				break;
+			}
+		}
+
+		for (Musics* ActualMusic : MusicList)
+		{
+			if (ActualMusic->getState() == _state && _state != State::ALL)
+			{
+				delete ActualMusic;
+				MusicList.remove(ActualMusic);
+				Removed = true;
+				break;
+			}
+		}
+	}
+}
+
+
 void RemoveAllSounds()
 {
 	bool Removed = true;

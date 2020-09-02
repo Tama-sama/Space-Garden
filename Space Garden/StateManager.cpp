@@ -16,12 +16,17 @@
 
 #pragma warning(disable : 26812)
 
-
 State state = State::INTRO;
+
+bool Loading = false;
+bool can_Switch = false;
+sf::Mutex MutexTest;
+
 extern bool changingkey;
 extern Controle* ChangingControle;
 extern bool isPause;
 
+void UpdateSaveToMenu();
 void UpdateSave();
 void DisplaySave();
 
@@ -35,6 +40,19 @@ void ChangeState(State NextState)
 	LoadSounds(NextState);
 	LoadSprite(NextState);
 	InitManager();
+}
+
+void LoadNextState(State NextState)
+{
+	Loading = true;
+	can_Switch = false;
+		
+	LoadSprite(NextState);
+	LoadSounds(NextState);
+	InitManager();
+
+	Loading = false;
+	can_Switch = true;
 }
 
 void InitManager()
@@ -93,18 +111,35 @@ void UpdateManager()
 	switch (state)
 	{
 	case State::MAIN_MENU :
-		UpdateMenu();
+		if (!Loading && !can_Switch)		
+			UpdateMenu();
+		else
+			UpdateMenuToGame();
+
 		break;
 
 	case State::GAME:
 		if (!isPause)
-			UpdateGame();
+		{
+			if (!Loading && !can_Switch)
+				UpdateGame();
+			else
+				UpdateGameToSave();
+		}
 		else
-			UpdateGamePause();
+		{
+			if (!Loading && !can_Switch)
+				UpdateGamePause();
+			else
+				UpdateGameToMenu();
+		}
 		break;
 
 	case State::SAVE:
-		UpdateSave();
+		if (!Loading && !can_Switch)
+			UpdateSave();
+		else
+			UpdateSaveToMenu();
 		break;
 
 	default:

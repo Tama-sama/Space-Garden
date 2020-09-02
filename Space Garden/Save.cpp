@@ -12,6 +12,8 @@ char isModif2 = '_';
 bool NameDone[2] = { false,false };
 extern bool SoloGame;
 
+sf::Thread LoadMenu_2(&LoadNextState, State::MAIN_MENU);
+
 void FileSave()
 {
 	if (SoloGame)
@@ -319,7 +321,16 @@ void UpdateSave()
 
 	if (NameDone[0] && NameDone[1] && ActionTimingP2 > 0.2)
 	{
-		ActionTimingP2 = 0;
+		LoadMenu_2.launch();
+	}
+}
+ 
+void UpdateSaveToMenu()
+{
+	if (can_Switch && !Loading)
+	{
+		can_Switch = false;
+
 		NameDone[0] = false;
 		NameDone[1] = false;
 		FileSave();
@@ -327,10 +338,12 @@ void UpdateSave()
 		b = "";
 		isModif = '_';
 		isModif2 = '_';
-		ChangeState(State::MAIN_MENU);
+
+		RemoveStateSprites(State::SAVE);
+		state = State::MAIN_MENU;
 	}
 }
- 
+
 void DisplaySave()
 {
 	sf::Text TxtPlayerOne(a + isModif, Font, 65);

@@ -291,6 +291,9 @@ void RemoveDeadExplosions()
 }
 
 
+sf::Thread LoadSave(&LoadNextState, State::SAVE);
+sf::Thread LoadMenu(&LoadNextState, State::MAIN_MENU);
+
 Player Player1(sf::Vector2f(1920 / 2, 900), 1, 1);
 Player Player2(sf::Vector2f(1920 / 1.3f, 900), 1, 2);
 bool SoloGame = true;
@@ -811,11 +814,12 @@ void GameInit()
 	Player1.Reset();
 	Player2.Reset();
 
-	Player1.setPosition(1920 / 2, 900);
-	Player2.setPosition(1920 / 1.3f, 900);
+	Player1.setPosition(720.f, 900.f);
+	Player2.setPosition(1200.f, 900.f);
 
 	if (SoloGame)
 	{
+		Player1.setPosition(960.f, 900.f);
 		Player2.TakeDamage(Player2.getLife());
 	}
 }
@@ -838,7 +842,7 @@ void UpdateGame()
 
 		ptPlayer->setLRectFrame(0);
 
-		if (_game_phase != -1)
+		if (_game_phase != -1 && ptPlayer->getLife() > 0)
 		{
 			if (isButtonPressed(Action::Up, ptPlayer->getController()))
 			{
@@ -886,6 +890,7 @@ void UpdateGame()
 			ptPlayer->FireSin();
 
 		}
+		
 		if (isButtonPressed(Action::Start, ptPlayer->getController()) && ActionTiming >= 0.3)
 		{
 			ActionTiming = 0.f;
@@ -934,13 +939,7 @@ void UpdateGame()
 
 	if (Player1.getLife() <= 0 && Player2.getLife() <= 0)
 	{
-		RemoveAllBuffs();
-		RemoveAllEnnemies();
-		RemoveAllEnnemiesShoots();
-		RemoveAllExplosions();
-		RemoveAllPlayerShoots();
-
-		ChangeState(State::SAVE);
+		LoadSave.launch();
 	}
 }
 void UpdateGamePause()
@@ -1014,15 +1013,7 @@ void UpdateGamePause()
 					IgMenu_Choice = 0;
 					break;
 				case 3: // Menu
-					RemoveAllBuffs();
-					RemoveAllEnnemies();
-					RemoveAllEnnemiesShoots();
-					RemoveAllExplosions();
-					RemoveAllPlayerShoots();
-					IgMenu_Choice = 0;
-					getSprite("JoueurR").setColor(sf::Color::White);
-					getSprite("JoueurB").setColor(sf::Color::White);
-					ChangeState(State::MAIN_MENU);
+					LoadMenu.launch();
 					break;
 
 				default:
@@ -1038,6 +1029,50 @@ void UpdateGamePause()
 				IgMenu_Choice = 0;
 			}
 		}
+	}
+}
+
+void UpdateGameToSave()
+{
+	if (can_Switch && !Loading)
+	{
+		can_Switch = false;
+
+		RemoveAllBuffs();
+		RemoveAllEnnemies();
+		RemoveAllEnnemiesShoots();
+		RemoveAllExplosions();
+		RemoveAllPlayerShoots();
+
+		RemoveStateSounds(State::GAME);
+		RemoveStateSprites(State::GAME);
+		state = State::SAVE;
+	}
+}
+
+void UpdateGameToMenu()
+{
+	if (can_Switch && !Loading) 
+	{
+		can_Switch = false;
+
+		RemoveAllBuffs();
+		RemoveAllEnnemies();
+		RemoveAllEnnemiesShoots();
+		RemoveAllExplosions();
+		RemoveAllPlayerShoots();
+
+		IgMenu_Choice = 0;
+		getSprite("JoueurR").setColor(sf::Color::White);
+		getSprite("JoueurB").setColor(sf::Color::White);
+		getSprite("JoueurV").setColor(sf::Color::White);
+		getSprite("JoueurG").setColor(sf::Color::White);
+		getSprite("JoueurN").setColor(sf::Color::White);
+
+
+		RemoveStateSounds(State::GAME);
+		RemoveStateSprites(State::GAME);
+		state = State::MAIN_MENU;
 	}
 }
 
@@ -1079,6 +1114,7 @@ void DisplayGame()
 
 
 	getSprite("Fond").setPosition(240, posY);
+
 	win.Window().draw(getSprite("Fond"));
 	getSprite("Fond").setPosition(240, posY2);
 	win.Window().draw(getSprite("Fond"));
@@ -1145,8 +1181,9 @@ void DisplayGame()
 
 
 	// Player 1 and 2
-	Player1.Draw();
-	if (!SoloGame)
+	if (Player1.getLife() > 0)
+		Player1.Draw();
+	if (!SoloGame && Player2.getLife() > 0)
 		Player2.Draw();
 
 

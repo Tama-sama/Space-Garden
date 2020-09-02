@@ -3,6 +3,7 @@
 
 
 void UpdateMenu();
+void UpdateMenuToGame();
 
 void UpdateMainMenu();
 void UpdateShipMenu();

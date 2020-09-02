@@ -57,7 +57,7 @@ extern std::list<Sound> SoundList;
 void LoadSounds(State _state);
 sf::Sound& getSound(std::string Name);
 void RemoveAllSounds();
-
+void RemoveStateSounds(State _state);
 
 
 class Musics

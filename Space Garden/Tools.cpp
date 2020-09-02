@@ -1,5 +1,6 @@
 #include "Tools.hpp"
 
+
 Times MainTime;
 sf::Font Font;
 

@@ -72,6 +72,7 @@ void OptionLoad()
 
 Windows win(sf::VideoMode::getDesktopMode(), "Space Garden", 120, sf::Style::None);
 
+
 int main(int argc, char** argv)
 {
 	LaunchArguments(argc, argv);
@@ -81,11 +82,21 @@ int main(int argc, char** argv)
 	RessourcesLoad("../Ressources/Textures/");
 	RessourcesLoad("../Ressources/SFX/");
 	RessourcesLoad("../Ressources/Musics/");
-	ChangeState(State::ALL);
+
+	LoadNextState(State::ALL);
+	can_Switch = false;
+
 	ChangeState(State::INTRO);
 
+	LoadNextState(State::MAIN_MENU);
+	can_Switch = false;
+
+
+
 	while (!win.isDone())
-	{
+	{	
+		
+		
 		UpdateManager();
 		DisplayManager();
 	}

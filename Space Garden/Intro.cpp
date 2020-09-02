@@ -142,5 +142,9 @@ void Intro()
 	}
 
 	if (changestate)
-		ChangeState(State::MAIN_MENU);
+	{
+		RemoveStateSounds(State::INTRO);
+		RemoveStateSprites(State::INTRO);
+		state = State::MAIN_MENU;
+	}
 }
