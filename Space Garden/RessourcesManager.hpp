@@ -8,6 +8,7 @@ enum class RessourceType
 	TEXTURE,
 	SOUNDFX,
 	MUSIC,
+	LANG,
 };
 
 struct Ressources

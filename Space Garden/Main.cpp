@@ -4,6 +4,7 @@
 #include "RessourcesManager.hpp"
 #include "SoundManager.hpp"
 #include "Controles.hpp"
+#include "StringManager.hpp"
 
 
 void ControlInit()
@@ -59,6 +60,13 @@ void OptionLoad()
 		SettingFile.read((char*)&Vsync, sizeof(bool));
 		SettingFile.read((char*)&Frames, sizeof(int));
 
+		size_t size;
+		SettingFile.read((char*)&size, sizeof(size));
+		Lang.resize(size);
+		SettingFile.read(&Lang[0], size);
+
+		//Lang = "En_us";
+
 		win.setStyle(Style);
 		win.setVerticalSync(Vsync);
 		win.setFrameRate(Frames);
@@ -82,6 +90,7 @@ int main(int argc, char** argv)
 	RessourcesLoad("../Ressources/Textures/");
 	RessourcesLoad("../Ressources/SFX/");
 	RessourcesLoad("../Ressources/Musics/");
+	RessourcesLoad("../Ressources/Langs/");
 
 	LoadNextState(State::ALL);
 	can_Switch = false;
@@ -90,8 +99,6 @@ int main(int argc, char** argv)
 
 	LoadNextState(State::MAIN_MENU);
 	can_Switch = false;
-
-
 
 	while (!win.isDone())
 	{	

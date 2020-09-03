@@ -8,6 +8,7 @@
 #include "RessourcesManager.hpp"
 #include "SoundManager.hpp"
 #include "Texture_SpriteManager.hpp"
+#include "StringManager.hpp"
 
 void Intro()
 {
@@ -20,22 +21,27 @@ void Intro()
 	bool changestate = false;
 	if (!one_pass)
 	{
+		buttons_text[0].setString(getString("Play"));
+		buttons_text[1].setString(getString("ScoreBoards"));
+		buttons_text[2].setString(getString("Settings"));
+		buttons_text[3].setString(getString("HowTP"));
+		buttons_text[4].setString(getString("Credit"));
+		buttons_text[5].setString(getString("Quit"));
+
 		for (int i = 0; i < 6; i++)
 		{
 			buttons_text[i].setFont(Font);
 			buttons_text[i].setCharacterSize(70);
 			buttons_text[i].setFillColor(sf::Color::Black);
+			buttons_text[i].setOrigin(buttons_text[i].getLocalBounds().left + buttons_text[i].getLocalBounds().width / 2, buttons_text[i].getLocalBounds().top + buttons_text[i].getLocalBounds().height / 2);
+			
+			while (buttons_text[i].getOrigin().x >= 85)
+			{
+				buttons_text[i].setCharacterSize(buttons_text[i].getCharacterSize() - 1);
+				buttons_text[i].setOrigin(buttons_text[i].getLocalBounds().left + buttons_text[i].getLocalBounds().width / 2, buttons_text[i].getLocalBounds().top + buttons_text[i].getLocalBounds().height / 2);
+			}
 		}
 
-		buttons_text[0].setString("Jouer");
-		buttons_text[1].setString("ScoreBoards");
-		buttons_text[2].setString("Options");
-		buttons_text[3].setString("How To Play");
-		buttons_text[4].setString("Credits");
-		buttons_text[5].setString("Quitter");
-
-		buttons_text[1].setCharacterSize(50);
-		buttons_text[3].setCharacterSize(50);
 
 		one_pass = true;
 	}
@@ -113,12 +119,12 @@ void Intro()
 	getSprite("JoueurR").setPosition(ship_pos);
 	win.Window().draw(getSprite("JoueurR"));
 
-	buttons_text[0].setPosition(sf::Vector2f(850, 50 + (ship_pos.y + 150)));
-	buttons_text[1].setPosition(sf::Vector2f(975, 235 + (ship_pos.y + 150)));
-	buttons_text[2].setPosition(sf::Vector2f(840, 395 + (ship_pos.y + 150)));
-	buttons_text[3].setPosition(sf::Vector2f(960, 580 + (ship_pos.y + 150)));
-	buttons_text[4].setPosition(sf::Vector2f(820, 735 + (ship_pos.y + 150)));
-	buttons_text[5].setPosition(sf::Vector2f(990, 900 + (ship_pos.y + 150)));
+	buttons_text[0].setPosition(sf::Vector2f(890, 110 + (ship_pos.y + 150)));
+	buttons_text[1].setPosition(sf::Vector2f(1040, 275 + (ship_pos.y + 150)));
+	buttons_text[2].setPosition(sf::Vector2f(890, 455 + (ship_pos.y + 150)));
+	buttons_text[3].setPosition(sf::Vector2f(1040, 625 + (ship_pos.y + 150)));
+	buttons_text[4].setPosition(sf::Vector2f(890, 788 + (ship_pos.y + 150)));
+	buttons_text[5].setPosition(sf::Vector2f(1040, 956.5f + (ship_pos.y + 150.f)));
 
 
 	for (int i = 0; i < 6; i++)
@@ -144,6 +150,7 @@ void Intro()
 	if (changestate)
 	{
 		RemoveStateSounds(State::INTRO);
+		RemoveStateStrings(State::INTRO);
 		RemoveStateSprites(State::INTRO);
 		state = State::MAIN_MENU;
 	}

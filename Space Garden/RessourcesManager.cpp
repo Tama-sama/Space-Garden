@@ -53,6 +53,12 @@ void RessourcesLoad(std::string path)
 			tmpRessource.type = RessourceType::TEXTURE;
 			InfoPath = "../Ressources/Infos/Textures.load";
 		}
+		else if (tmpExtension == ".lang")
+		{
+			tmpRessource.type = RessourceType::LANG;
+			InfoPath = "../Ressources/Infos/Langs.load";
+
+		}
 
 
 		if (InfoPath.size() != 0)

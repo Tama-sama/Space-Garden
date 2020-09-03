@@ -90,6 +90,9 @@
     <ClCompile Include="Save.cpp">
       <Filter>Fichiers sources\Stages</Filter>
     </ClCompile>
+    <ClCompile Include="StringManager.cpp">
+      <Filter>Fichiers sources\Ressources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.hpp">
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="Controles.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="StringManager.hpp">
+      <Filter>Fichiers d%27en-tête\Ressources</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

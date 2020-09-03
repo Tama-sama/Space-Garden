@@ -14,6 +14,7 @@
 #include "RessourcesManager.hpp"
 #include "SoundManager.hpp"
 #include "Texture_SpriteManager.hpp"
+#include "StringManager.hpp"
 #include "Game.hpp"
 
 int MenuChoice = 0;
@@ -37,6 +38,8 @@ std::string To_String(Action _Action);
 
 // options
 bool OptionChangeKeys = false;
+bool LanguageChange = false;
+int languageSelect = 0;
 std::string ret;
 #define ITEM(x) case sf::Keyboard:: ## x : ret = #x; break;
 #define ITEM2(x) case gamepadPS4:: ## x : ret = #x; break;
@@ -513,10 +516,15 @@ void UpdateOptionMenu()
 		changeKeyChoice = 0;
 		getSound("menu_click").play();
 
-		if (!OptionChangeKeys)
+		if (!OptionChangeKeys && !LanguageChange)
 			ActualMenu = Menus::MAIN;
 		else if(OptionChangeKeys && !changingkey)
 			OptionChangeKeys = false;
+		else if (LanguageChange)
+		{
+			LanguageChange = false;
+			changeKeyChoice = 6;
+		}
 	}
 
 	if (OptionChangeKeys && !changingkey)
@@ -551,7 +559,7 @@ void UpdateOptionMenu()
 			changingkey = true;
 		}
 	}
-	else if (!OptionChangeKeys)
+	else if (!OptionChangeKeys && !LanguageChange)
 	{
 		if (isButtonPressed(Action::Up) && ActionTiming >= 0.3)
 		{
@@ -563,7 +571,7 @@ void UpdateOptionMenu()
 		if (isButtonPressed(Action::Down) && ActionTiming >= 0.3)
 		{
 			ActionTiming = 0;
-			if (changeKeyChoice < 5)
+			if (changeKeyChoice < 6)
 				changeKeyChoice++;
 		}
 
@@ -653,12 +661,61 @@ void UpdateOptionMenu()
 		{
 			ActionTiming = 0;
 			if (changeKeyChoice == 0)
-			{
 				OptionChangeKeys = true;
-			}
+			if (changeKeyChoice == 6)
+				LanguageChange = true;
 		}
 	}
+	else if (LanguageChange)
+	{
+		if (isButtonPressed(Action::Up) && ActionTiming >= 0.3)
+		{
+			ActionTiming = 0;
+			if (languageSelect > 0)
+				languageSelect--;
+		}
 
+		if (isButtonPressed(Action::Down) && ActionTiming >= 0.3)
+		{
+			ActionTiming = 0;
+
+			int i = 0;
+			for (Ressources& ActualRessource : RessourcesList)
+				if (ActualRessource.type == RessourceType::LANG)
+					if (ActualRessource.name != Lang)	
+						i++;
+
+			if (languageSelect < i)
+				languageSelect++;
+		}
+
+		if (isButtonPressed(Action::Interact) && ActionTiming >= 0.3)
+		{
+			ActionTiming = 0;
+
+			int i = 0;
+			for (Ressources& ActualRessource : RessourcesList)
+			{
+				if (ActualRessource.type == RessourceType::LANG)
+				{
+					if (ActualRessource.name != Lang)
+					{
+						i++;
+
+						if (i == languageSelect)
+						{
+							Lang = ActualRessource.name;
+							languageSelect = 0;
+							RemoveStateStrings(state);
+							LoadStrings(state);
+							Save = true;
+						}
+					}
+				}
+			}
+
+		}
+	}
 
 	if (Save)
 	{
@@ -688,6 +745,10 @@ void UpdateOptionMenu()
 			FileWrite.write((char*)&Style, sizeof(int));
 			FileWrite.write((char*)&Vsync, sizeof(bool));
 			FileWrite.write((char*)&Frames, sizeof(int));
+
+			size_t size = Lang.size();
+			FileWrite.write((char*)&size, sizeof(size));
+			FileWrite.write(&Lang[0], size);
 
 			FileWrite.close();
 			Save = false;
@@ -948,6 +1009,7 @@ void UpdateMenuToGame()
 
 
 		RemoveStateSounds(State::MAIN_MENU);
+		RemoveStateStrings(State::MAIN_MENU);
 		RemoveStateSprites(State::MAIN_MENU);
 		state = State::GAME;
 	}
@@ -989,8 +1051,8 @@ void DisplayMenu()
 void DisplayMainMenu()
 {
 	sf::Text buttons_text("", Font, 70);
-	std::string Textyes[6]{ "Jouer","ScoreBoards","Options","How To Play","Credits","Quitter" };
-	sf::Vector2f TextPos[6]{ sf::Vector2f(850,50),sf::Vector2f(975,235), sf::Vector2f(840,395), sf::Vector2f(960,580), sf::Vector2f(820,735), sf::Vector2f(990,900) };
+	std::string Textyes[6]{ getString("Play"),getString("ScoreBoards"),getString("Settings"),getString("HowTP"),getString("Credit"),getString("Quit") };
+	sf::Vector2f TextPos[6]{ sf::Vector2f(890,110),sf::Vector2f(1040,275), sf::Vector2f(890,455), sf::Vector2f(1040,625), sf::Vector2f(890,788), sf::Vector2f(1040,956.5f) };
 
 	win.Window().draw(getSprite("Fond_menu2"));
 
@@ -1018,12 +1080,15 @@ void DisplayMainMenu()
 			getSprite("Button").setPosition(sf::Vector2f(600.f + 250.f, 170.f * i ));
 		}
 
-		if (i == 1 || i == 3)
-			buttons_text.setCharacterSize(50);
-		else
-			buttons_text.setCharacterSize(70);
 
+		buttons_text.setCharacterSize(70);
 		buttons_text.setString(Textyes[i]);
+		buttons_text.setOrigin(buttons_text.getLocalBounds().left + buttons_text.getLocalBounds().width / 2, buttons_text.getLocalBounds().top + buttons_text.getLocalBounds().height / 2);
+		while (buttons_text.getOrigin().x >= 85)
+		{
+			buttons_text.setCharacterSize(buttons_text.getCharacterSize() - 1);
+			buttons_text.setOrigin(buttons_text.getLocalBounds().left + buttons_text.getLocalBounds().width / 2, buttons_text.getLocalBounds().top + buttons_text.getLocalBounds().height / 2);
+		}
 		buttons_text.setPosition(TextPos[i]);
 
 		win.Window().draw(getSprite("Button"));
@@ -1213,34 +1278,34 @@ void DisplayOptionMenu()
 			switch (ActualControle.name)
 			{
 			case Action::Up:
-				ActionName.setString("Go Up");
+				ActionName.setString(getString("Go_Up"));
 				break;
 			case Action::Down:
-				ActionName.setString("Go Down");
+				ActionName.setString(getString("Go_Down"));
 				break;
 			case Action::Left:
-				ActionName.setString("Go Left");
+				ActionName.setString(getString("Go_Left"));
 				break;
 			case Action::Right:
-				ActionName.setString("Go Right");
+				ActionName.setString(getString("Go_Right"));
 				break;
 			case Action::Interact:
-				ActionName.setString("Interact");
+				ActionName.setString(getString("Interact"));
 				break;
 			case Action::Return:
-				ActionName.setString("Return");
+				ActionName.setString(getString("Return"));
 				break;
 			case Action::Start:
-				ActionName.setString("Start");
+				ActionName.setString(getString("Start"));
 				break;
 			case Action::Fire:
-				ActionName.setString("Fire");
+				ActionName.setString(getString("Fire"));
 				break;
 			case Action::Fire_Spe1:
-				ActionName.setString("Fire Spe 1");
+				ActionName.setString(getString("Fire_Spe1"));
 				break;
 			case Action::Fire_Spe2:
-				ActionName.setString("Fire Spe 2");
+				ActionName.setString(getString("Fire_Spe2"));
 				break;
 			default:
 				ActionName.setString("None (Bug)");
@@ -1423,16 +1488,17 @@ void DisplayOptionMenu()
 		if (changeKeyChoice == 0)
 			ButtonText.setFillColor(sf::Color::Red);
 
-		ButtonText.setString("Change KeyBinding");
-		ButtonText.setPosition(Boxs.getPosition().x + 395, Boxs.getPosition().y);
+		ButtonText.setString(getString("KeyBind"));
+		ButtonText.setOrigin(ButtonText.getLocalBounds().left + ButtonText.getLocalBounds().width / 2, 0);
+		ButtonText.setPosition(Boxs.getPosition().x + Boxs.getSize().x / 2, Boxs.getPosition().y - 3);
 		win.Window().draw(ButtonText);
 
-		for (int i = 1; i < 6; i++)
+		for (int i = 1; i < 7; i++)
 		{
 			Boxs.setSize(sf::Vector2f(300, 60));
 			Boxs.setPosition(490, Boxs.getPosition().y + Boxs.getSize().y + 1);
 			win.Window().draw(Boxs);
-
+			ButtonText.setOrigin(0.f, 0.f);
 			ButtonText.setPosition(Boxs.getPosition().x + 10, Boxs.getPosition().y);
 			if (changeKeyChoice == i)
 				ButtonText.setFillColor(sf::Color::Red);
@@ -1440,15 +1506,17 @@ void DisplayOptionMenu()
 				ButtonText.setFillColor(sf::Color::Black);
 
 			if (i == 1)
-				ButtonText.setString("Music");
+				ButtonText.setString(getString("Music"));
 			if (i == 2)
-				ButtonText.setString("Sound");
+				ButtonText.setString(getString("Sound"));
 			if (i == 3)
-				ButtonText.setString("FullScreen");
+				ButtonText.setString(getString("Screen"));
 			if (i == 4)
-				ButtonText.setString("Vsync");
+				ButtonText.setString(getString("Vsync"));
 			if (i == 5)
-				ButtonText.setString("FPS");
+				ButtonText.setString(getString("FPS"));
+			if (i == 6)
+				ButtonText.setString(getString("Language"));
 
 
 			ButtonText.setPosition(Boxs.getPosition().x + 10, Boxs.getPosition().y);
@@ -1501,24 +1569,64 @@ void DisplayOptionMenu()
 
 		// fullscreen
 		if (win.getStyle() == sf::Style::Default)
-			Values.setString("<\tWindowed\t>");
+			Values.setString("<\t" + getString("Windowed") + "\t>");
 		if (win.getStyle() == sf::Style::None)
-			Values.setString("<\tWindowed FullScreen\t>");
+			Values.setString("<\t" + getString("Windowed_full") + "\t>");
 		if (win.getStyle() == sf::Style::Fullscreen)
-			Values.setString("<\tFullScreen\t>");
+			Values.setString("<\t" + getString("FullScreen") + "\t>");
 		Values.setPosition(Bars.getPosition().x , 315 + 61 * 3 - 10);
 		win.Window().draw(Values);
 
 
 		// VSync
 		if (win.getVerticalSync())
-			Values.setString("<\tOn\t>");
+			Values.setString("<\t" + getString("On") + "\t>");
 		if (!win.getVerticalSync())
-			Values.setString("<\tOff\t>");
+			Values.setString("<\t" + getString("Off") + "\t>");
 
 		Values.setPosition(Bars.getPosition().x, 315 + 61 * 4 - 10);
 		win.Window().draw(Values);
 
+		// Langage
+		if (languageSelect == 0 && LanguageChange)
+			Values.setFillColor(sf::Color::Red);
+		Values.setCharacterSize(50);
+		Values.setString(Lang);
+		Values.setPosition(Bars.getPosition().x, 315 + 61 * 6 - 20);
+		win.Window().draw(Values);
+
+		if (LanguageChange)
+		{
+			sf::RectangleShape LangBoxs(sf::Vector2f(150, 50));
+			sf::Text LangText("", Font, 50);
+			int i = 0;
+
+			LangBoxs.setFillColor(sf::Color::Color(0,0,0,50)); LangBoxs.setOutlineThickness(1); LangBoxs.setOutlineColor(sf::Color::Black);
+
+			for (Ressources& ActualRessource : RessourcesList)
+			{
+				if (ActualRessource.type == RessourceType::LANG)
+				{
+					if (ActualRessource.name != Lang)
+					{
+						i++;
+
+						LangBoxs.setPosition(Bars.getPosition().x - 20, 677 + (50 * i));
+						win.Window().draw(LangBoxs);
+
+						if (languageSelect == i)
+							LangText.setFillColor(sf::Color::Red);
+						else
+							LangText.setFillColor(sf::Color::Black);
+
+						LangText.setString(ActualRessource.name);
+						LangText.setPosition(Bars.getPosition().x, 657 + (50 * i));
+						win.Window().draw(LangText);
+					}
+
+				}
+			}
+		}
 	}
 	
 

@@ -173,6 +173,7 @@
     <ClCompile Include="RessourcesManager.cpp" />
     <ClCompile Include="Save.cpp" />
     <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="StringManager.cpp" />
     <ClCompile Include="Texture_SpriteManager.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="Tir.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="RessourcesManager.hpp" />
     <ClInclude Include="SoundManager.hpp" />
     <ClInclude Include="StateManager.hpp" />
+    <ClInclude Include="StringManager.hpp" />
     <ClInclude Include="Texture_SpriteManager.hpp" />
     <ClInclude Include="Tir.hpp" />
     <ClInclude Include="Tools.hpp" />

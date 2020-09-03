@@ -3,6 +3,7 @@
 #include "SoundManager.hpp"
 #include "Texture_SpriteManager.hpp"
 #include "Controles.hpp"
+#include "StringManager.hpp"
 
 #include "Explosion.hpp"
 #include "Tir.hpp"
@@ -34,11 +35,13 @@ void ChangeState(State NextState)
 {
 	RemoveAllSounds();
 	RemoveAllSprites();
+	RemoveAllStrings();
 
 	state = NextState;
 	
 	LoadSounds(NextState);
 	LoadSprite(NextState);
+	LoadStrings(NextState);
 	InitManager();
 }
 
@@ -46,9 +49,10 @@ void LoadNextState(State NextState)
 {
 	Loading = true;
 	can_Switch = false;
-		
+
 	LoadSprite(NextState);
 	LoadSounds(NextState);
+	LoadStrings(NextState);
 	InitManager();
 
 	Loading = false;
@@ -192,6 +196,7 @@ void DisplayManager()
 	DebugInfos += "Textures / Sprites Loaded : " + std::to_string(SpriteList.size()) + "\n";
 	DebugInfos += "Sounds Loaded : " + std::to_string(SoundList.size()) + "\n";
 	DebugInfos += "Music Loaded : " + std::to_string(MusicList.size()) + "\n";
+	DebugInfos += "Strings Loaded : " + std::to_string(StringsList.size()) + "\n";
 	DebugInfos += "\n";
 	DebugInfos += "Player Bullets : " + std::to_string(Bullets.size()) + "\n";
 	DebugInfos += "Ennemies Bullets : " + std::to_string(EnnemiesShootsList.size()) + "\n";

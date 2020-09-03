@@ -1,0 +1,39 @@
+// Intro and Main Menu
+Play | Play | Intro | Menu
+ScoreBoards | ScoreBoards | Intro | Menu
+Settings | Settings | Intro | Menu
+HowTP | How to play | intro | Menu
+Credit | Credits | Intro | Menu
+Quit | Leave | Intro | Menu
+
+// in-Game Menu
+Resume | Resume | Game
+Settings | Settings | Game
+Restart | Restart | Game
+Menu | Back Menu | Game
+
+// Options
+KeyBind | Change Key Binding | Menu | Game
+Music | Music | Menu | Game
+Sound | Sound | Menu | Game
+Screen | Display | Menu | Game
+Vsync | Vsync | Menu | Game
+FPS | FPS | Menu | Game
+Language | Language | Menu | Game
+On | On | Menu | Game
+Off | Off | Menu | Game
+Windowed | Windowed | Menu | Game
+Windowed_full | Windowed FullScreen | Menu | Game
+FullScreen | FullScreen | Menu | Game
+
+// Controles
+Go_Up | Go Up | Menu | Game
+Go_Down | GoDown | Menu | Game
+Go_Left | Go Left | Menu | Game
+Go_Right | Go Right | Menu | Game
+Interact | Interact | Menu | Game
+Return | Return | Menu | Game
+Start | Start | Menu | Game
+Fire | Shoot | Menu | Game
+Fire_Spe1 | Special Shot 1 | Menu | Game
+Fire_Spe2 | Special Shot 2 | Menu | Game

@@ -1,6 +1,7 @@
 #include "Game.hpp"
 #include "Texture_SpriteManager.hpp"
 #include "SoundManager.hpp"
+#include "StringManager.hpp"
 #include "Window.hpp"
 #include "Menu.hpp"
 
@@ -1045,6 +1046,7 @@ void UpdateGameToSave()
 		RemoveAllPlayerShoots();
 
 		RemoveStateSounds(State::GAME);
+		RemoveStateStrings(State::GAME);
 		RemoveStateSprites(State::GAME);
 		state = State::SAVE;
 	}
@@ -1071,6 +1073,7 @@ void UpdateGameToMenu()
 
 
 		RemoveStateSounds(State::GAME);
+		RemoveStateStrings(State::GAME);
 		RemoveStateSprites(State::GAME);
 		state = State::MAIN_MENU;
 	}
@@ -1217,8 +1220,6 @@ void DisplayGame()
 	win.Window().draw(getSprite("XpBar"));
 
 
-
-
 	sf::Text Scores("", Font, 65);
 	std::string strScores;
 	strScores = "  " + std::to_string(Player1.getScore()) + "\n\n\n\n\t * " + std::to_string(Player1.getPissenlitShoot()) + "\n\n\t * " + std::to_string(Player1.getSinShoot());
@@ -1323,8 +1324,8 @@ void DisplayGamePause()
 		win.Window().draw(getSprite("Bande_R"));
 
 		sf::Text buttons_text("", Font, 70);
-		std::string Textyes[4]{ "Return","Options","Restart","Menu" };
-		sf::Vector2f TextPos[4]{ sf::Vector2f(850,175),sf::Vector2f(990,375), sf::Vector2f(800,580), sf::Vector2f(990,775) };
+		std::string Textyes[4]{ getString("Resume"),getString("Settings"),getString("Restart"),getString("Menu") };
+		sf::Vector2f TextPos[4]{ sf::Vector2f(890,235),sf::Vector2f(1040,435), sf::Vector2f(890,635), sf::Vector2f(1040,835) };
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -1339,7 +1340,6 @@ void DisplayGamePause()
 				buttons_text.setFillColor(sf::Color::Black);
 			}
 
-
 			if (i % 2 == 0)
 			{
 				getSprite("Button").setRotation(180);
@@ -1351,7 +1351,14 @@ void DisplayGamePause()
 				getSprite("Button").setPosition(sf::Vector2f(600 + 250, 125 + (200 * i)));
 			}
 
+			buttons_text.setCharacterSize(70);
 			buttons_text.setString(Textyes[i]);
+			buttons_text.setOrigin(buttons_text.getLocalBounds().left + buttons_text.getLocalBounds().width / 2, buttons_text.getLocalBounds().top + buttons_text.getLocalBounds().height / 2);
+			while (buttons_text.getOrigin().x >= 85)
+			{
+				buttons_text.setCharacterSize(buttons_text.getCharacterSize() - 1);
+				buttons_text.setOrigin(buttons_text.getLocalBounds().left + buttons_text.getLocalBounds().width / 2, buttons_text.getLocalBounds().top + buttons_text.getLocalBounds().height / 2);
+			}
 			buttons_text.setPosition(TextPos[i]);
 
 			win.Window().draw(getSprite("Button"));
