@@ -4,11 +4,14 @@
 #include "Tir.hpp"
 #include "Explosion.hpp"
 #include "Game.hpp"
+#include "Controles.hpp"
 
 #include "RessourcesManager.hpp"
 #include "SoundManager.hpp"
 #include "Texture_SpriteManager.hpp"
 #include "StringManager.hpp"
+
+int speedmult = 1;
 
 void Intro()
 {
@@ -46,11 +49,18 @@ void Intro()
 		one_pass = true;
 	}
 
+
+	if (isButtonPressed(Action::Interact) || isButtonPressed(Action::Start))
+		speedmult = 3;
+	
+
+
+
 	win.Window().draw(getSprite("Fond_menu2"));
 
 	if (ship_pos.y > 950)
 	{
-		ship_pos.y += -150 * MainTime.GetTimeDeltaF();
+		ship_pos.y += -150 * MainTime.GetTimeDeltaF() * speedmult;
 		ship_rect.left = ship_rect.width;
 	}
 	else
@@ -71,7 +81,7 @@ void Intro()
 			{
 				for (PlayerBullet& BulletList : Bullets)
 				{
-					BulletList.Pos().y += -150 * MainTime.GetTimeDeltaF();
+					BulletList.Pos().y += -150 * MainTime.GetTimeDeltaF() * speedmult;
 					BulletList.Draw();
 
 					if (BulletList.Pos().y < 630)
@@ -109,7 +119,7 @@ void Intro()
 
 	if (Name_pos.x > 9000 && ship_pos.y > -150)
 	{
-		ship_pos.y += -250 * MainTime.GetTimeDeltaF();
+		ship_pos.y += -250 * MainTime.GetTimeDeltaF() * speedmult;
 		ship_rect.left = ship_rect.width;
 	}
 	else if (Name_pos.x > 9000 && ship_pos.y <= -150)

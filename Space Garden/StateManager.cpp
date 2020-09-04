@@ -19,6 +19,8 @@
 
 State state = State::INTRO;
 
+bool DebugsInfos = false;
+
 bool Loading = false;
 bool can_Switch = false;
 sf::Mutex MutexTest;
@@ -30,6 +32,7 @@ extern bool isPause;
 void UpdateSaveToMenu();
 void UpdateSave();
 void DisplaySave();
+void DisplayDevMode();
 
 void ChangeState(State NextState)
 {
@@ -189,32 +192,32 @@ void DisplayManager()
 		break;
 	}
 
+	static float dots = 0;
+	if (Loading)
+	{
+		dots += MainTime.GetTimeDeltaF();
+
+		sf::Text LoadingText("Loading", Font, 70);
+		LoadingText.setFillColor(sf::Color::Black);
+		LoadingText.setPosition(1700, 20);
+
+		if (dots >= 0.2f)
+			LoadingText.setString("Loading .");
+		if (dots >= 0.4f)
+			LoadingText.setString("Loading ..");
+		if (dots >= 0.6f)
+			LoadingText.setString("Loading ...");
+		if (dots >= 0.8f)
+			dots = 0.f;
+
+		win.Window().draw(LoadingText);
+	}
+	else
+		dots = 0.f;
 
 
-	std::string DebugInfos;
-	DebugInfos += "Ressources registered : " + std::to_string(RessourcesList.size()) + "\n";
-	DebugInfos += "Textures / Sprites Loaded : " + std::to_string(SpriteList.size()) + "\n";
-	DebugInfos += "Sounds Loaded : " + std::to_string(SoundList.size()) + "\n";
-	DebugInfos += "Music Loaded : " + std::to_string(MusicList.size()) + "\n";
-	DebugInfos += "Strings Loaded : " + std::to_string(StringsList.size()) + "\n";
-	DebugInfos += "\n";
-	DebugInfos += "Player Bullets : " + std::to_string(Bullets.size()) + "\n";
-	DebugInfos += "Ennemies Bullets : " + std::to_string(EnnemiesShootsList.size()) + "\n";
-	DebugInfos += "Ennemies : " + std::to_string(ennemies.size()) + "\n";
-	DebugInfos += "Buffs : " + std::to_string(BuffsList.size()) + "\n";
-	DebugInfos += "Explosions : " + std::to_string(Explosions.size()) + "\n";
-
-
-	sf::Text DebugText(DebugInfos, Font, 45);
-	DebugText.setPosition(245, 0);
-
-	sf::RectangleShape BackGround(sf::Vector2f(DebugText.getGlobalBounds().width + 10, DebugText.getGlobalBounds().height));
-	BackGround.setPosition(240, 0);
-	BackGround.setFillColor(sf::Color::Color(0,0,0,75));
-
-	win.Window().draw(BackGround);
-	win.Window().draw(DebugText);
-
+	if (DebugsInfos)
+		DisplayDevMode();
 
 	// Display on window
 	win.Window().display();
@@ -238,6 +241,11 @@ void EventsManager()
 				ChangingControle->KeyBoard = win.Events().key.code;
 				changingkey = false;
 				ChangingControle = 0;
+			}
+
+			if (win.Events().key.code == sf::Keyboard::F8)
+			{
+				DebugsInfos = !DebugsInfos;
 			}
 
 			PressedKey.push_back(win.Events().key.code);
@@ -292,4 +300,93 @@ void EventsManager()
 			}
 		}
 	}
+}
+
+
+
+
+
+
+
+
+void DisplayDevMode()
+{
+	sf::RectangleShape RectHitBox;
+	sf::CircleShape CircleHitBox;
+
+	RectHitBox.setFillColor(sf::Color::Transparent);
+	RectHitBox.setOutlineColor(sf::Color::Blue);
+	RectHitBox.setOutlineThickness(1);
+
+	CircleHitBox.setFillColor(sf::Color::Transparent);
+	CircleHitBox.setOutlineColor(sf::Color::Blue);
+	CircleHitBox.setOutlineThickness(1);
+
+	for (Buffs& ActualBuff : BuffsList)
+	{
+		RectHitBox.setSize(sf::Vector2f(SIZE_BUFFS, SIZE_BUFFS));
+		RectHitBox.setOrigin(SIZE_BUFFS / 2, SIZE_BUFFS / 2);
+		RectHitBox.setPosition(ActualBuff.getpos());
+		win.Window().draw(RectHitBox);
+	}
+
+	for (PlayerBullet& ActualPlayerBullet : Bullets)
+	{
+		CircleHitBox.setRadius(RADIUS_PLAYER_SHOOT);
+		CircleHitBox.setOrigin(sf::Vector2f(CircleHitBox.getRadius(), CircleHitBox.getRadius()));
+		CircleHitBox.setPosition(ActualPlayerBullet.Pos());
+		win.Window().draw(CircleHitBox);
+	}
+
+	for (EnnemiesShoots& ActualEnnemieBullet : EnnemiesShootsList)
+	{
+		CircleHitBox.setRadius(RADIUS_ENNEMIES_SHOOT);
+		CircleHitBox.setOrigin(sf::Vector2f(CircleHitBox.getRadius(), CircleHitBox.getRadius()));
+		CircleHitBox.setPosition(ActualEnnemieBullet.getpos());
+		win.Window().draw(CircleHitBox);
+	}
+
+	for (Ennemies& ActualEnnemie : ennemies)
+	{
+		CircleHitBox.setRadius(RADIUS_ENNEMIES);
+		CircleHitBox.setOrigin(sf::Vector2f(CircleHitBox.getRadius(), CircleHitBox.getRadius()));
+		CircleHitBox.setPosition(ActualEnnemie.getPos());
+		win.Window().draw(CircleHitBox);
+	}
+
+	if (state == State::GAME)
+	{
+		RectHitBox.setSize(sf::Vector2f(getSprite(Player1.getShip()).getGlobalBounds().width, getSprite(Player1.getShip()).getGlobalBounds().height));
+		RectHitBox.setOrigin(RectHitBox.getSize().x / 2, RectHitBox.getSize().y / 2);
+		RectHitBox.setPosition(Player1.getPosition());
+		win.Window().draw(RectHitBox);
+
+		RectHitBox.setSize(sf::Vector2f(getSprite(Player2.getShip()).getGlobalBounds().width, getSprite(Player2.getShip()).getGlobalBounds().height));
+		RectHitBox.setOrigin(RectHitBox.getSize().x / 2, RectHitBox.getSize().y / 2);
+		RectHitBox.setPosition(Player2.getPosition());
+		win.Window().draw(RectHitBox);
+	}
+
+	std::string DebugInfos;
+	DebugInfos += "Ressources registered : " + std::to_string(RessourcesList.size()) + "\n";
+	DebugInfos += "Textures / Sprites Loaded : " + std::to_string(SpriteList.size()) + "\n";
+	DebugInfos += "Sounds Loaded : " + std::to_string(SoundList.size()) + "\n";
+	DebugInfos += "Music Loaded : " + std::to_string(MusicList.size()) + "\n";
+	DebugInfos += "Strings Loaded : " + std::to_string(StringsList.size()) + "\n";
+	DebugInfos += "\n";
+	DebugInfos += "Player Bullets : " + std::to_string(Bullets.size()) + "\n";
+	DebugInfos += "Ennemies Bullets : " + std::to_string(EnnemiesShootsList.size()) + "\n";
+	DebugInfos += "Ennemies : " + std::to_string(ennemies.size()) + "\n";
+	DebugInfos += "Buffs : " + std::to_string(BuffsList.size()) + "\n";
+	DebugInfos += "Explosions : " + std::to_string(Explosions.size()) + "\n";
+
+	sf::Text DebugText(DebugInfos, Font, 45);
+	DebugText.setPosition(245, 0);
+
+	sf::RectangleShape BackGround(sf::Vector2f(DebugText.getGlobalBounds().width + 10, DebugText.getGlobalBounds().height));
+	BackGround.setPosition(240, 0);
+	BackGround.setFillColor(sf::Color::Color(0, 0, 0, 75));
+
+	win.Window().draw(BackGround);
+	win.Window().draw(DebugText);
 }

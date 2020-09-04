@@ -6,6 +6,10 @@ HowTP | Comment jouer | intro | Menu
 Credit | Credits | Intro | Menu
 Quit | Quitter | Intro | Menu
 
+// ShipSelection
+Select | Selectionne la couleur de ton vaiseau | Menu
+Join | Joueur 2, appui sur une touche pour te joindre a la bataille | Menu
+
 // in-Game Menu
 Resume | Reprendre | Game
 Settings | Options | Game

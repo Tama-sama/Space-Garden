@@ -1,0 +1,43 @@
+// Intro and Main Menu
+Play | Ludi | Intro | Menu
+ScoreBoards | Poentaroj | Intro | Menu
+Settings | Agordoj | Intro | Menu
+HowTP | Kiel ludi | intro | Menu
+Credit | Kreditoj | Intro | Menu
+Quit | Foriru | Intro | Menu
+
+// ShipSelection
+Select | Elektu vian kosmosipan koloron | Menu
+Join | Ludanto 2, premu iun ajn butonon por aligi al la batalo | Menu
+
+// in-Game Menu
+Resume | Revenu al ludo | Game
+Settings | Agordoj | Game
+Restart | Rekomenci | Game
+Menu | Reen al menuo | Game
+
+// Options
+KeyBind | Klavaroj | Menu | Game
+Music | Muziko | Menu | Game
+Sound | Sono | Menu | Game
+Screen | Vidigu | Menu | Game
+Vsync | Vsync | Menu | Game
+FPS | FPS | Menu | Game
+Language | lingvo | Menu | Game
+On | Aktiva | Menu | Game
+Off | Neaktiva | Menu | Game
+Windowed | Bobenita | Menu | Game
+Windowed_full | Tutekrana fenestrita | Menu | Game
+FullScreen | Plenekrane | Menu | Game
+
+// Controles
+Go_Up | Iri supren | Menu | Game
+Go_Down | Malsupreniri | Menu | Game
+Go_Left | Iru maldekstren | Menu | Game
+Go_Right | Iru dekstren | Menu | Game
+Interact | Interagi | Menu | Game
+Return | Reveno | Menu | Game
+Start | Start | Menu | Game
+Fire | Pafu | Menu | Game
+Fire_Spe1 | Speciala pafo 1 | Menu | Game
+Fire_Spe2 | Speciala pafo 2 | Menu | Game

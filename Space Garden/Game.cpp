@@ -11,10 +11,6 @@
 #include "Explosion.hpp"
 #include "Controles.hpp"
 
-#define SIZE_BUFFS 30
-#define RADIUS_PLAYER_SHOOT 11
-#define RADIUS_ENNEMIES_SHOOT 9
-#define RADIUS_ENNEMIES 45
 extern sf::Image BossCollision;
 
 
@@ -1249,62 +1245,6 @@ void DisplayGame()
 		Scores.setPosition(1740, 433);
 		Scores.setFillColor(sf::Color::Black);
 		win.Window().draw(Scores);
-	}
-
-	if (true) // future HitBox Show 
-	{
-		sf::RectangleShape RectHitBox;
-		sf::CircleShape CircleHitBox;
-
-		RectHitBox.setFillColor(sf::Color::Transparent);
-		RectHitBox.setOutlineColor(sf::Color::Blue);
-		RectHitBox.setOutlineThickness(1);
-
-		CircleHitBox.setFillColor(sf::Color::Transparent);
-		CircleHitBox.setOutlineColor(sf::Color::Blue);
-		CircleHitBox.setOutlineThickness(1);
-		
-		for (Buffs& ActualBuff : BuffsList)
-		{
-			RectHitBox.setSize(sf::Vector2f(SIZE_BUFFS, SIZE_BUFFS));
-			RectHitBox.setOrigin(SIZE_BUFFS / 2, SIZE_BUFFS / 2);
-			RectHitBox.setPosition(ActualBuff.getpos());
-			win.Window().draw(RectHitBox);
-		}
-
-		for (PlayerBullet& ActualPlayerBullet : Bullets)
-		{
-			CircleHitBox.setRadius(RADIUS_PLAYER_SHOOT);
-			CircleHitBox.setOrigin(sf::Vector2f(CircleHitBox.getRadius(), CircleHitBox.getRadius()));
-			CircleHitBox.setPosition(ActualPlayerBullet.Pos());
-			win.Window().draw(CircleHitBox);
-		}
-
-		for (EnnemiesShoots& ActualEnnemieBullet : EnnemiesShootsList)
-		{
-			CircleHitBox.setRadius(RADIUS_ENNEMIES_SHOOT);
-			CircleHitBox.setOrigin(sf::Vector2f(CircleHitBox.getRadius(), CircleHitBox.getRadius()));
-			CircleHitBox.setPosition(ActualEnnemieBullet.getpos());
-			win.Window().draw(CircleHitBox);
-		}
-
-		for (Ennemies& ActualEnnemie : ennemies)
-		{
-			CircleHitBox.setRadius(RADIUS_ENNEMIES);
-			CircleHitBox.setOrigin(sf::Vector2f(CircleHitBox.getRadius(), CircleHitBox.getRadius()));
-			CircleHitBox.setPosition(ActualEnnemie.getPos());
-			win.Window().draw(CircleHitBox);
-		}
-
-		RectHitBox.setSize(sf::Vector2f(getSprite(Player1.getShip()).getGlobalBounds().width, getSprite(Player1.getShip()).getGlobalBounds().height));
-		RectHitBox.setOrigin(RectHitBox.getSize().x / 2, RectHitBox.getSize().y / 2);
-		RectHitBox.setPosition(Player1.getPosition());
-		win.Window().draw(RectHitBox);
-
-		RectHitBox.setSize(sf::Vector2f(getSprite(Player2.getShip()).getGlobalBounds().width, getSprite(Player2.getShip()).getGlobalBounds().height));
-		RectHitBox.setOrigin(RectHitBox.getSize().x / 2, RectHitBox.getSize().y / 2);
-		RectHitBox.setPosition(Player2.getPosition());
-		win.Window().draw(RectHitBox);
 	}
 }
 void DisplayGamePause()

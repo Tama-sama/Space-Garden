@@ -6,6 +6,10 @@ HowTP | How to play | intro | Menu
 Credit | Credits | Intro | Menu
 Quit | Leave | Intro | Menu
 
+// ShipSelection
+Select | Select your spaceship color | Menu
+Join | Player 2, press any button to join the battle | Menu
+
 // in-Game Menu
 Resume | Resume | Game
 Settings | Settings | Game
@@ -28,7 +32,7 @@ FullScreen | FullScreen | Menu | Game
 
 // Controles
 Go_Up | Go Up | Menu | Game
-Go_Down | GoDown | Menu | Game
+Go_Down | Go Down | Menu | Game
 Go_Left | Go Left | Menu | Game
 Go_Right | Go Right | Menu | Game
 Interact | Interact | Menu | Game

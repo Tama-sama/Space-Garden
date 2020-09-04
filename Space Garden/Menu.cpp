@@ -48,7 +48,7 @@ bool changingkey = false;
 Controle* ChangingControle = 0;
 extern bool SoloGame;
 bool Readys[2] = { false,false };
-sf::Vector2f ShipSelectionPos[5] = { sf::Vector2f(690, 850),sf::Vector2f(890, 850), sf::Vector2f(1090, 850), sf::Vector2f(1290, 850), sf::Vector2f(1490, 850) };
+sf::Vector2f ShipSelectionPos[5] = { sf::Vector2f(463, 850),sf::Vector2f(726, 850), sf::Vector2f(990, 850), sf::Vector2f(1253, 850), sf::Vector2f(1516, 850) };
 
 
 int ScoreBoardSeen = 1;
@@ -176,7 +176,7 @@ void UpdateShipMenu()
 			{
 				if (i != Player1.getController())
 				{
-					if (isButtonPressed(Action::Interact, i))
+					if (isButtonPressed(Action::Interact, i) || isButtonPressed(Action::Return, i) || isButtonPressed(Action::Start, i))
 					{
 						ActionTiming = 0;
 						SoloGame = false;
@@ -1160,6 +1160,22 @@ void DisplayShipSelection()
 
 	win.Window().draw(V);
 	win.Window().draw(V2);
+
+	sf::Text Tsentence(getString("Select"), Font, 60);
+	Tsentence.setFillColor(sf::Color::Black);
+	Tsentence.setOrigin(Tsentence.getLocalBounds().left + Tsentence.getLocalBounds().width / 2, Tsentence.getLocalBounds().top + Tsentence.getLocalBounds().height / 2);
+	Tsentence.setPosition(960, 300);
+	win.Window().draw(Tsentence);
+
+	if (SoloGame)
+	{
+		Tsentence.setString(getString("Join"));
+		Tsentence.setOrigin(Tsentence.getLocalBounds().left + Tsentence.getLocalBounds().width / 2, Tsentence.getLocalBounds().top + Tsentence.getLocalBounds().height / 2);
+		Tsentence.setPosition(960, 360);
+		win.Window().draw(Tsentence);
+	}
+
+
 }
 void DisplayScoreBoardMenu()
 {
@@ -1498,7 +1514,7 @@ void DisplayOptionMenu()
 			Boxs.setSize(sf::Vector2f(300, 60));
 			Boxs.setPosition(490, Boxs.getPosition().y + Boxs.getSize().y + 1);
 			win.Window().draw(Boxs);
-			ButtonText.setOrigin(0.f, 0.f);
+
 			ButtonText.setPosition(Boxs.getPosition().x + 10, Boxs.getPosition().y);
 			if (changeKeyChoice == i)
 				ButtonText.setFillColor(sf::Color::Red);
@@ -1518,7 +1534,7 @@ void DisplayOptionMenu()
 			if (i == 6)
 				ButtonText.setString(getString("Language"));
 
-
+			ButtonText.setOrigin(0, 0);
 			ButtonText.setPosition(Boxs.getPosition().x + 10, Boxs.getPosition().y);
 			win.Window().draw(ButtonText);
 
@@ -1550,21 +1566,24 @@ void DisplayOptionMenu()
 		Bars.setPosition(891, 315 + (61 * 1));
 		win.Window().draw(Bars);
 		Values.setString(std::to_string(MusicMultip));
-		Values.setPosition(Bars.getPosition().x, Bars.getPosition().y - 10);
+		Values.setOrigin(Values.getLocalBounds().left + Values.getLocalBounds().width / 2, 0);
+		Values.setPosition(Boxs.getPosition().x + Boxs.getSize().x / 2, Bars.getPosition().y - 10);
 		win.Window().draw(Values);
 
 		Bars.setSize(sf::Vector2f(500 * (SoundMultip / 100.f), 30));
 		Bars.setPosition(891, 315 + (61 * 2));
 		win.Window().draw(Bars);
 		Values.setString(std::to_string(SoundMultip));
-		Values.setPosition(Bars.getPosition().x, Bars.getPosition().y - 10);
+		Values.setOrigin(Values.getLocalBounds().left + Values.getLocalBounds().width / 2, 0);
+		Values.setPosition(Boxs.getPosition().x + Boxs.getSize().x / 2, Bars.getPosition().y - 10);
 		win.Window().draw(Values);
 
 		Bars.setSize(sf::Vector2f(500 * (win.getFrameRate() / 240.f), 30));
 		Bars.setPosition(891, 315 + (61 * 5));
 		win.Window().draw(Bars);
 		Values.setString(std::to_string(win.getFrameRate()));
-		Values.setPosition(Bars.getPosition().x , Bars.getPosition().y - 10);
+		Values.setOrigin(Values.getLocalBounds().left + Values.getLocalBounds().width / 2, 0);
+		Values.setPosition(Boxs.getPosition().x + Boxs.getSize().x / 2, Bars.getPosition().y - 10);
 		win.Window().draw(Values);
 
 		// fullscreen
@@ -1574,7 +1593,8 @@ void DisplayOptionMenu()
 			Values.setString("<\t" + getString("Windowed_full") + "\t>");
 		if (win.getStyle() == sf::Style::Fullscreen)
 			Values.setString("<\t" + getString("FullScreen") + "\t>");
-		Values.setPosition(Bars.getPosition().x , 315 + 61 * 3 - 10);
+		Values.setOrigin(Values.getLocalBounds().left + Values.getLocalBounds().width / 2, 0);
+		Values.setPosition(Boxs.getPosition().x + Boxs.getSize().x / 2, 315 + 61 * 3 - 10);
 		win.Window().draw(Values);
 
 
@@ -1583,8 +1603,8 @@ void DisplayOptionMenu()
 			Values.setString("<\t" + getString("On") + "\t>");
 		if (!win.getVerticalSync())
 			Values.setString("<\t" + getString("Off") + "\t>");
-
-		Values.setPosition(Bars.getPosition().x, 315 + 61 * 4 - 10);
+		Values.setOrigin(Values.getLocalBounds().left + Values.getLocalBounds().width / 2, 0);
+		Values.setPosition(Boxs.getPosition().x + Boxs.getSize().x / 2, 315 + 61 * 4 - 10);
 		win.Window().draw(Values);
 
 		// Langage
@@ -1592,7 +1612,8 @@ void DisplayOptionMenu()
 			Values.setFillColor(sf::Color::Red);
 		Values.setCharacterSize(50);
 		Values.setString(Lang);
-		Values.setPosition(Bars.getPosition().x, 315 + 61 * 6 - 20);
+		Values.setOrigin(Values.getLocalBounds().left + Values.getLocalBounds().width / 2, 0);
+		Values.setPosition(Boxs.getPosition().x + Boxs.getSize().x / 2, 315 + 61 * 6 - 20);
 		win.Window().draw(Values);
 
 		if (LanguageChange)
@@ -1611,7 +1632,13 @@ void DisplayOptionMenu()
 					{
 						i++;
 
-						LangBoxs.setPosition(Bars.getPosition().x - 20, 677 + (50 * i));
+						LangBoxs.setOrigin(LangBoxs.getSize().x / 2, 0);
+						if (i == 1)
+							LangBoxs.setPosition(Boxs.getPosition().x + Boxs.getSize().x / 2, 727);
+						else
+							LangBoxs.setPosition(Boxs.getPosition().x + Boxs.getSize().x / 2, LangBoxs.getPosition().y + 51);
+
+
 						win.Window().draw(LangBoxs);
 
 						if (languageSelect == i)
@@ -1620,7 +1647,8 @@ void DisplayOptionMenu()
 							LangText.setFillColor(sf::Color::Black);
 
 						LangText.setString(ActualRessource.name);
-						LangText.setPosition(Bars.getPosition().x, 657 + (50 * i));
+						LangText.setOrigin(LangText.getLocalBounds().left + LangText.getLocalBounds().width / 2, 0);
+						LangText.setPosition(Boxs.getPosition().x + Boxs.getSize().x / 2, 657 + (50 * i));
 						win.Window().draw(LangText);
 					}
 
