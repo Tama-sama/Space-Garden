@@ -1,4 +1,5 @@
 #include "StateManager.hpp"
+
 #include "Window.hpp"
 #include "SoundManager.hpp"
 #include "Texture_SpriteManager.hpp"
@@ -11,28 +12,25 @@
 #include "EnnemiesShoots.hpp"
 #include "Buffs.hpp"
 
+#include "Intro.hpp"
 #include "Menu.hpp"
 #include "Game.hpp"
+#include "Save.hpp"
 
 
 #pragma warning(disable : 26812)
 
+
 State state = State::INTRO;
-
-bool DebugsInfos = false;
-
 bool Loading = false;
 bool can_Switch = false;
-sf::Mutex MutexTest;
+
+bool DebugsInfos = false;
 
 extern bool changingkey;
 extern Controle* ChangingControle;
 extern bool isPause;
 
-void UpdateSaveToMenu();
-void UpdateSave();
-void DisplaySave();
-void DisplayDevMode();
 
 void ChangeState(State NextState)
 {
@@ -84,6 +82,58 @@ void InitManager()
 		getSprite("JoueurV").setTextureRect(sf::IntRect(0, 0, 62, 101));
 		getSprite("JoueurV").setOrigin(getSprite("JoueurV").getGlobalBounds().width / 2, getSprite("JoueurV").getGlobalBounds().height / 2);
 
+
+		// load scoreboards
+		std::ifstream FileRead("../Ressources/Score Solo.txt");
+
+		if (FileRead.is_open())
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				std::getline(FileRead, SoloLines[i]);
+				ShipsColorsSolo[i] = SoloLines[i].c_str()[0];
+				SoloLines[i].erase(0, 2);
+				SoloNames[i] = SoloLines[i].substr(0, SoloLines[i].find(" "));
+				SoloLines[i].erase(0, SoloNames[i].size() + 1);
+				SoloScores[i] = std::stoi(SoloLines[i]);
+
+				SoloLines[i] = "#" + std::to_string(i + 1) + " - " + SoloNames[i] + " - " + std::to_string(SoloScores[i]) + "\n";
+			}
+			FileRead.close();
+		}
+
+		FileRead.open("../Ressources/Score Duo.txt");
+		if (FileRead.is_open())
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				std::getline(FileRead, DuoLines[i]);
+
+				ShipsColorsDuo[i][0] = DuoLines[i].c_str()[0];
+				DuoLines[i].erase(0, 2);
+
+				DuoNames[i][0] = DuoLines[i].substr(0, DuoLines[i].find(" "));
+				DuoLines[i].erase(0, DuoNames[i][0].size() + 1);
+
+				DuoScores[i][0] = std::stoi(DuoLines[i].substr(0, DuoLines[i].find(" ")));
+				DuoLines[i].erase(0, std::to_string(DuoScores[i][0]).size() + 1);
+
+				DuoScoresTotal[i] = std::stoi(DuoLines[i].substr(0, DuoLines[i].find(" ")));
+				DuoLines[i].erase(0, std::to_string(DuoScoresTotal[i]).size() + 1);
+
+				DuoScores[i][1] = std::stoi(DuoLines[i].substr(0, DuoLines[i].find(" ")));
+				DuoLines[i].erase(0, std::to_string(DuoScores[i][1]).size() + 1);
+
+				DuoNames[i][1] = DuoLines[i].substr(0, DuoLines[i].find(" "));
+				DuoLines[i].erase(0, DuoNames[i][1].size() + 1);
+
+				ShipsColorsDuo[i][1] = DuoLines[i].c_str()[0];
+
+				DuoLines[i] = "#" + std::to_string(i + 1) + "       " + DuoNames[i][0] + " - " + std::to_string(DuoScores[i][0]) + " - " + std::to_string(DuoScoresTotal[i]) + " - " + std::to_string(DuoScores[i][1]) + " - " + DuoNames[i][1] + "\n";
+			}
+		}
+
+
 		FirstInit = true;
 	}
 
@@ -117,6 +167,9 @@ void UpdateManager()
 
 	switch (state)
 	{
+	case State::INTRO:
+		UpdateIntro();
+		break;
 	case State::MAIN_MENU :
 		if (!Loading && !can_Switch)		
 			UpdateMenu();
@@ -154,8 +207,6 @@ void UpdateManager()
 	}
 }
 
-
-
 void DisplayManager()
 {
 
@@ -169,7 +220,7 @@ void DisplayManager()
 	switch (state)
 	{
 	case State::INTRO:
-		Intro();
+		DisplayIntro();
 		break;
 
 	case State::MAIN_MENU:
@@ -223,10 +274,6 @@ void DisplayManager()
 	win.Window().display();
 }
 
-extern std::string a;
-extern std::string b;
-extern bool NameDone[2];
-
 void EventsManager()
 {
 	while (win.Window().pollEvent(win.Events()))
@@ -272,12 +319,12 @@ void EventsManager()
 
 					if (Player1.getController() == 8)
 					{
-						ptName = &a;
+						ptName = &NameP1;
 						i = 0;
 					}
 					else
 					{
-						ptName = &b;
+						ptName = &NameP2;
 						i = 1;
 					}
 
@@ -301,13 +348,6 @@ void EventsManager()
 		}
 	}
 }
-
-
-
-
-
-
-
 
 void DisplayDevMode()
 {

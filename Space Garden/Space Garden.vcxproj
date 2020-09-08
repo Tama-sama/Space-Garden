@@ -187,9 +187,11 @@
     <ClInclude Include="Explosion.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="GamePad.hpp" />
+    <ClInclude Include="Intro.hpp" />
     <ClInclude Include="Menu.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="RessourcesManager.hpp" />
+    <ClInclude Include="Save.hpp" />
     <ClInclude Include="SoundManager.hpp" />
     <ClInclude Include="StateManager.hpp" />
     <ClInclude Include="StringManager.hpp" />

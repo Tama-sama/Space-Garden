@@ -5,7 +5,7 @@ std::list<Musics*> MusicList;
 int MusicMultip = 50;
 int SoundMultip = 30;
 extern int _game_phase;
-
+ 
 void LoadSounds(State _state)
 {
 	for (Ressources& ActualRessource : RessourcesList)

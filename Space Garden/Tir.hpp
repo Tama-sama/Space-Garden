@@ -10,7 +10,6 @@ public:
 	PlayerBullet(sf::Vector2f _elemvector, int _type, int _player, int _damage, float DirTir = 0);
 	~PlayerBullet() {};
 
-	//sf::Sprite& Sprite() { return sprite; };
 	sf::Vector2f& Pos() { return bul_pos; };
 	int getLife() { return bul_vie; };
 	int getDamages() { return damage; };
@@ -27,7 +26,6 @@ public:
 	bool operator != (const PlayerBullet& s) const { return !operator==(s); }
 
 private:
-	//sf::Sprite sprite;
 	float m_rotation;
 	sf::Vector2f bul_pos;
 	sf::Vector2f Delta;
@@ -41,4 +39,8 @@ private:
 
 
 extern std::list<PlayerBullet> Bullets;
+
+////////////////
+/// \brief Remove All Player shoots
+////////////////
 void RemoveAllPlayerShoots();

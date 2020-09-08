@@ -149,5 +149,11 @@
     <ClInclude Include="StringManager.hpp">
       <Filter>Fichiers d%27en-tête\Ressources</Filter>
     </ClInclude>
+    <ClInclude Include="Save.hpp">
+      <Filter>Fichiers d%27en-tête\Stages</Filter>
+    </ClInclude>
+    <ClInclude Include="Intro.hpp">
+      <Filter>Fichiers d%27en-tête\Stages</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

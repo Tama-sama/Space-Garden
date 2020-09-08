@@ -41,3 +41,13 @@ Start | Start | Menu | Game
 Fire | Shoot | Menu | Game
 Fire_Spe1 | Special Shot 1 | Menu | Game
 Fire_Spe2 | Special Shot 2 | Menu | Game
+
+// Save state
+Names | Enter your names | Save
+GamePad | GamePad : | Save
+Pad_Up_Down | Up and Down to select | Save
+Pad_Interact | Interact to go next letter | Save
+Pad_Start | Start to finish | Save
+KeyBoard | KeyBoard : | Save
+Key_write | Write normaly | Save
+Key_Interact | Interact to finish | Save

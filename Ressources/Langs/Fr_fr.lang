@@ -41,3 +41,13 @@ Start | Start | Menu | Game
 Fire | Tir | Menu | Game
 Fire_Spe1 | Tir Special 1 | Menu | Game
 Fire_Spe2 | Tir Special 2 | Menu | Game
+
+// Save state
+Names | Entrez vos nom | Save
+GamePad | Manette : | Save
+Pad_Up_Down | Haut et Bas pour selectioner | Save
+Pad_Interact | Interact pour valider la lettre | Save
+Pad_Start | Start pour finir | Save
+KeyBoard | Clavier : | Save
+Key_write | Ecrire | Save
+Key_Interact | Interact pour finir | Save

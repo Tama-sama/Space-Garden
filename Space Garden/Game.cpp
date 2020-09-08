@@ -132,7 +132,7 @@ void PlayerShootsColisions()
 							{
 								for (int i = 0; i < 16; i++)
 								{
-									float Dir_Tir = (i * (pi / 8));
+									float Dir_Tir = (float)(i * (pi / 8.f));
 
 									Bullets.push_back(PlayerBullet(sf::Vector2f(ActualShoot.Pos().x, ActualShoot.Pos().y), 3, ActualShoot.getOwner(), 1, Dir_Tir));
 								}
@@ -167,7 +167,7 @@ void PlayerShootsColisions()
 				{
 					sf::Color ImagePixel;
 					if (ActualShoot.Pos().y > 0 && ActualShoot.Pos().x > 0 && ActualShoot.Pos().x < 1920 && ActualShoot.Pos().x > 0)
-						ImagePixel = BossCollision.getPixel(ActualShoot.Pos().x, ActualShoot.Pos().y);
+						ImagePixel = BossCollision.getPixel((int)ActualShoot.Pos().x, (int)ActualShoot.Pos().y);
 
 					if (ImagePixel == sf::Color::White && ActualEnnemie.getLife() > 0 && !ActualEnnemie.isHit() && ActualEnnemie.getPos().y == 0)
 					{
@@ -178,7 +178,7 @@ void PlayerShootsColisions()
 						{
 							for (int i = 0; i < 16; i++)
 							{
-								float Dir_Tir = (i * (pi / 8));
+								float Dir_Tir = (float)(i * (pi / 8.f));
 
 								Bullets.push_back(PlayerBullet(sf::Vector2f(ActualShoot.Pos().x, ActualShoot.Pos().y), 3, ActualShoot.getOwner(), 1, Dir_Tir));
 							}
@@ -738,9 +738,9 @@ void ennemies_Loop_1P()
 		static float spawn_speed = 2;
 		if (Game_timer >= spawn_speed)
 		{
-			float randX = rand() % 1300 + 300; // 300 - 1600
+			float randX = rand() % 1300 + 300.f; // 300 - 1600
 			while (randX > Last_spawxX - 100 && randX < Last_spawxX + 100 && randX > Last_spawxX2 - 100 && randX < Last_spawxX2 + 100)
-				randX = rand() % 1300 + 300; // 300 - 1600
+				randX = rand() % 1300 + 300.f; // 300 - 1600
 
 			ennemies.push_back(Ennemies(sf::Vector2f(randX, 0), 5));
 			Last_spawxX2 = Last_spawxX;
@@ -752,7 +752,7 @@ void ennemies_Loop_1P()
 			type_5++;
 
 			if (spawn_speed > 1.25)
-				spawn_speed -= 0.05;
+				spawn_speed -= 0.05f;
 
 			if (type_2 == 4)
 			{
@@ -1202,13 +1202,13 @@ void DisplayGame()
 	// Info Hud
 	for (int i = 0; i < Player1.getLife(); i++)
 	{
-		getSprite("Coeur").setPosition(60, 100 + (100 * i));
+		getSprite("Coeur").setPosition(60.f, 100.f + (100.f * i));
 		win.Window().draw(getSprite("Coeur"));
 	}
 
 
 	sf::IntRect XpRect(0, 0, 210, 88);
-	XpRect.width = 52 + (210 - 52) * ((float)Player1.getAtkPoints() / 10);
+	XpRect.width = (int)(52 + (210 - 52) * ((float)Player1.getAtkPoints() / 10));
 	getSprite("XP").setTextureRect(XpRect);
 	getSprite("XP").setPosition(17, 593);
 	win.Window().draw(getSprite("XP"));
@@ -1228,11 +1228,11 @@ void DisplayGame()
 	{
 		for (int i = 0; i < Player2.getLife(); i++)
 		{
-			getSprite("Coeur").setPosition(1740, 100 + (100 * i));
+			getSprite("Coeur").setPosition(1740.f, 100.f + (100.f * i));
 			win.Window().draw(getSprite("Coeur"));
 		}
 
-		XpRect.width = 52 + (210 - 52) * ((float)Player2.getAtkPoints() / 10);
+		XpRect.width = (int)(52 + (210 - 52) * ((float)Player2.getAtkPoints() / 10));
 		getSprite("XP").setTextureRect(XpRect);
 		getSprite("XP").setPosition(1700, 593);
 		win.Window().draw(getSprite("XP"));
@@ -1288,7 +1288,7 @@ void DisplayGamePause()
 			else
 			{
 				getSprite("Button").setRotation(0);
-				getSprite("Button").setPosition(sf::Vector2f(600 + 250, 125 + (200 * i)));
+				getSprite("Button").setPosition(sf::Vector2f(600.f + 250.f, 125.f + (200.f * i)));
 			}
 
 			buttons_text.setCharacterSize(70);

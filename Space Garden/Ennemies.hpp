@@ -21,7 +21,6 @@ public:
 	sf::Vector2f getLastSwitch() const { return LastSwitch; };
 	bool isHit() const { return hit; };
 
-	//sf::Sprite& getSprite() { return sprite; };
 	void setRotation(float rotation) { m_rotation = rotation; };
 
 	void rotate(int rotation) { m_rotation += rotation; };
@@ -56,7 +55,6 @@ public:
 	bool operator != (const Ennemies& s) const { return !operator==(s); }
 
 private:
-	//sf::Sprite sprite;
 	float m_rotation;
 	sf::Vector2f pos;
 	sf::Vector2f Delta;
@@ -71,4 +69,8 @@ private:
 };
 
 extern std::list<Ennemies> ennemies;
+
+////////////////
+/// \brief Remove All Ennemies
+////////////////
 void RemoveAllEnnemies();

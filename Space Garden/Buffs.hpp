@@ -27,4 +27,7 @@ private:
 
 extern std::list<Buffs> BuffsList;
 
+////////////////
+/// \brief Remove All Buffs
+////////////////
 void RemoveAllBuffs();

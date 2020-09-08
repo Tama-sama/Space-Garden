@@ -101,9 +101,7 @@ int main(int argc, char** argv)
 	can_Switch = false;
 
 	while (!win.isDone())
-	{	
-		
-		
+	{			
 		UpdateManager();
 		DisplayManager();
 	}

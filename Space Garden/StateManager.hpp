@@ -11,29 +11,44 @@ enum class State
 	GAME,
 	SAVE,
 };
-extern State state;
 
+extern State state;
 extern bool Loading;
 extern bool can_Switch;
-extern sf::Mutex MutexTest;
 
-/////////////
-/// \brief Managements of updates based on state
-/// \param Windows
-/// /////////////
-void UpdateManager();
-
-/////////////
-/// \brief Managements of diplays based on state
-/// \param Windows
-/// /////////////
-void DisplayManager();
-
-void EventsManager();
-
+////////////////
+/// \brief Load ressources of a state, change state and remove others ressources
+/// \param NextState state need to go
+////////////////
 void ChangeState(State NextStage);
+
+////////////////
+/// \brief Load ressources of a state
+/// \param NextState state need to load
+////////////////
 void LoadNextState(State NextState);
 
+////////////////
+/// \brief Managements of inits based on state
+////////////////
 void InitManager();
 
-void Intro();
+////////////////
+/// \brief Managements of updates based on state
+////////////////
+void UpdateManager();
+
+////////////////
+/// \brief Managements of diplays based on state
+////////////////
+void DisplayManager();
+
+////////////////
+/// \brief Managements of events
+////////////////
+void EventsManager();
+
+////////////////
+/// \brief Display some dev infos like HitBoxs etc ...
+////////////////
+void DisplayDevMode();

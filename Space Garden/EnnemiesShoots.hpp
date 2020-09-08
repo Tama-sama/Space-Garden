@@ -15,13 +15,10 @@ public:
 	void draw();
 	void TakeDamage() { m_life = 0; };
 
-	//sf::Sprite& getSprite() { return m_sprite; };
-
 	bool operator==(const EnnemiesShoots& s) const { return m_pos == s.m_pos && m_delta == s.m_delta && m_life == s.m_life; };
 	bool operator!=(const EnnemiesShoots& s) const { return !operator==(s); };
 
 private:
-	//sf::Sprite m_sprite;
 	sf::Vector2f m_pos;
 	sf::Vector2f m_delta;
 	int m_life;
@@ -33,4 +30,8 @@ private:
 };
 
 extern std::list<EnnemiesShoots> EnnemiesShootsList;
+
+////////////////
+/// \brief Remove All Ennemies shoots
+////////////////
 void RemoveAllEnnemiesShoots();

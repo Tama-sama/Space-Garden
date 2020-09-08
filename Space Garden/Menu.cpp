@@ -34,7 +34,48 @@ enum class Menus
 };
 Menus ActualMenu;
 
-std::string To_String(Action _Action);
+std::string To_String(Action _Action)
+{
+	switch (_Action)
+	{
+	case Action::Up:
+		return "Up";
+		break;
+	case Action::Down:
+		return "Down";
+		break;
+	case Action::Left:
+		return "Left";
+		break;
+	case Action::Right:
+		return "Right";
+		break;
+	case Action::Interact:
+		return "Interact";
+		break;
+	case Action::Return:
+		return "Return";
+		break;
+	case Action::Start:
+		return "Start";
+		break;
+	case Action::Fire:
+		return "Fire";
+		break;
+	case Action::Fire_Spe1:
+		return "Fire_Spe1";
+		break;
+	case Action::Fire_Spe2:
+		return "Fire_Spe2";
+		break;
+
+	default:
+		return "";
+		break;
+	}
+}
+
+extern bool SoloGame;
 
 // options
 bool OptionChangeKeys = false;
@@ -46,18 +87,23 @@ std::string ret;
 int changeKeyChoice = 0;
 bool changingkey = false;
 Controle* ChangingControle = 0;
-extern bool SoloGame;
 bool Readys[2] = { false,false };
 sf::Vector2f ShipSelectionPos[5] = { sf::Vector2f(463, 850),sf::Vector2f(726, 850), sf::Vector2f(990, 850), sf::Vector2f(1253, 850), sf::Vector2f(1516, 850) };
 
 
 int ScoreBoardSeen = 1;
+
+std::string SoloNames[5] = { "NoBody","NoBody","NoBody","NoBody","NoBody" };
+int SoloScores[5] = { 0,0,0,0,0 };
+
+char ShipsColorsSolo[5] = { 'R','R','R','R','R'};
+std::string DuoNames[5][2] = { "NoBody","NoBody","NoBody","NoBody","NoBody",  "NoBody","NoBody","NoBody","NoBody","NoBody" };
+char ShipsColorsDuo[5][2] = { 'R','R','R','R','R',	'R','R','R','R','R' };
+int DuoScores[5][2] = { 0,0,0,0,0,   0,0,0,0,0 };
+int DuoScoresTotal[5] = { 0,0,0,0,0 };
+
 std::string SoloLines[5] = {"#1 - Nobody - 000","#2 - Nobody - 000","#3 - Nobody - 000","#4 - Nobody - 000","#5 - Nobody - 000"};
 std::string DuoLines[5];
-
-// Linenumber // playernumber
-char ShipsColorsSolo[5] = { 'R','R','R','R','R'};
-char ShipsColorsDuo[5][2] = { 'R','R','R','R','R',	'R','R','R','R','R' };
 
 sf::Thread LoadGame(&LoadNextState, State::GAME);
 
@@ -94,7 +140,7 @@ void UpdateMenu()
 	default:
 		break;
 	}
-}
+}	
 
 void UpdateMainMenu()
 {
@@ -172,6 +218,7 @@ void UpdateShipMenu()
 	{
 		if (SoloGame)
 		{
+			// if an other controller join
 			for (int i = 0; i < 9; i++)
 			{
 				if (i != Player1.getController())
@@ -410,12 +457,10 @@ void UpdateShipMenu()
 }
 void UpdateScoreBoardMenu()
 {
-	static bool NeedReload = true;
 	static float ActionTiming = 0.f;
 	ActionTiming += MainTime.GetTimeDeltaF();
 	if (isButtonPressed(Action::Return) && ActionTiming >= 0.3)
 	{
-		NeedReload = true;
 		ActionTiming = 0;
 		getSound("menu_click").play();
 		ActualMenu = Menus::MAIN;
@@ -434,72 +479,6 @@ void UpdateScoreBoardMenu()
 		if (ScoreBoardSeen == 1)
 			ScoreBoardSeen = 2;
 	}
-
-	if (NeedReload)
-	{
-		NeedReload = false;
-
-		std::ifstream FileRead("../Ressources/Score Solo.txt");
-
-		if (FileRead.is_open())
-		{
-			std::string Names[5] = { "NoBody","NoBody","NoBody","NoBody","NoBody" };
-			int Scores[5] = { 0,0,0,0,0 };
-
-			for (int i = 0; i < 5; i++)
-			{
-				std::getline(FileRead, SoloLines[i]);
-				ShipsColorsSolo[i] = SoloLines[i].c_str()[0];
-				SoloLines[i].erase(0, 2);
-				Names[i] = SoloLines[i].substr(0, SoloLines[i].find(" "));
-				SoloLines[i].erase(0, Names[i].size() + 1);
-				Scores[i] = std::stoi(SoloLines[i]);
-
-				SoloLines[i] = "#" + std::to_string(i + 1) + " - " + Names[i] + " - " + std::to_string(Scores[i]) + "\n";
-			}
-			FileRead.close();
-		}
-
-		FileRead.open("../Ressources/Score Duo.txt");
-		if (FileRead.is_open())
-		{
-			std::string NamesP1[5] = { "NoBody","NoBody","NoBody","NoBody","NoBody" };
-			int ScoresP1[5] = { 0,0,0,0,0 };
-			int ScoresTotal[5] = { 0,0,0,0,0 };
-			int ScoresP2[5] = { 0,0,0,0,0 };
-			std::string NamesP2[5] = { "NoBody","NoBody","NoBody","NoBody","NoBody" };
-
-			for (int i = 0; i < 5; i++)
-			{
-				std::getline(FileRead, DuoLines[i]);
-
-				ShipsColorsDuo[i][0] = DuoLines[i].c_str()[0];
-				DuoLines[i].erase(0, 2);
-
-				NamesP1[i] = DuoLines[i].substr(0, DuoLines[i].find(" "));
-				DuoLines[i].erase(0, NamesP1[i].size() + 1);
-
-				ScoresP1[i] = std::stoi(DuoLines[i].substr(0, DuoLines[i].find(" ")));
-				DuoLines[i].erase(0, std::to_string(ScoresP1[i]).size() + 1);
-
-				ScoresTotal[i] = std::stoi(DuoLines[i].substr(0, DuoLines[i].find(" ")));
-				DuoLines[i].erase(0, std::to_string(ScoresTotal[i]).size() + 1);
-
-				ScoresP2[i] = std::stoi(DuoLines[i].substr(0, DuoLines[i].find(" ")));
-				DuoLines[i].erase(0, std::to_string(ScoresP2[i]).size() + 1);
-
-				NamesP2[i] = DuoLines[i].substr(0, DuoLines[i].find(" "));
-				DuoLines[i].erase(0, NamesP2[i].size() + 1);
-
-				ShipsColorsDuo[i][1] = DuoLines[i].c_str()[0];
-
-				DuoLines[i] = "#" + std::to_string(i + 1) + "       " + NamesP1[i] + " - " + std::to_string(ScoresP1[i]) + " - " + std::to_string(ScoresTotal[i]) + " - " + std::to_string(ScoresP2[i]) + " - " + NamesP2[i] + "\n";
-			}
-		}
-	}
-
-
-
 }
 void UpdateOptionMenu()
 {
@@ -1228,7 +1207,7 @@ void DisplayScoreBoardMenu()
 	{
 		TLine.setString(DuoLines[i]);
 		TLine.setOrigin(TLine.getLocalBounds().left + TLine.getLocalBounds().width / 2, TLine.getLocalBounds().top + TLine.getLocalBounds().height / 2);
-		TLine.setPosition(PosX + 1515.f, 250.f + (125.f * (i + 1))); // 915
+		TLine.setPosition(PosX + 1515.f, 250.f + (125.f * (i + 1)));
 		win.Window().draw(TLine);
 
 
@@ -1251,6 +1230,33 @@ void DisplayScoreBoardMenu()
 	getSprite("Bande_R").setPosition(1680, 0);
 	win.Window().draw(getSprite("Bande_R"));
 
+	static bool BracketMove = true;
+	static float BracketMoveX = 0.f;
+
+	if (BracketMove && BracketMoveX <= 50.f)
+		BracketMoveX += 100 * MainTime.GetTimeDeltaF();
+	else if (!BracketMove && BracketMoveX >= 0.f)
+		BracketMoveX -= 100 * MainTime.GetTimeDeltaF();
+	else
+		BracketMove = !BracketMove;
+
+	sf::Text AngleBracekts("", Font, 133);
+	AngleBracekts.setFillColor(sf::Color::Color(180, 50, 0));
+
+	if (ScoreBoardSeen == 1)
+	{
+		AngleBracekts.setString(">");
+		AngleBracekts.setOrigin(AngleBracekts.getLocalBounds().left + AngleBracekts.getLocalBounds().width / 2, AngleBracekts.getLocalBounds().top + AngleBracekts.getLocalBounds().height / 2);
+		AngleBracekts.setPosition(1580 - BracketMoveX, 540);
+	}
+	else
+	{
+		AngleBracekts.setString("<");
+		AngleBracekts.setOrigin(AngleBracekts.getLocalBounds().left + AngleBracekts.getLocalBounds().width / 2, AngleBracekts.getLocalBounds().top + AngleBracekts.getLocalBounds().height / 2);
+		AngleBracekts.setPosition(350 + BracketMoveX, 540);
+	}
+
+	win.Window().draw(AngleBracekts);
 }
 void DisplayOptionMenu()
 {
@@ -1750,45 +1756,4 @@ void DisplayHowToPlay()
 		}
 	}
 	getSprite("Icons").setScale(1, 1);
-}
-
-std::string To_String(Action _Action)
-{
-	switch (_Action)
-	{
-	case Action::Up:
-		return "Up";
-		break;
-	case Action::Down:
-		return "Down";
-		break;
-	case Action::Left:
-		return "Left";
-		break;
-	case Action::Right:
-		return "Right";
-		break;
-	case Action::Interact:
-		return "Interact";
-		break;
-	case Action::Return:
-		return "Return";
-		break;
-	case Action::Start:
-		return "Start";
-		break;
-	case Action::Fire:
-		return "Fire";
-		break;
-	case Action::Fire_Spe1:
-		return "Fire_Spe1";
-		break;
-	case Action::Fire_Spe2:
-		return "Fire_Spe2";
-		break;
-
-	default:
-		return "";
-		break;
-	}
 }
