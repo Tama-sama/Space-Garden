@@ -154,11 +154,13 @@ void Player::Reset()
 	m_vie = 3;
 	m_score = 0;
 	m_firingTimer = 0;
+	m_speTimer = 0;
 	m_shootPissenlit = 3;
 	shootingSin = false;
 	m_shootSin = 3;
 	invulnerability = false;
 	InvuTimer = 0;
+	SpeAtkPts = 0;
 }
 
 void Player::Draw()
