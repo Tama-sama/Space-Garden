@@ -103,8 +103,7 @@ int DuoScores[5][2] = { 0,0,0,0,0,   0,0,0,0,0 };
 int DuoScoresTotal[5] = { 0,0,0,0,0 };
 
 std::string SoloLines[5] = {"#1 - Nobody - 000","#2 - Nobody - 000","#3 - Nobody - 000","#4 - Nobody - 000","#5 - Nobody - 000"};
-std::string DuoLines[5];
-
+std::string DuoLines[5] = { "#1       Nobody - 000 - 000 - 000 Nobody\n","#2       Nobody - 000 - 000 - 000 Nobody\n" ,"#3       Nobody - 000 - 000 - 000 Nobody\n" ,"#4       Nobody - 000 - 000 - 000 Nobody\n" ,"#5       Nobody - 000 - 000 - 000 Nobody\n" };
 sf::Thread LoadGame(&LoadNextState, State::GAME);
 
 
