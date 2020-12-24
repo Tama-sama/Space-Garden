@@ -2,4 +2,4 @@ G Tama 5760
 R Miki 4550
 N Color 4530
 B Ne 3960
-B f 50
+R i 1760

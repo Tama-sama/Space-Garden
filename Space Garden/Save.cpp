@@ -439,6 +439,7 @@ void DisplaySave()
 
 
 			getSprite(SpriteToGet).setPosition(AditionalText.getPosition().x + AditionalText.getGlobalBounds().width / 2 + 50, AditionalText.getPosition().y - 35);
+			getSprite(SpriteToGet).setTextureRect(Default_player_rect);
 			win.Window().draw(getSprite(SpriteToGet));
 		}
 		else

@@ -13,7 +13,7 @@
 
 int speedmult = 1;
 sf::Vector2f Name_pos = { 240,-70 };
-sf::Vector2f ship_pos = { 960, 1200 };
+sf::Vector2f ship_pos = { 960, 1300 };
 sf::IntRect ship_rect(0, 0, 62, 101);
 sf::Text buttons_text;
 
@@ -32,6 +32,7 @@ void UpdateIntro()
 	}
 	else
 	{
+		ship_rect.left = 0;
 		static bool one_pass2;
 		if (!one_pass2)
 		{

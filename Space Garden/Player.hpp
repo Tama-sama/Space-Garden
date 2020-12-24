@@ -2,6 +2,8 @@
 #include "Tools.hpp"
 #include "Tir.hpp"
 
+const sf::IntRect Default_player_rect(0, 0, 62, 101);
+
 class Player
 {
 public:

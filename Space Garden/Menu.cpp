@@ -725,9 +725,9 @@ void UpdateOptionMenu()
 			FileWrite.write((char*)&Vsync, sizeof(bool));
 			FileWrite.write((char*)&Frames, sizeof(int));
 
-			size_t size = Lang.size();
-			FileWrite.write((char*)&size, sizeof(size));
-			FileWrite.write(&Lang[0], size);
+			int size = Lang.size();
+			FileWrite.write((char*)&size, 4);
+			FileWrite.write(&Lang[0], sizeof(int));
 
 			FileWrite.close();
 			Save = false;
@@ -1084,11 +1084,11 @@ void DisplayShipSelection()
 	getSprite("JoueurG").setPosition(ShipSelectionPos[3]);
 	getSprite("JoueurN").setPosition(ShipSelectionPos[4]);
 
-	win.Window().draw(getSprite("JoueurR"));
-	win.Window().draw(getSprite("JoueurB"));
-	win.Window().draw(getSprite("JoueurV"));
-	win.Window().draw(getSprite("JoueurG"));
-	win.Window().draw(getSprite("JoueurN"));
+	getSprite("JoueurR").setTextureRect(Default_player_rect);
+	getSprite("JoueurB").setTextureRect(Default_player_rect);
+	getSprite("JoueurV").setTextureRect(Default_player_rect);
+	getSprite("JoueurG").setTextureRect(Default_player_rect);
+	getSprite("JoueurN").setTextureRect(Default_player_rect);
 
 	sf::Text V("P1\nV", Font, 100);
 	sf::Text V2("", Font, 100);
@@ -1154,7 +1154,11 @@ void DisplayShipSelection()
 		win.Window().draw(Tsentence);
 	}
 
-
+	win.Window().draw(getSprite("JoueurR"));
+	win.Window().draw(getSprite("JoueurB"));
+	win.Window().draw(getSprite("JoueurV"));
+	win.Window().draw(getSprite("JoueurG"));
+	win.Window().draw(getSprite("JoueurN"));
 }
 void DisplayScoreBoardMenu()
 {
@@ -1196,6 +1200,7 @@ void DisplayScoreBoardMenu()
 		SpriteToGet = "Joueur";
 		SpriteToGet += ShipsColorsSolo[i];
 		getSprite(SpriteToGet).setPosition(TLine.getPosition().x + TLine.getGlobalBounds().width / 2 + 50, TLine.getPosition().y - 35);
+		getSprite(SpriteToGet).setTextureRect(Default_player_rect);
 		win.Window().draw(getSprite(SpriteToGet));
 	}
 	// Duo Board 

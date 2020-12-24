@@ -6,7 +6,6 @@
 #include "Controles.hpp"
 #include "StringManager.hpp"
 
-
 void ControlInit()
 {
 	controles.push_back(Controle(Action::Up, sf::Keyboard::Z, false, gamepadPS4::StickLY, -1));
@@ -60,10 +59,10 @@ void OptionLoad()
 		SettingFile.read((char*)&Vsync, sizeof(bool));
 		SettingFile.read((char*)&Frames, sizeof(int));
 
-		size_t size;
-		SettingFile.read((char*)&size, sizeof(size));
+		int size;
+		SettingFile.read((char*)&size, 4);
 		Lang.resize(size);
-		SettingFile.read(&Lang[0], size);
+		SettingFile.read(&Lang[0], sizeof(int));
 
 		//Lang = "En_us";
 
@@ -83,7 +82,7 @@ Windows win(sf::VideoMode::getDesktopMode(), "Space Garden", 120, sf::Style::Non
 
 int main(int argc, char** argv)
 {
-	LaunchArguments(argc, argv);
+	LaunchArguments(argc, argv);	
 
 	ControlInit();
 	OptionLoad();
